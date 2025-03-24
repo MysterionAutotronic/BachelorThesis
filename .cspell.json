@@ -1,0 +1,12 @@
+{
+    "ignorePaths": [
+        "thesis.log",
+        "package.json",
+        "latex.ltx"
+    ],
+    "words": [
+        "bibtex",
+        "jabref",
+        "pandoc"
+    ]
+}
