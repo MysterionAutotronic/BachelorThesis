@@ -5,8 +5,15 @@
         "latex.ltx"
     ],
     "words": [
+        "Autoscaler",
+        "biber",
         "bibtex",
+        "helvetic",
+        "imagemagick",
         "jabref",
-        "pandoc"
+        "lmodern",
+        "pandoc",
+        "spinstr",
+        "texlive"
     ]
 }
