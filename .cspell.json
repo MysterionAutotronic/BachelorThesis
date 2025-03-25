@@ -1,5 +1,6 @@
 {
     "ignorePaths": [
+        "jabref-library.bib",
         "**/*.aux",
         "**/*.toc",
         "**/*.lof",
@@ -37,6 +38,7 @@
         "pandoc",
         "spinstr",
         "synctex",
-        "texlive"
+        "texlive",
+        "Younghan"
     ]
 }
