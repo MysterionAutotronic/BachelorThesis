@@ -15,3 +15,7 @@ zsh ./scripts/pandoc.sh
 ```sh
 bash ./scripts/pandoc.sh
 ```
+## Run JabRef
+```sh
+bash ./scripts/jabref.sh
+```

@@ -25,9 +25,15 @@ progress_message "Starting LaTeX installation"
 sudo apt update > /dev/null 2>&1 &
 spinner $!
 
-# Run the installation command
-progress_message "Installing required packages"
-sudo apt install -y texlive-full pandoc biber lmodern imagemagick 2>&1 | tee install.log &
+# APT install
+progress_message "Installing required APT packages"
+sudo apt install -y texlive-full pandoc biber lmodern imagemagick flatpak 2>&1 | tee install.log &
+spinner $!
+
+# flatpak install
+progress_message "Installing required flatpak packages"
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install -y flathub org.jabref.jabref
 spinner $!
 
 # Check for success
