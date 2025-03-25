@@ -36,11 +36,7 @@
 
     \tableofcontents
 
-        \newpage
-
     \section*{Glossary}
-
-        \newpage
 
     \section{Introduction}
 
@@ -88,7 +84,7 @@
 
         \subsection{Performance Measurements (Downtime, Latency, Scaling)}
 
-        \subsection{Scaling Scenarios & Optimizations}
+        \subsection{Scaling Scenarios \& Optimizations}
 
         \subsection{Discussion of Results}
 
@@ -103,6 +99,15 @@
         \subsection{Future Development Potential}
 
     \section*{References}
+        \addcontentsline{toc}{section}{References} % manually add to TOC
+        \printbibliography[heading=none]
+
+    \section*{List of Figures}
+        \addcontentsline{toc}{section}{List of Figures} % manually add to TOC
+        \begingroup
+            \renewcommand{\listfigurename}{} % remove heading
+            \listoffigures
+        \endgroup
 
     \section*{Appendix}
 
