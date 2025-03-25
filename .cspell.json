@@ -1,8 +1,27 @@
 {
     "ignorePaths": [
-        "thesis.log",
-        "package.json",
-        "latex.ltx"
+        "**/*.aux",
+        "**/*.toc",
+        "**/*.lof",
+        "**/*.lot",
+        "**/*.out",
+        "**/*.bbl",
+        "**/*.blg",
+        "**/*.fls",
+        "**/*.fdb_latexmk",
+        "**/*.synctex.gz",
+        "**/*.nav",
+        "**/*.snm",
+        "**/*.vrb",
+        "**/*.bcf",
+        "**/*.run.xml",
+        "**/*.swp",
+        "**/*.bak",
+        "**/*~",
+        "**/*.dvi",
+        "**/*.ps",
+        "**/*.DS_Store",
+        "**/Thumbs.db",
     ],
     "words": [
         "Autoscaler",
@@ -11,9 +30,11 @@
         "helvetic",
         "imagemagick",
         "jabref",
+        "latexmk",
         "lmodern",
         "pandoc",
         "spinstr",
+        "synctex",
         "texlive"
     ]
 }
