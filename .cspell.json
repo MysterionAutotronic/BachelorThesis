@@ -39,6 +39,7 @@
         "pandoc",
         "spinstr",
         "synctex",
+        "tabularx",
         "texlive",
         "Younghan"
     ]

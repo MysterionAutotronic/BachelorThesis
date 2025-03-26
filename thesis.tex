@@ -16,6 +16,7 @@
 \usepackage{needspace}
 \usepackage{trace}
 \usepackage{longtable}
+\usepackage{tabularx}
 % show page layout
 %\usepackage{showframe}
 
@@ -51,92 +52,38 @@
 
         \vspace{1cm}
 
-        \hrule
+        \hrulefill
 
-        \vspace{1.5cm}
+        \vspace{4cm}
 
-        % Titel
-        {\Huge\textbf{Praktikantenbericht}}\par
-        \vspace{0.5cm}
-        {\Large über das praktische Studiensemester}\par
-        {\Large im Wintersemester 2023/2024}\par
-        \vspace{1cm}
-
-        \hrule
-
-        % Persönliche Daten
-        \vspace{0.5cm}
-        \begin{tabular}{l@{\hspace{1cm}}l}
-            Name, Vorname: & David Linhardt\\
-            Studiengang, Semester: & Informatik (Bachelor) 5. Semester\\
-            Ausbildungsbetrieb: & BMW Group AG\\
-            Straße: & Bremer Straße 6\\
-            PLZ, Ort: & 80807 München\\
-        \end{tabular}
-        \vspace{0.5cm}
-
-        \hrule
-
-        % Dauer
-        \vspace{0.5cm}
+        % header box
         \noindent
-        \textbf{1 Dauer des Praktikums}\par
-        \vspace{0.5em}
-        \begin{tabular}{l@{\hspace{0.5cm}}c@{\hspace{0.5cm}}c@{\hspace{0.5cm}}c@{\hspace{0.5cm}}l}
-            vom 04.09.2023 bis 05.01.2024 = 18 Wochen \\
-        \end{tabular}
-        \vspace{1cm}
-
-        % Unterbrechungen
-        \noindent
-        \textbf{2 Unterbrechungen (Krankheit, Betriebsferien usw.)}\par
-        \vspace{0.5em}
-        \begin{tabular}{l@{\hspace{0.5cm}}c@{\hspace{0.5cm}}c@{\hspace{0.5cm}}l@{\hspace{0.5cm}}l}
-            vom 11.12. bis 15.12. Grund: Krankheit \\
-            vom 27.12. bis 29.12. Grund: Betriebsferien* \\
-            vom 02.01. bis 05.01. Grund: Betriebsferien* \\
-            \multicolumn{5}{l}{
-                \textsf{
-                    \small{
-                        \hspace*{0.1cm}\textit{
-                            *Betriebsferien wurden durch Überstunden ausgeglichen
-                        }
-                    }
-                }
-            } \\
-
-        \end{tabular}
-        \vspace{0.5cm}
-
-        \hrule
-
-        % Unterschriften
-        \vspace{0.5cm}
-        Die Ausbildungsstelle bestätigt die Angaben des Berichts.\par
-        \vspace{1.5cm}
-        \noindent
-        \begin{tabular}{@{}p{7cm}p{1cm}p{7cm}@{}}
-            \dotfill\\
-            \multicolumn{1}{l}{(Ort, Datum)}
-        \end{tabular}
-        \par
-        \vspace{2cm}
-        \noindent
-        \begin{tabular}{@{}p{7cm}p{1cm}p{7cm}@{}}
-            \dotfill & & \dotfill \\
-            \multicolumn{1}{l}{
-                (Unterschrift des Ausbildungsbeauftragten)
-            } & & \multicolumn{1}{l}{
-                (Firmenstempel)
+        \makebox[\textwidth][c]{
+            \parbox{10cm}{
+                \LARGE\textbf{Technische Hochschule Ingolstadt}\\
+                \\
+                \Large\textbf{Specialist area Computer Science}\\
+                \Large\textbf{Bachelor's course Computer Science}\\
             }
-        \end{tabular}
+        }
 
-        % Vertraulichkeit
-        \vspace{1.5cm}
-        \noindent
-        Der Praktikumsbericht wird von der Technischen Hochschule Ingolstadt vertraulich behandelt
-        und nur dem /der Beauftragten für das Praktische Studiensemester zur Prüfung und Genehmigung
-        weitergeleitet.\par
+        % bachelors thesis
+        \begin{center}
+            \LARGE\textbf{Bachelor's thesis}
+        \end{center}
+
+        \vspace{1cm}
+
+        % tabularx
+        \begin{tabularx}{\textwidth}{@{}lX@{}}
+            \textbf{Subject:} & Conception, implementation and evaluation of a highly scalable and highly available Kubernetes-based SaaS platform on Kubernetes Control Plane (KCP) \\[2cm]
+            \textbf{Name and Surname:} & David Linhardt \\[2cm]     
+            \textbf{Issued on:} & TODO: Insert Issue Date \\[0.5cm]           
+            \textbf{Submitted on:} & TODO: Insert Submit Date \\[2cm]           
+            \textbf{First examiner:} & Prof.\ Dr.\ Bernd Hafenrichter \\[0.5cm]      
+            \textbf{Second examiner:} & TODO: Insert Second examiner \\
+        \end{tabularx}
+
     \end{titlepage}
 
     \section*{Abstract}
