@@ -27,7 +27,7 @@ spinner $!
 
 # APT install
 progress_message "Installing required APT packages"
-sudo apt install -y texlive-full pandoc biber lmodern imagemagick flatpak 2>&1 | tee install.log &
+sudo apt install -y texlive-full pandoc biber lmodern imagemagick flatpak inkscape 2>&1 | tee install.log &
 spinner $!
 
 # flatpak install
