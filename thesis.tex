@@ -1,7 +1,7 @@
 \documentclass[11pt, a4paper, oneside]{scrartcl}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
+\usepackage[ngerman, english]{babel}
 \usepackage[onehalfspacing]{setspace}
 \usepackage{helvet}
 \usepackage[a4paper, left=2.5cm, right=2.5cm]{geometry}
@@ -17,8 +17,14 @@
 \usepackage{trace}
 \usepackage{longtable}
 \usepackage{tabularx}
+\usepackage[automark]{scrlayer-scrpage}
+\usepackage{microtype}
+\usepackage{svg}
 % show page layout
-%\usepackage{showframe}
+\usepackage{showframe}
+
+% set language to english (german styling)
+\selectlanguage{english}
 
 % set font to sans-serif
 \renewcommand{\familydefault}{\sfdefault}
@@ -31,15 +37,16 @@
 \author{David Linhardt}
 \date{\today}
 
-\begin{document}
+\pagestyle{scrheadings}
+\cfoot{\thepage} % Page number in center of footer
 
-    \sloppy
-    \hfuzz=100cm
-    \vfuzz=30pt
+\begin{document}
 
     \newgeometry{top=1cm, bottom=1cm, left=2.5cm, right=2.5cm}
 
     \begin{titlepage}
+        \thispagestyle{empty}
+
         \hspace*{-1.5cm}
         \noindent
         \hfill
@@ -47,7 +54,7 @@
         \begin{minipage}{0.3\textwidth}
             \raggedleft\
             \hspace*{1cm}
-            \includegraphics[width=1\textwidth]{images/thi_logo.jpg}
+            \includegraphics[width=1\textwidth]{images/thi_logo.pdf}
         \end{minipage}
 
         \vspace{1cm}
@@ -86,11 +93,21 @@
 
     \end{titlepage}
 
+    \restoregeometry
+
+    \pagenumbering{roman}
+
     \section*{Abstract}
 
-    \tableofcontents
+    % TOC
+    \begingroup
+        \microtypesetup{protrusion=false}
+        \tableofcontents
+    \endgroup
 
     \section*{Glossary}
+
+    \pagenumbering{arabic}
 
     \section{Introduction}
 
