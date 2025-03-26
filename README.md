@@ -17,5 +17,17 @@ bash ./scripts/pandoc.sh
 ```
 ## Run JabRef
 ```sh
+zsh ./scripts/jabref.sh
+```
+**OR**
+```sh
 bash ./scripts/jabref.sh
+```
+## Compile SVG to PDF
+```sh
+zsh ./scripts/convert_svgs.sh
+```
+**OR**
+```sh
+bash ./scripts/convert_svgs.sh
 ```
