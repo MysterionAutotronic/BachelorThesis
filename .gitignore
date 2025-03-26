@@ -30,3 +30,6 @@
 # MacOS & Windows
 .DS_Store
 Thumbs.db
+
+# Inkscape
+.svg:Zone.Identifier
