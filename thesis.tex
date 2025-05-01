@@ -1,4 +1,4 @@
-\documentclass[11pt, a4paper, oneside]{scrartcl}
+\documentclass[11pt, a4paper, oneside, draft]{scrartcl}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman, english]{babel}
@@ -33,7 +33,11 @@
 \DeclareNameAlias{author}{given-family}
 \DeclareNameAlias{labelname}{given-family}
 
-\title{Conception, implementation and evaluation of a highly scalable and highly available Kubernetes-based SaaS platform on Kubernetes Control Plane (KCP)}
+% custom vars
+\newcommand{\thesistitle}{Conception, Implementation, and Evaluation of a Highly Scalable and Highly Available Kubernetes-Based SaaS Platform on Kubernetes Control Plane (KCP)}
+
+% metadata
+\title{\thesistitle}
 \author{David Linhardt}
 \date{\today}
 
@@ -83,12 +87,12 @@
 
         % tabularx
         \begin{tabularx}{\textwidth}{@{}lX@{}}
-            \textbf{Subject:} & Conception, implementation and evaluation of a highly scalable and highly available Kubernetes-based SaaS platform on Kubernetes Control Plane (KCP) \\[2cm]
+            \textbf{Subject:} & \thesistitle \\[2cm]
             \textbf{Name and Surname:} & David Linhardt \\[2cm]     
             \textbf{Issued on:} & TODO: Insert Issue Date \\[0.5cm]           
             \textbf{Submitted on:} & TODO: Insert Submit Date \\[2cm]           
             \textbf{First examiner:} & Prof.\ Dr.\ Bernd Hafenrichter \\[0.5cm]      
-            \textbf{Second examiner:} & TODO: Insert Second examiner \\
+            \textbf{Second examiner:} & Prof.\ Dr.\ Ludwig Lausser \\
         \end{tabularx}
 
     \end{titlepage}
@@ -113,6 +117,8 @@
 
         \subsection{Problem Statement and Motivation}
 
+
+
         \subsection{Objectives and Scope}
 
         \subsection{Structure of the Thesis}
@@ -120,6 +126,18 @@
     \section{Fundamentals}
 
         \subsection{Kubernetes and Multi-Tenancy}
+
+            \paragraph{Introduction and Motivation}
+
+            \paragraph{Overview of Kubernetes}
+
+            \paragraph{Kubernetes Resource Isolation Mechanisms}
+
+            \paragraph{Multi-Tenancy Challenges in Kubernetes}
+
+            \paragraph{Approaches to Multi-Tenancy in Kubernetes}
+
+            \paragraph{Relevance to SaaS and this Thesis}
 
         \subsection{Kubernetes Control Plane (KCP)}
 
