@@ -1,3 +1,4 @@
+% TODO: disable draft mode
 \documentclass[11pt, a4paper, oneside, draft]{scrartcl}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -20,8 +21,11 @@
 \usepackage[automark]{scrlayer-scrpage}
 \usepackage{microtype}
 \usepackage{svg}
-% show page layout
+% show frames in draft
 %\usepackage{showframe}
+% Temporary disable citations for better readability while writing
+\renewcommand{\parencite}[2][]{}
+\renewcommand{\textcite}[2][]{}
 
 % set language to english (german styling)
 \selectlanguage{english}
@@ -128,8 +132,45 @@
         \subsection{Kubernetes and Multi-Tenancy}
 
             \paragraph{Introduction and Motivation}
+                % Why Kubernetes matters
+                As the de facto standard for deploying and managing 
+                \textit{cloud-native applications}, Kubernetes plays a pivotal role in modern cloud
+                architecture \parencite[p.~7--8]{poulton2021}.
+                Kubernetes works as an application orchestrator for \textit{containerized,
+                cloud-native microservice} apps, meaning it can deploy applications and dynamically
+                respond to changes \parencite[p.~3]{poulton2021}.
+                It offers a platform for declarative configuration and automation for containerized
+                workloads, enabling organizations to run distributed applications and services at
+                scale \parencite{kubernetesOverview,redhatWhatIsKubernetes}.
+
+                % Why multi-tenancy matters in modern SaaS-platforms
+                Multi-tenancy plays a fundamental role in modern cloud computing.
+                By allowing multiple tenants to share the same infrastructure through
+                virtualization, it significantly increases resource utilization, reduces operational
+                costs, and enables essential features such as VM mobility and dynamic resource
+                allocation \parencite[pp.~345--346]{IEEEMultiTenancySecurityConcerns}.
+                These benefits are critical for cloud providers, as they make the cloud business
+                model economically viable and scalable.
+                \\
+                However, while multi-tenancy is indispensable for efficiency and cost-effectiveness,
+                it simultaneously introduces complex security challenges, especially in shared
+                environments where resource isolation is limited. As such, understanding and
+                addressing multi-tenancy is essential when designing and securing modern
+                cloud-native platforms \parencite[pp.~345--346]{IEEEMultiTenancySecurityConcerns}.
 
             \paragraph{Overview of Kubernetes}
+                % History
+                Kubernetes was originally developed at Google and released as open source in 2014
+                \parencite{googlecloudWhatIsKubernetes}.
+                % Containerization
+                \textit{Containerization} is a way to bundle an application's code with all its
+                dependencies to run on any infrastructure thus enhancing portability
+                \parencite{awsWhatIsContainerization,dockerWhatContainer}.
+                This comes with additional advantages that can be leveraged by Kubernetes, including
+                vertical and horizontal autoscaling facilitated by quick container boot times, along
+                with self-healing mechanisms and support for distributed, resilient infrastructures
+                \parencite{kubernetesAutoscalingWorkloads,kubernetesSelfHealing,
+                    awsWhatIsContainerization}.
 
             \paragraph{Kubernetes Resource Isolation Mechanisms}
 
