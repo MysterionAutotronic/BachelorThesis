@@ -21,11 +21,12 @@
 \usepackage[automark]{scrlayer-scrpage}
 \usepackage{microtype}
 \usepackage{svg}
+
 % show frames in draft
 %\usepackage{showframe}
 % Temporary disable citations for better readability while writing
-\renewcommand{\parencite}[2][]{}
-\renewcommand{\textcite}[2][]{}
+%\renewcommand{\parencite}[2][]{}
+%\renewcommand{\textcite}[2][]{}
 
 % set language to english (german styling)
 \selectlanguage{english}
@@ -178,13 +179,33 @@
                 \textit{Containerization} is a way to bundle an application's code with all its
                 dependencies to run on any infrastructure thus enhancing portability
                 \parencite{awsWhatIsContainerization,dockerWhatContainer}.
-                This comes with additional advantages that can be leveraged by Kubernetes, including
-                vertical and horizontal autoscaling facilitated by quick container boot times, along
-                with self-healing mechanisms and support for distributed, resilient infrastructures
-                \parencite{kubernetesAutoscalingWorkloads,kubernetesSelfHealing,
-                    awsWhatIsContainerization}.
+                The lightweight nature and isolation can be leveraged by cloud-native software by
+                enabling vertical and horizontal autoscaling facilitated by quick container boot
+                times, along with self-healing mechanisms and support for distributed, resilient
+                infrastructures \parencites{kubernetesAutoscalingWorkloads}{kubernetesSelfHealing}
+                    {awsWhatIsContainerization}[pp.~58--59]{davis2019patterns}
 
             \paragraph{Background: The Role of Microservices in Cloud-Native Architectures}
+                \textit{Microservices} play a pivotal role in cloud-native architectures by
+                promoting agility, scalability, and maintainability of applications.
+                By decomposing applications into independent, granular services, microservices
+                facilitate development, testing, and deployment using diverse technology stacks,
+                enhancing interoperability across platforms
+                \parencites[p.~1]{waseem2020}[p.~1]{larrucea2018}.
+                This architectural style aligns well with cloud environments, as it allows services
+                to evolve independently, effectively addressing challenges associated with scaling
+                and maintenance without being tied to a singular technological framework
+                \parencite[pp.~202--203]{balalaie2016}.
+                Furthermore, the integration of microservices with platforms like Kubernetes
+                enhances deployment automation and orchestration, thus providing substantial
+                elasticity to accommodate fluctuating workloads
+                \parencite[p.~170]{haugeland2021}.
+                Additionally, migrating legacy applications to microservices can foster
+                modernization and efficiency, thus positioning organizations favorably in
+                competitive landscapes \parencite[p.~214]{balalaie2016}.
+                Overall, the synergy between microservices and cloud-native architectures stems from
+                their inherent capability to optimize resource utilization and streamline continuous
+                integration and deployment processes.
 
             \paragraph{Background: Kubernetes Resource Isolation Mechanisms}
 
