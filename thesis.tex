@@ -203,8 +203,7 @@
                 \parencite[pp.~202--203]{balalaie2016}.
                 Furthermore, the integration of microservices with platforms like Kubernetes
                 enhances deployment automation and orchestration, thus providing substantial
-                elasticity to accommodate fluctuating workloads
-                \parencite[p.~170]{haugeland2021}.
+                elasticity to accommodate fluctuating workloads \parencite[p.~170]{haugeland2021}.
                 Additionally, migrating legacy applications to microservices can foster
                 modernization and efficiency, thus positioning organizations favorably in
                 competitive landscapes \parencite[p.~214]{balalaie2016}.
@@ -213,6 +212,37 @@
                 integration and deployment processes.
 
             \paragraph{Background: Kubernetes Resource Isolation Mechanisms}
+                Kubernetes employs several resource isolation mechanisms, primarily through the use
+                of \textit{cgroups} (control groups) and \textit{namespaces} to limit resource
+                allocation for containers.
+                Cgroups are a Linux kernel feature that organizes processes into hierarchical
+                groups for fine-grained resource limitation and monitoring via a pseudo-filesystem
+                called \textit{cgroupfs} \parencites{kubernetesCgroupsV2}{cgroups7}.
+                \textit{Namespaces} are a mechanism for isolating groups of resources withing a
+                single cluster and scoping resource names to prevent naming conflicts across
+                different teams or projects \parencite{kubernetesNamespaces}.
+                However, these mechanisms may not always provide sufficient isolation necessary for
+                multi-tenant architectures, because the logical segregation offered by namespaces
+                does not address the fundamental security concerns associated with multi-tenancy 
+                \parencite[p.~651]{nguyen2022} and research indicates that the native isolation
+                strategies can lead to performance interference, where containers that share nodes
+                can experience significant degradation in performance due to CPU contention
+                \parencite[p.~158]{kim2021}.
+                Specifically, critical services may be adversely affected when non-critical services
+                monopolize available resources, which undermines the quality of service in
+                multi-tenant environments \parencite[p.~30410]{li2019}.
+                \\
+                Moreover, while Kubernetes allows for container orchestration and resource
+                scheduling, it can lead to resource fragmentation, further exacerbating the issue
+                of performance isolation \parencite[p.~1]{jian2023}.
+                A common approach in multi-tenant scenarios is to deploy separate clusters for each
+                tenant, which incurs substantial overhead—particularly in environments utilizing
+                virtual machines for isolation \parencite[pp.~144574--144575]{senel2023}.
+                In summary, although Kubernetes offers essential isolation mechanisms, the
+                complexities of resource sharing and performance consistency in multi-tenant
+                applications highlight the need for enhanced strategies to ensure robust resource
+                management and performance isolation
+                \parencites[p.~651]{nguyen2022}[p.~2]{jian2023}[p.~158]{kim2021}
 
             \paragraph{Relevance to SaaS and this Thesis}
 
