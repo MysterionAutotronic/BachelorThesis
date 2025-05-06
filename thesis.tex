@@ -6,7 +6,16 @@
 \usepackage[onehalfspacing]{setspace}
 \usepackage{helvet}
 \usepackage[a4paper, left=2.5cm, right=2.5cm]{geometry}
-\usepackage[backend=biber, style=authordate]{biblatex}
+\usepackage[
+    backend=biber,
+    style=authoryear,
+    citestyle=authoryear,
+    sorting=nyt,
+    sortcites=true,
+    dashed=false,
+    giveninits=true,
+    maxbibnames=999
+]{biblatex}
 \usepackage{csquotes}
 \usepackage{hyperref}
 \usepackage{graphicx}
@@ -35,8 +44,6 @@
 \renewcommand{\familydefault}{\sfdefault}
 
 \addbibresource{jabref-library.bib}
-\DeclareNameAlias{author}{given-family}
-\DeclareNameAlias{labelname}{given-family}
 
 % custom vars
 \newcommand{\thesistitle}{Conception, Implementation, and Evaluation of a Highly Scalable and Highly Available Kubernetes-Based SaaS Platform on Kubernetes Control Plane (KCP)}
@@ -93,7 +100,8 @@
         % tabularx
         \begin{tabularx}{\textwidth}{@{}lX@{}}
             \textbf{Subject:} & \thesistitle \\[2cm]
-            \textbf{Name and Surname:} & David Linhardt \\[2cm]     
+            \textbf{Name and Surname:} & David Linhardt \\[0.5cm]
+            \textbf{Matriculation number:} & 00122706\\[2cm]     
             \textbf{Issued on:} & TODO: Insert Issue Date \\[0.5cm]           
             \textbf{Submitted on:} & TODO: Insert Submit Date \\[2cm]           
             \textbf{First examiner:} & Prof.\ Dr.\ Bernd Hafenrichter \\[0.5cm]      
