@@ -14,7 +14,8 @@
     sortcites=true,
     dashed=false,
     giveninits=true,
-    maxbibnames=999
+    maxbibnames=999,
+    url=true
 ]{biblatex}
 \usepackage{csquotes}
 \usepackage{hyperref}
@@ -190,23 +191,32 @@
                 management system called Borg, and designed to streamline the process of deploying,
                 scaling, and managing applications composed of microservices running in containers
                 \parencites[pp.~13--14]{verma2015}[p.~84]{bernstein2014}.
-                % ------------------------- Sketch
-                % Since its inception, Kubernetes has gained traction among organizations because it
-                % provides robust features such as automated scaling,
-                % self-healing, and service discovery, which have made it the de facto standard for
-                % container orchestration in the tech industry (Damarapati, 2025; -, 2024).
-                % \\
-                % The evolution of Kubernetes parallels significant advancements in cloud computing
-                % and the surge in containerization practices, which enable developers to encapsulate
-                % their applications and dependencies within lightweight containers.
-                % This evolution has fostered an ecosystem promoting faster deployment cycles and
-                % optimized resource allocation, crucial for businesses aiming to innovate rapidly
-                % (Şenel et al., 2023)-, 2020).
-                % As a response to growing adoption, leading cloud providers have integrated
-                % Kubernetes into their services, offering Containers as a Service (CaaS),
-                % thus contributing to its widespread usage across various sectors
-                % (Şenel et al., 2023).
-                % \\
+                Since its inception, Kubernetes has gained traction among organizations because it
+                provides robust features such as automated scaling,
+                self-healing, and service discovery, which have made it the de facto standard for
+                container orchestration in the tech industry
+                \parencite[pp.~855--858]{damarapati2025}.
+                \\
+                As noted by \cite[p.~457]{moravcik2022} by 2021 almost 90\% of organizations used
+                Kubernetes as an orchestrator for managing containers and over 70\% of organizations
+                used it in production \parencite{redhatStateOfK8sSecurityReport2021}.
+                The widespread adoption of Kubernetes is further underscored by Red Hat's latest
+                (2024) report, which no longer asks survey respondents if they use Kubernetes for
+                container orchestration, but rather \textbf{which} Kubernetes platform they use
+                \parencite[p.~27]{redhatStateOfK8sSecurityReport2024}.
+                According to \parencite[pp.~855--856]{damarapati2025}, Kubernetes has seen
+                unprecedented industry adoption due to its vendor neutrality, strong community
+                support, and flexible, extensible architecture in combination with enterprise
+                readiness caused by high availability, disaster recovery and security.
+                \\
+                Moreover Kubernetes enables faster time-to-market by providing a unified,
+                declarative control plane that abstracts away infrastructure,
+                guarantees consistent environments from development to production,
+                and automates operational tasks such as scaling, rolling updates,
+                and self-healing—advantages that translate directly into competitive delivery speed
+                increasing its appeal to organizations of every size
+                \parencite[pp.~858--859]{damarapati2025}.
+                
                 % Over the years, Kubernetes has also adapted to encompass diverse workloads,
                 % catering to both traditional applications and new paradigms such as Edge Native
                 % computing (Biot et al., 2025; Aruna & Gurunathan, 2024).
@@ -219,7 +229,6 @@
                 % Overall, the history of Kubernetes showcases a transformative journey driven by the
                 % evolving demands of software architecture and the necessity for efficient
                 % application management in an increasingly complex technological landscape.
-                % ----------------------
 
             \paragraph{Background: Containerization as an Enabler of Kubernetes}
                 \textit{Containerization} is a way to bundle an application's code with all its
