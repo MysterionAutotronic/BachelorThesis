@@ -201,14 +201,14 @@
                 container orchestration in the tech industry
                 \parencite[pp.~855--858]{damarapati2025}.
                 \\
-                As noted by \cite[p.~457]{moravcik2022} by 2021 almost 90\% of organizations used
+                As noted by~\cite[p.~457]{moravcik2022} by 2021 almost 90\% of organizations used
                 Kubernetes as an orchestrator for managing containers and over 70\% of organizations
                 used it in production \parencite{redhatStateOfK8sSecurityReport2021}.
                 The widespread adoption of Kubernetes is further underscored by Red Hat's latest
                 (2024) report, which no longer asks survey respondents if they use Kubernetes for
                 container orchestration, but rather \textbf{which} Kubernetes platform they use
                 \parencite[p.~27]{redhatStateOfK8sSecurityReport2024}.
-                According to \parencite[pp.~855--856]{damarapati2025}, Kubernetes has seen
+                According to~\cite[pp.~855--856]{damarapati2025}, Kubernetes has seen
                 unprecedented industry adoption due to its vendor neutrality, strong community
                 support, and flexible, extensible architecture in combination with enterprise
                 readiness caused by high availability, disaster recovery and security.
@@ -220,19 +220,20 @@
                 and self-healing—advantages that translate directly into competitive delivery speed
                 increasing its appeal to organizations of every size
                 \parencite[pp.~858--859]{damarapati2025}.
-                
-                % Over the years, Kubernetes has also adapted to encompass diverse workloads,
-                % catering to both traditional applications and new paradigms such as Edge Native
-                % computing (Biot et al., 2025; Aruna & Gurunathan, 2024).
-                % This adaptability reflects its fundamental design, which focuses on modularity and
-                % extensibility, allowing developers to customize their orchestration needs.
-                % Furthermore, the Kubernetes community plays a vital role in its growth, providing a
-                % rich library of extensions and tools that enhance its capabilities and address
-                % various challenges faced, such as workload scheduling and resource provisioning in
-                % diverse environments (Rejiba & Chamanara, 2022; Truyen et al., 2019).
-                % Overall, the history of Kubernetes showcases a transformative journey driven by the
-                % evolving demands of software architecture and the necessity for efficient
-                % application management in an increasingly complex technological landscape.
+                \\
+                Over the years, Kubernetes—and the many orchestration solutions inspired by or built
+                on it—has evolved to handle an increasingly diverse range of workloads,
+                supporting everything from conventional applications to emerging Edge-Native
+                deployments \parencites[p.~21]{biot2025}[pp.~1--4]{biot2025}.
+                \textit{Edge-native} deployments are applications intended to run on computing
+                resources located at or near the data source --- the network \textit{edge} ---
+                rather than in a central cloud \parencite[p.~34]{satyanarayanan2019}.
+                This adaptability reflects its fundamental design, which focuses on modularity and
+                extensibility, allowing developers to customize their orchestration needs.
+                \\
+                Overall, the history of Kubernetes showcases a transformative journey driven by the
+                evolving demands of software architecture and the necessity for efficient
+                application management in an increasingly complex technological landscape.
 
             \paragraph{Background: Containerization as an Enabler of Kubernetes}
                 \textit{Containerization} is a way to bundle an application's code with all its
@@ -301,7 +302,7 @@
                 complexities of resource sharing and performance consistency in multi-tenant
                 applications highlight the need for enhanced strategies to ensure robust resource
                 management and performance isolation
-                \parencites[p.~651]{nguyen2022}[p.~2]{jian2023}[p.~158]{kim2021}
+                \parencites[p.~651]{nguyen2022}[p.~2]{jian2023}[p.~158]{kim2021}.
 
             \paragraph{Relevance to SaaS and this Thesis}
 
