@@ -208,13 +208,34 @@
                         heightening concern over how their critical information is protected,
                         replicated and kept available \parencite[pp.~3--4]{subashini2011}.
                         To complicate matters further, the customer might have no way to evaluate
-                        the SaaS vendors security measures, meaning the pricing will determine
-                        which service is used in practice, disregarding security concerns
-                        \parencite[p.~6]{everett2009}.
+                        the SaaS vendors security measures, meaning the pricing and feature set will
+                        most likely determine which service is used in practice, often disregarding
+                        security concerns \parencites[p.~6]{everett2009}[p.~836]{khorshed2012}.
 
-                    \item\label{chal:}
+                    \item\label{chal:scheduling}
+                        \textit{Scheduling}.
+                        In multi-tenant architectures multiple tenants utilize the same hardware,
+                        thus creating the need for fair scheduling to ensure cost-effectiveness
+                        and performance \parencite[p.~32597]{simi2024}.
+                    
+                    \item\label{chal:isolation}
+                        \textit{Performance Isolation}
+                        A single tenant is able to significantly degrade the performance of other
+                        tenants working on the same hardware, if \textit{performance isolation}
+                        is not given \parencite[p.~195]{krebs2013}.
+                        As noted by~\cite[p.~195]{krebs2013} ``A system is said to be performance
+                        isolated, if for tenants working within their quotas the performance is
+                        within the (response time) SLA while other tenants exceed their quotas
+                        (e.g., request rate)''
+
+                    \item\label{chal:automation}
+                        \textit{Automation}.
+            
 
                 \end{enumerate}
+
+                A secure solution, keeping multi-tenancies while also addressing security concerns
+                is desperately needed \parencite[p.~346]{aljahdali2014}.
 
             \paragraph{Kubernetes Control Plane (KCP) as a Promising Approach}
 
