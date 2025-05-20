@@ -32,6 +32,7 @@
 \usepackage{microtype}
 \usepackage{svg}
 \usepackage{xurl}
+\usepackage{enumitem}
 
 % show frames in draft
 %\usepackage{showframe}
@@ -161,7 +162,7 @@
                 By allowing multiple tenants to share the same infrastructure through
                 virtualization, it significantly increases resource utilization, reduces operational
                 costs, and enables essential features such as VM mobility and dynamic resource
-                allocation \parencite[pp.~345--346]{IEEEMultiTenancySecurityConcerns}. 
+                allocation \parencite[pp.~345--346]{aljahdali2014}. 
                 These benefits are critical for cloud providers, as they make the cloud business
                 model economically viable and scalable. 
                 In the context of modern SaaS platforms, multi-tenancy goes even further by enabling
@@ -174,14 +175,32 @@
                 especially in shared environments where resource isolation is limited. 
                 In particular, the potential for cross-tenant access and side-channel attacks makes
                 security in multi-tenant environments a primary concern
-                \parencite[pp.~345--346]{IEEEMultiTenancySecurityConcerns}. 
+                \parencite[pp.~345--346]{aljahdali2014}. 
                 As such, understanding and addressing multi-tenancy from both operational and
                 security perspectives is essential when designing and securing modern cloud-native
                 platforms
                 \parencites[pp.~9--11]{awsSaaSArchitectureFundamentals}[p.~4]{isoConcepts}.
 
             \paragraph{The Challenges of Multi-Tenancy and the Need for Solutions}
-                
+                Multi-tenancy introduces a spectrum of technical and security challenges that need
+                to be addressed.
+
+                \begin{enumerate}[label={[\arabic*]:},
+                    ref=Challenge~\arabic*,
+                    leftmargin=*,
+                    itemsep=0.6\baselineskip]
+
+                    \item\label{chal:remanence}
+                        \textit{Residual-data exposure}.
+                        Shared infrastructures may expose tenants to data leakage and hardware-layer
+                        attacks. 
+                        Because hardware resources are only virtually partitioned,
+                        residual data left in reusable memory or storage blocks,
+                        known as \textit{data remanence},
+                        can be inadvertently leaked or deliberately harvested by co-resident tenants
+                        \parencite[p.~586]{zissis2012}.
+
+                \end{enumerate}
 
             \paragraph{Kubernetes Control Plane (KCP) as a Promising Approach}
 
