@@ -33,6 +33,7 @@
 \usepackage{svg}
 \usepackage{xurl}
 \usepackage{enumitem}
+\usepackage{csquotes}
 
 % show frames in draft
 %\usepackage{showframe}
@@ -223,10 +224,10 @@
                         A single tenant is able to significantly degrade the performance of other
                         tenants working on the same hardware, if \textit{performance isolation}
                         is not given \parencite[p.~195]{krebs2013}.
-                        As noted by~\cite[p.~195]{krebs2013} ``A system is said to be performance
-                        isolated, if for tenants working within their quotas the performance is
-                        within the (response time) SLA while other tenants exceed their quotas
-                        (e.g., request rate)''
+                        As noted by~\cite[p.~195]{krebs2013} \enquote{A system is said to be
+                        performance isolated, if for tenants working within their quotas the
+                        performance is within the (response time) SLA while other tenants exceed
+                        their quotas (e.g., request rate)}.
 
                     \item\label{chal:automation}
                         \textit{Automation}.
