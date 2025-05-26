@@ -253,7 +253,7 @@
                         allocate resources for new tenants.
                         Multi-tenant system~\sic{} administrator manually does all the work of
                         allocation or changing tenant's~\sic{} resources.}
-                        However, to ensure efficiency and scalability, a API that allows automating
+                        However, to ensure efficiency and scalability, an API that allows automating
                         deployments and dynamic changes in the application is needed.
 
                 \end{enumerate}
@@ -263,10 +263,22 @@
                 \parencites[p.~346]{aljahdali2014}[pp.~14576--14577]{senel2023}.
 
             \paragraph{Kubernetes Control Plane (KCP) as a Promising Approach}
+                KCP is \enquote{An open source horizontally scalable control plane for
+                Kubernetes-like APIs} \parencite{kcpio}.
+                % definition
+
                 % nguyen 2022
                 % KCP docs
 
                 % automation
+                As previously noted, most Kubernetes based multi-tenant systems currently need
+                manual intervention by an administrator to deploy new tenants or modify resource
+                allocation.
+                However KCP, other than similar frameworks, like Capsule and Kiosk, provides an
+                API server to the customer, that provides an easy way to access
+                their resources \parencites[p.~651]{nguyen2022}{kcpio}.
+                This in turn enables a degree of automation \parencite[p.~651]{nguyen2022}.
+
 
 
             \paragraph{Background: The Evolution of Kubernetes}
@@ -402,6 +414,9 @@
         \subsection{Kubernetes Scaling Methods}
 
         \subsection{Multi-Tenancy Concepts in the Cloud}
+
+        \subsection{KCP}
+            % nguyen2022
 
     \section{Conceptual Design}
 
