@@ -52,6 +52,7 @@
 
 % custom vars
 \newcommand{\thesistitle}{Conception, Implementation, and Evaluation of a Highly Scalable and Highly Available Kubernetes-Based SaaS Platform on Kubernetes Control Plane (KCP)}
+\newcommand{\sic}{\textnormal{\textit{[sic]}}}
 
 % URL formatting
 \PassOptionsToPackage{hyphens}{url}
@@ -221,7 +222,14 @@
                         and performance \parencite[p.~32597]{simi2024}.
                         Achieving fair and efficient resource allocation in scheduling first
                         requires a quantitative assessment of the system's existing unfairness
-                        \parencite[p.~7]{ebrahimi2012}.
+                        \parencites[p.~7]{ebrahimi2012}[p.~14]{beltre2019}[pp.~2--3]{ghodsi2011}.
+                        Various scheduling algorithms and policies can be employed in practice to
+                        achieve fairness \parencites[pp.~14--16]{beltre2019}[p.~4]{ghodsi2011}.
+                        To fully leverage the advantages of multi-tenant architectures, resources
+                        must not only be shared fairly, but also efficiently, not hindering
+                        performance \parencite[p.~14]{beltre2019}.
+                        As stated by~\cite[p.~14]{beltre2019} \enquote{Balancing both cluster
+                        utilization and fairness is challenging}.
                     
                     \item\label{chal:isolation}
                         \textit{Performance Isolation}
@@ -232,16 +240,34 @@
                         performance isolated, if for tenants working within their quotas the
                         performance is within the (response time) SLA while other tenants exceed
                         their quotas (e.g., request rate)}.
+                        As noted by~\cite[p.~18]{carrion2022} \enquote{Currently, it is difficult
+                        to achieve performance isolation for multi-tenancy on K8s clusters because
+                        this requires providing resource isolation and improving the abstraction of
+                        applications.}
 
                     \item\label{chal:automation}
                         \textit{Automation}.
+                        As noted by~\cite[p.~651]{nguyen2022} \enquote{Presently, multi-tenant
+                        systems lack the facility of allowing clients to dynamic~\sic{}
+                        change their resources based on their business demands or create and
+                        allocate resources for new tenants.
+                        Multi-tenant system~\sic{} administrator manually does all the work of
+                        allocation or changing tenant's~\sic{} resources.}
+                        However, to ensure efficiency and scalability, a API that allows automating
+                        deployments and dynamic changes in the application is needed.
 
                 \end{enumerate}
 
-                A secure solution, keeping multi-tenancies while also addressing security concerns
-                is desperately needed \parencite[p.~346]{aljahdali2014}.
+                A secure solution, keeping multi-tenancies advantages while also addressing security
+                concerns is desperately needed
+                \parencites[p.~346]{aljahdali2014}[pp.~14576--14577]{senel2023}.
 
             \paragraph{Kubernetes Control Plane (KCP) as a Promising Approach}
+                % nguyen 2022
+                % KCP docs
+
+                % automation
+
 
             \paragraph{Background: The Evolution of Kubernetes}
                 Kubernetes, an open-source container orchestration platform developed by Google,

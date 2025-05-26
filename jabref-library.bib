@@ -1,4 +1,4 @@
-@standard{isoVocab,
+@manual{isoVocab,
   type        = {Standard},
   title       = {Information technology - Cloud computing - Part 1: Vocabulary},
   number      = {{ISO}/{IEC} 22123-1:2023(E)},
@@ -9,7 +9,7 @@
   publisher   = {{ISO}}
 }
 
-@standard{isoConcepts,
+@manual{isoConcepts,
   type        = {Standard},
   title       = {Information technology - Cloud computing - Part 2: Concepts},
   number      = {{ISO}/{IEC} 22123-2:2023(E)},
@@ -20,7 +20,7 @@
   publisher   = {{ISO}}
 }
 
-@standard{isoReferenceArchitecture,
+@manual{isoReferenceArchitecture,
   type        = {Standard},
   title       = {Information technology - Cloud computing - Part 3: Reference architecture},
   number      = {{ISO}/{IEC} 22123-3:2023(E)},
@@ -515,6 +515,51 @@
   year={2012},
   month=apr,
   pages={1-35}
+}
+
+@inproceedings{beltre2019,
+  title={KubeSphere: An Approach to Multi-Tenant Fair Scheduling for Kubernetes Clusters},
+  url={http://dx.doi.org/10.1109/cloudsummit47114.2019.00009},
+  DOI={10.1109/cloudsummit47114.2019.00009},
+  booktitle={2019 IEEE Cloud Summit},
+  publisher={IEEE},
+  author={Beltre, Angel and Saha, Pankaj and Govindaraju, Madhusudhan},
+  year={2019},
+  month=aug,
+  pages={14-20}
+}
+
+@inproceedings{ghodsi2011,
+  author = {Ghodsi, Ali and Zaharia, Matei and Hindman, Benjamin and Konwinski, Andy and Shenker, Scott and Stoica, Ion},
+  title = {Dominant resource fairness: fair allocation of multiple resource types},
+  year = {2011},
+  publisher = {USENIX Association},
+  address = {USA},
+  booktitle = {Proceedings of the 8th USENIX Conference on Networked Systems Design and Implementation},
+  pages = {323-336},
+  numpages = {14},
+  location = {Boston, MA},
+  series = {NSDI'11}
+}
+
+@article{carrion2022,
+  author = {Carri\'{o}n, Carmen},
+  title = {Kubernetes Scheduling: Taxonomy, Ongoing Issues and Challenges},
+  year = {2022},
+  issue_date = {July 2023},
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
+  volume = {55},
+  number = {7},
+  issn = {0360-0300},
+  url = {https://doi.org/10.1145/3539606},
+  doi = {10.1145/3539606},
+  abstract = {Continuous integration enables the development of microservices-based applications using container virtualization technology. Container orchestration systems such as Kubernetes, which has become the de facto standard, simplify the deployment of container-based applications. However, developing efficient and well-defined orchestration systems is a challenge. This article focuses specifically on the scheduler, a key orchestrator task that assigns physical resources to containers. Scheduling approaches are designed based on different Quality of Service (QoS) parameters to provide limited response time, efficient energy consumption, better resource utilization, and other things. This article aims to establish insight knowledge into Kubernetes scheduling, find the main gaps, and thus guide future research in the area. Therefore, we conduct a study of empirical research on Kubernetes scheduling techniques and present a new taxonomy for Kubernetes scheduling. The challenges, future direction, and research opportunities are also discussed.},
+  journal = {ACM Comput. Surv.},
+  month = dec,
+  articleno = {138},
+  numpages = {37},
+  keywords = {Kubernetes, orchestration, scheduling, containers, survey}
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}
