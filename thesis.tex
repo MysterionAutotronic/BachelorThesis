@@ -125,13 +125,19 @@
 
     \section*{Abstract}
 
+    \newpage
+
     % TOC
     \begingroup
         \microtypesetup{protrusion=false}
         \tableofcontents
     \endgroup
 
+    \newpage
+
     \section*{Glossary}
+
+    \newpage
 
     \pagenumbering{arabic}
 
@@ -265,40 +271,6 @@
             \paragraph{Kubernetes Control Plane (KCP) as a Promising Approach}
                 KCP is \enquote{An open source horizontally scalable control plane for
                 Kubernetes-like APIs} \parencite{kcpio}.
-                \\
-                KPC introduces the concept of \textit{workspaces}.
-                In KCP, a workspace is a Kubernetes-cluster-like HTTPS endpoint exposed under
-                \texttt{/clusters/<parent>:<name>}, that regular tools such as \textit{kubectl},
-                \textit{Helm} or \textit{client-go} treat exactly like a real Kubernetes cluster.
-                Every workspace is backed by its own logical cluster stored in an isolated
-                \textbf{etcd prefix}, so objects in one workspace (including cluster-scoped
-                resources like \textbf{CRDs}) are completely invisible to others, delivering hard
-                multi-tenancy without spinning up separate control planes \parencite{kcpWorkspaces}.
-                \\
-                As per the definition by the~\cite{etcd}, \enquote{\textbf{etcd} is a strongly
-                consistent, distributed key-value store that provides a reliable way to store data
-                that needs to be accessed by a distributed system or cluster of machines.
-                It gracefully handles leader elections during network partitions and can tolerate
-                machine failure, even in the leader node.}
-                etcd is the primary datastore used by KCP and K8s
-                \parencites{kcpDevStorageToRest}[p.~214]{sun2021}.
-                \textbf{etcd prefixes} are a simple, inbuilt way to group keys using a prefix
-                \parencite{etcdPrefix}.
-                This allows for resource isolation in KCP.\@
-                A \textit{Custom Resource Definition} \textbf{(CRD)} is a declaratively specified
-                schema that registers a new API resource, defined by its group, version, kind, and
-                OpenAPI schema, into the Kubernetes control plane so the native API server stores
-                and serves the objects as first-class resources \parencite{kubernetesCRD}.
-                \\
-                Workspaces for a typed, parent-child tree, and each type can constrain which kind
-                of workspaces it can contain or be contained by, giving platform teams a structured
-                way to delegate environments while retaining policy control
-                \parencite{kcpWorkspaces}.
-                \\
-                This combination of strong isolation, familiar tooling, and hierarchical
-                organization makes workspaces offer an attractive solution to many of the problems
-                commonly faced in multi-tenant environments: each tenant gets the freedom of a full
-                dedicated cluster, yet operators manage only a single shared KCP control plane.
                 \\
                 % nguyen 2022
                 % KCP docs
@@ -434,7 +406,45 @@
 
             \paragraph{Relevance to SaaS and this Thesis}
 
+        \newpage
+
         \subsection{Kubernetes Control Plane (KCP)}
+
+            \paragraph{Workspaces}
+                KPC introduces the concept of \textit{workspaces}.
+                In KCP, a workspace is a Kubernetes-cluster-like HTTPS endpoint exposed under
+                \texttt{/clusters/<parent>:<name>}, that regular tools such as \textit{kubectl},
+                \textit{Helm} or \textit{client-go} treat exactly like a real Kubernetes cluster.
+                Every workspace is backed by its own logical cluster stored in an isolated
+                \textbf{etcd prefix}, so objects in one workspace (including cluster-scoped
+                resources like \textbf{CRDs}) are completely invisible to others, delivering hard
+                multi-tenancy without spinning up separate control planes \parencite{kcpWorkspaces}.
+                \\
+                As per the definition by the~\cite{etcd}, \enquote{\textbf{etcd} is a strongly
+                consistent, distributed key-value store that provides a reliable way to store data
+                that needs to be accessed by a distributed system or cluster of machines.
+                It gracefully handles leader elections during network partitions and can tolerate
+                machine failure, even in the leader node.}
+                etcd is the primary datastore used by KCP and K8s
+                \parencites{kcpDevStorageToRest}[p.~214]{sun2021}.
+                \textbf{etcd prefixes} are a simple, inbuilt way to group keys using a prefix
+                \parencite{etcdPrefix}.
+                This allows for resource isolation in KCP.\@
+                A \textit{Custom Resource Definition} \textbf{(CRD)} is a declaratively specified
+                schema that registers a new API resource, defined by its group, version, kind, and
+                OpenAPI schema, into the Kubernetes control plane so the native API server stores
+                and serves the objects as first-class resources \parencite{kubernetesCRD}.
+                \\
+                Workspaces for a typed, parent-child tree, and each type can constrain which kind
+                of workspaces it can contain or be contained by, giving platform teams a structured
+                way to delegate environments while retaining policy control
+                \parencite{kcpWorkspaces}.
+                \\
+                This combination of strong isolation, familiar tooling, and hierarchical
+                organization makes workspaces offer an attractive solution to many of the problems
+                commonly faced in multi-tenant environments: each tenant gets the freedom of a full
+                dedicated cluster, yet operators manage only a single shared KCP control plane.
+                \\
 
         \subsection{SaaS Architecture and Automation}
 
@@ -484,6 +494,8 @@
         \subsection{Personal Conclusion}
 
         \subsection{Future Outlook}
+
+    \newpage
 
     \section*{References}
         \addcontentsline{toc}{section}{References} % manually add to TOC
