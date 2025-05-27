@@ -284,8 +284,11 @@
                 \parencites{kcpDevStorageToRest}[p.~214]{sun2021}.
                 \textbf{etcd prefixes} are a simple, inbuilt way to group keys using a prefix
                 \parencite{etcdPrefix}.
-                This allows for resource isolation in KCP.
-                % def CRDs
+                This allows for resource isolation in KCP.\@
+                A \textit{Custom Resource Definition} \textbf{(CRD)} is a declaratively specified
+                schema that registers a new API resource, defined by its group, version, kind, and
+                OpenAPI schema, into the Kubernetes control plane so the native API server stores
+                and serves the objects as first-class resources \parencite{kubernetesCRD}.
                 \\
                 Workspaces for a typed, parent-child tree, and each type can constrain which kind
                 of workspaces it can contain or be contained by, giving platform teams a structured
