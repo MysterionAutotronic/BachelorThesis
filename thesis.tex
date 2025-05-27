@@ -411,7 +411,7 @@
         \subsection{Kubernetes Control Plane (KCP)}
 
             \paragraph{Workspaces}
-                KPC introduces the concept of \textit{workspaces}.
+                KPC introduces the concept of \textit{workspaces} to implement multi-tenancy.
                 In KCP, a workspace is a Kubernetes-cluster-like HTTPS endpoint exposed under
                 \texttt{/clusters/<parent>:<name>}, that regular tools such as \textit{kubectl},
                 \textit{Helm} or \textit{client-go} treat exactly like a real Kubernetes cluster.
