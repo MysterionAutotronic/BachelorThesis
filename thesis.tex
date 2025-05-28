@@ -53,6 +53,7 @@
 % custom vars
 \newcommand{\thesistitle}{Conception, Implementation, and Evaluation of a Highly Scalable and Highly Available Kubernetes-Based SaaS Platform on Kubernetes Control Plane (KCP)}
 \newcommand{\sic}{\textnormal{\textit{[sic]}}}
+\newcommand{\see}[1]{(see~\autoref{#1}: \textit{\nameref{#1}})}
 
 % URL formatting
 \PassOptionsToPackage{hyphens}{url}
@@ -123,7 +124,7 @@
 
     \pagenumbering{roman}
 
-    \section*{Abstract}
+    \section*{Abstract}\label{sec:abstract}
 
     \newpage
 
@@ -135,27 +136,25 @@
 
     \newpage
 
-    \section*{Glossary}
+    \section*{Glossary}\label{sec:glossary}
 
     \newpage
 
     \pagenumbering{arabic}
 
-    \section{Introduction}
+    \section{Introduction}\label{sec:introduction}
 
-        \subsection{Problem Statement and Motivation}
+        \subsection{Problem Statement and Motivation}\label{subsec:problem}
 
+        \subsection{Objectives and Scope}\label{subsec:objectives}
 
-
-        \subsection{Objectives and Scope}
-
-        \subsection{Structure of the Thesis}
+        \subsection{Structure of the Thesis}\label{subsec:structure}
 
     \section{Fundamentals}
 
-        \subsection{Kubernetes and Multi-Tenancy}
+        \subsection{Kubernetes and Multi-Tenancy}\label{subsec:k8sAndMultiTenancy}
 
-            \paragraph{Kubernetes as the Foundation for Cloud-Native Applications}
+            \subsubsection{Kubernetes as the Foundation for Cloud-Native Applications}\label{subsubsec:foundationK8s}
                 As the de facto standard for deploying and managing 
                 \textit{cloud-native applications}, Kubernetes plays a pivotal role in modern cloud
                 architecture \parencite[p.~7--8]{poulton2021}.
@@ -166,7 +165,7 @@
                 workloads, enabling organizations to run distributed applications and services at
                 scale \parencite{kubernetesOverview,redhatWhatIsKubernetes}.
 
-            \paragraph{The Importance of Multi-Tenancy in Modern SaaS Platforms}
+            \subsubsection{The Importance of Multi-Tenancy in Modern SaaS Platforms}\label{subsubsec:mtImportance}
                 Multi-tenancy plays a fundamental role in modern cloud computing. 
                 By allowing multiple tenants to share the same infrastructure through
                 virtualization, it significantly increases resource utilization, reduces operational
@@ -190,7 +189,7 @@
                 platforms
                 \parencites[pp.~9--11]{awsSaaSArchitectureFundamentals}[p.~4]{isoConcepts}.
 
-            \paragraph{The Challenges of Multi-Tenancy and the Need for Solutions}
+            \subsubsection{The Challenges of Multi-Tenancy and the Need for Solutions}\label{subsubsec:challenges}
                 Multi-tenancy introduces a spectrum of technical and security challenges that need
                 to be addressed.
 
@@ -268,23 +267,24 @@
                 concerns is desperately needed
                 \parencites[p.~346]{aljahdali2014}[pp.~14576--14577]{senel2023}.
 
-            \paragraph{Kubernetes Control Plane (KCP) as a Promising Approach}
-                KCP is \enquote{An open source horizontally scalable control plane for
-                Kubernetes-like APIs} \parencite{kcpio}.
-                \\
-                % nguyen 2022
-                % KCP docs
-                As previously noted, most Kubernetes based multi-tenant systems currently need
-                manual intervention by an administrator to deploy new tenants or modify resource
-                allocation.
-                However KCP, other than similar frameworks, like Capsule or Kiosk, provides an
-                API server to the customer, that provides an easy way to access
-                their resources \parencites[p.~651]{nguyen2022}{kcpio}.
-                This in turn enables a degree of automation \parencite[p.~651]{nguyen2022}.
+            \subsubsection{Kubernetes Control Plane (KCP) as a Promising Approach}\label{subsubsec:kcpApproach}
+                KCP offers three capabilities that map cleanly onto today's multi-tenancy pain
+                points.
 
+                \begin{enumerate}[label={[\arabic*]:},
+                    ref=Challenge~\arabic*,
+                    leftmargin=*,
+                    itemsep=0.6\baselineskip]
 
+                    \item\label{chal:workspaces}
+                        \textit{Workspaces}.
+                        KCP achieves strong resource isolation through the concept of
+                        \textit{workspaces} \see{subsubsec:workspaces}.
+                        
 
-            \paragraph{Background: The Evolution of Kubernetes}
+                \end{enumerate}
+
+            \subsubsection{Background: The Evolution of Kubernetes}\label{subsubsec:k8sEvolution}
                 Kubernetes, an open-source container orchestration platform developed by Google,
                 emerged from the need to manage the complexities of containerized applications
                 effectively and to support large-scale deployments in a cloud-native environment
@@ -335,7 +335,7 @@
                 evolving demands of software architecture and the necessity for efficient
                 application management in an increasingly complex technological landscape.
 
-            \paragraph{Background: Containerization as an Enabler of Kubernetes}
+            \subsubsection{Background: Containerization as an Enabler of Kubernetes}\label{subsubsec:containerization}
                 \textit{Containerization} is a way to bundle an application's code with all its
                 dependencies to run on any infrastructure thus enhancing portability
                 \parencite{awsWhatIsContainerization,dockerWhatContainer}.
@@ -348,7 +348,7 @@
                 isolated, low overhead deployments, ensuring consistent environments
                 \parencite[p.~209]{balalaie2016}.
 
-            \paragraph{Background: The Role of Microservices in Cloud-Native Architectures}
+            \subsubsection{Background: The Role of Microservices in Cloud-Native Architectures}\label{subsubsec:microservices}
                 \textit{Microservices} play a pivotal role in cloud-native architectures by
                 promoting agility, scalability, and maintainability of applications.
                 By decomposing applications into independent, granular services, microservices
@@ -371,7 +371,7 @@
                 their inherent capability to optimize resource utilization and streamline continuous
                 integration and deployment processes.
 
-            \paragraph{Background: Kubernetes Resource Isolation Mechanisms}
+            \subsubsection{Background: Kubernetes Resource Isolation Mechanisms}\label{subsubsec:k8sResourceIsolation}
                 Kubernetes employs several resource isolation mechanisms, primarily through the use
                 of \textit{cgroups} (control groups) and \textit{namespaces} to limit resource
                 allocation for containers.
@@ -404,13 +404,17 @@
                 management and performance isolation
                 \parencites[p.~651]{nguyen2022}[p.~2]{jian2023}[p.~158]{kim2021}.
 
-            \paragraph{Relevance to SaaS and this Thesis}
+            \subsubsection{Relevance to SaaS and this Thesis}
 
         \newpage
 
-        \subsection{Kubernetes Control Plane (KCP)}
+        \subsection{Kubernetes Control Plane (KCP)}\label{subsec:kcp}
+            KCP is \enquote{An open source horizontally scalable control plane for Kubernetes-like
+            APIs} \parencite{kcpio}.
+            % nguyen 2022
+            % KCP docs
 
-            \paragraph{Workspaces}
+            \subsubsection{Workspaces}\label{subsubsec:workspaces}
                 KPC introduces the concept of \textit{workspaces} to implement multi-tenancy.
                 In KCP, a workspace is a Kubernetes-cluster-like HTTPS endpoint exposed under
                 \texttt{/clusters/<parent>:<name>}, that regular tools such as \textit{kubectl},
@@ -444,72 +448,80 @@
                 organization makes workspaces offer an attractive solution to many of the problems
                 commonly faced in multi-tenant environments: each tenant gets the freedom of a full
                 dedicated cluster, yet operators manage only a single shared KCP control plane.
-                \\
+            
+            \subsubsection{Automation}\label{subsubsec:automation}
+                As previously noted, most Kubernetes based multi-tenant systems currently need
+                manual intervention by an administrator to deploy new tenants or modify resource
+                allocation.
+                However KCP, other than similar frameworks, like Capsule or Kiosk, provides an
+                API server to the customer, that provides an easy way to access
+                their resources \parencites[p.~651]{nguyen2022}{kcpio}.
+                This in turn enables a degree of automation \parencite[p.~651]{nguyen2022}.
+
+            \subsubsection{Control}\label{subsubsec:control}
 
         \newpage
 
-        \subsection{SaaS Architecture and Automation}
+        \subsection{SaaS Architecture and Automation}\label{subsec:saas}
 
-    \section{State of the Art and Related Work}
+    \section{State of the Art and Related Work}\label{sec:related}
 
-        \subsection{Zero-Downtime Deployment Strategies}
+        \subsection{Zero-Downtime Deployment Strategies}\label{subsec:zeroDowntime}
 
-        \subsection{Kubernetes Scaling Methods}
+        \subsection{Kubernetes Scaling Methods}\label{subsec:k8sScaling}
 
-        \subsection{Multi-Tenancy Concepts in the Cloud}
+        \subsection{Multi-Tenancy Concepts in the Cloud}\label{subsec:mtConcepts}
 
-        \subsection{KCP}
+        \subsection{KCP}\label{subsec:relatedKCP}
             % nguyen2022
 
-    \section{Conceptual Design}
+    \section{Conceptual Design}\label{sec:concept}
 
-        \subsection{System Requirements}
+        \subsection{System Requirements}\label{subsec:requirements}
 
-        \subsection{Architecture Design with KCP for SaaS}
+        \subsection{Architecture Design with KCP for SaaS}\label{subsec:architectureDesign}
 
-        \subsection{Automated Deployment Strategies}
+        \subsection{Automated Deployment Strategies}\label{subsec:deploymentStrategies}
 
-    \section{Prototypical Implementation}
+    \section{Prototypical Implementation}\label{sec:prototype}
 
-        \subsection{Infrastructure with KCP}
+        \subsection{Infrastructure with KCP}\label{subsec:infrastructure}
 
-        \subsection[Tenant Provisioning]{Tenant Provisioning (Automation, Multi-Tenancy)}
+        \subsection[Tenant Provisioning]{Tenant Provisioning (Automation, Multi-Tenancy)}\label{subsec:tenantProvisioning}
 
-        \subsection[Scaling Mechanisms]{Scaling Mechanisms (Horizontal Pod Autoscaler)}
+        \subsection[Scaling Mechanisms]{Scaling Mechanisms (Horizontal Pod Autoscaler)}\label{subsec:scaling}
 
-        \subsection[Monitoring and Logging]{Monitoring and Logging (Prometheus, Grafana)}
+        \subsection[Monitoring and Logging]{Monitoring and Logging (Prometheus, Grafana)}\label{subsec:monitoring}
 
-    \section{Evaluation}
+    \section{Evaluation}\label{sec:evaluation}
 
-        \subsection[Performance Measurements]{Performance Measurements (Downtime, Latency, Scaling)}
+        \subsection[Performance Measurements]{Performance Measurements (Downtime, Latency, Scaling)}\label{subsec:performance}
 
-        \subsection{Scaling Scenarios and Optimizations}
+        \subsection{Scaling Scenarios and Optimizations}\label{subsec:scalingOptimization}
 
-        \subsection{Discussion of Results}
+        \subsection{Discussion of Results}\label{subsec:discussion}
 
-        \subsection{Related Work}
+    \section{Conclusion and Outlook}\label{sec:conclusion}
 
-    \section{Conclusion and Outlook}
+        \subsection{Summary}\label{subsec:summary}
 
-        \subsection{Summary}
+        \subsection{Personal Conclusion}\label{subsec:personalConclusion}
 
-        \subsection{Personal Conclusion}
-
-        \subsection{Future Outlook}
+        \subsection{Future Outlook}\label{subsec:outlook}
 
     \newpage
 
-    \section*{References}
+    \section*{References}\label{sec:references}
         \addcontentsline{toc}{section}{References} % manually add to TOC
         \printbibliography[heading=none]
 
-    \section*{List of Figures}
+    \section*{List of Figures}\label{sec:lof}
         \addcontentsline{toc}{section}{List of Figures} % manually add to TOC
         \begingroup
             \renewcommand{\listfigurename}{} % remove heading
             \listoffigures
         \endgroup
 
-    \section*{Appendix}
+    \section*{Appendix}\label{sec:appendix}
 
 \end{document}
