@@ -284,15 +284,18 @@
 
                     \item\label{chal:workspaces}
                         \textit{Workspaces}.
-                        KCP achieves strong resource isolation through the concept of
+                        \gls{kcp} achieves strong resource isolation through the concept of
                         \textit{workspaces} \see{subsubsec:workspaces}.
 
                     \item\label{chal:api}
                         \textit{API}
+                        \gls{kcp} offers an Kubernetes-like \gls{api} that enables the use of
+                        standard tools and automation to a degree \see{subsubsec:automation}.
                     
                     \item\label{chal:sharding}
                         \textit{Sharding}
-
+                        \gls{kcp} offers sharding out of the box to manage high traffic and 
+                        geo-distribution \see{subsubsec:sharding}.
                 \end{enumerate}
 
             \subsubsection{Background: The Evolution of Kubernetes}\label{subsubsec:k8sEvolution}
@@ -450,6 +453,19 @@
                 OpenAPI schema, into the Kubernetes control plane so the native API server stores
                 and serves the objects as first-class resources \parencite{kubernetesCRD}.
                 \\
+                \gls{kcp} implements the same \gls{rbac}-based authorization mechanism and cluster
+                role and cluster role binding principles as Kubernetes inside workspaces 
+                \parencite{kcpAuthorization}.
+                However unlike Kubernetes \gls{kcp} does currently not support \gls{abac}
+                \parencites{kcpAuthorization}{kubernetesABAC}.
+                \gls{kcp} likely supports only \gls{rbac}-based authorization because \gls{abac} is
+                considered overly complex, hard to audit, and increasingly deprecated in favor of
+                \gls{rbac}, which offers a more structured and maintainable access control model
+                \parencite{kubernetesRBACBlog}.
+                This allows for consistent access control and permission management across all
+                workspaces, aligning with familiar Kubernetes patterns and simplifying multi-tenant
+                environment administration.
+                \\
                 Workspaces for a typed, parent-child tree, and each type can constrain which kind
                 of workspaces it can contain or be contained by, giving platform teams a structured
                 way to delegate environments while retaining policy control
@@ -460,16 +476,21 @@
                 commonly faced in multi-tenant environments: each tenant gets the freedom of a full
                 dedicated cluster, yet operators manage only a single shared KCP control plane.
             
-            \subsubsection{Automation}\label{subsubsec:automation}
-                As previously noted, most Kubernetes based multi-tenant systems currently need
+            \subsubsection{API}\label{subsubsec:api}
+                As previously noted, most Kubernetes based multi-tenant systems currently require
                 manual intervention by an administrator to deploy new tenants or modify resource
                 allocation.
-                However KCP, other than similar frameworks, like Capsule or Kiosk, provides an
-                API server to the customer, that provides an easy way to access
+                However \gls{kcp}, other than similar frameworks, like Capsule or Kiosk, provides an
+                \gls{api} server to the customer, that provides an easy way to access
                 their resources \parencites[p.~651]{nguyen2022}{kcpio}.
                 This in turn enables a degree of automation \parencite[p.~651]{nguyen2022}.
+                Every workspace has its own \gls{api} endpoint \parencite{kcpWorkspaces}.
+                This ensures, that more control can be shifted back to the customer.
+                \\
 
-            \subsubsection{Control}\label{subsubsec:control}
+
+
+            \subsubsection{Sharding}\label{subsubsec:sharding}
 
         \newpage
 
@@ -478,6 +499,8 @@
     \section{State of the Art and Related Work}\label{sec:related}
 
         \subsection{Zero-Downtime Deployment Strategies}\label{subsec:zeroDowntime}
+            % syncer / controller !
+            % eventual consistency !
 
         \subsection{Kubernetes Scaling Methods}\label{subsec:k8sScaling}
 
