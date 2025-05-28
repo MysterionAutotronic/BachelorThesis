@@ -1,5 +1,5 @@
 % TODO: disable draft mode
-\documentclass[11pt, a4paper, oneside, draft]{scrartcl}
+\documentclass[11pt, a4paper, oneside, listof=totoc]{scrartcl}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman, english]{babel}
@@ -38,9 +38,6 @@
 
 % show frames in draft
 %\usepackage{showframe}
-% Temporary disable citations for better readability while writing
-%\renewcommand{\parencite}[2][]{}
-%\renewcommand{\textcite}[2][]{}
 
 % set language to english
 \selectlanguage{english}
@@ -124,7 +121,8 @@
 
     \pagenumbering{roman}
 
-    \section*{Abstract}\label{sec:abstract}
+    \section*{Abstract}\label{abstract}
+    \markboth{Abstract}{Abstract}
 
     \newpage
 
@@ -136,7 +134,8 @@
 
     \newpage
 
-    \section*{Glossary}\label{sec:glossary}
+    \section*{Glossary}\label{glossary}
+    \markboth{Glossary}{Glossary}
 
     \newpage
 
@@ -514,19 +513,17 @@
 
         \subsection{Future Outlook}\label{subsec:outlook}
 
-    \newpage
+    \cleardoublepage{}
+    \printbibliography[
+        title = {References},
+        heading = bibintoc
+    ]
 
-    \section*{References}\label{sec:references}
-        \addcontentsline{toc}{section}{References} % manually add to TOC
-        \printbibliography[heading=none]
+    \cleardoublepage{}
+    \listoffigures
 
-    \section*{List of Figures}\label{sec:lof}
-        \addcontentsline{toc}{section}{List of Figures} % manually add to TOC
-        \begingroup
-            \renewcommand{\listfigurename}{} % remove heading
-            \listoffigures
-        \endgroup
+    \cleardoublepage{}
 
-    \section*{Appendix}\label{sec:appendix}
+    \appendix
 
 \end{document}
