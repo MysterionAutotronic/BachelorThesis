@@ -2,6 +2,11 @@
 
 ## Scripts
 
+### Make Glossary
+```sh
+makeglossaries thesis
+```
+
 <details>
 
 <summary><strong>bash</strong></summary>

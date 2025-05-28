@@ -33,3 +33,12 @@ Thumbs.db
 
 # Inkscape
 .svg:Zone.Identifier
+
+# Glossaries auxiliary files
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.ist

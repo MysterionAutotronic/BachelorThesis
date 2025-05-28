@@ -35,6 +35,7 @@
 \usepackage{xurl}
 \usepackage{enumitem}
 \usepackage{csquotes}
+\usepackage[acronym]{glossaries}
 
 % show frames in draft
 %\usepackage{showframe}
@@ -62,6 +63,10 @@
 
 \pagestyle{scrheadings}
 \cfoot{\thepage} % Page number in center of footer
+
+% glossary
+\makeglossaries{}
+\input{glossary.tex}
 
 \begin{document}
 
@@ -134,7 +139,7 @@
 
     \newpage
 
-    \section*{Glossary}\label{glossary}
+    \printglossaries{}\label{glossary}
     \markboth{Glossary}{Glossary}
 
     \newpage
