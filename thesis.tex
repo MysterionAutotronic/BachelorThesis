@@ -177,10 +177,10 @@
                 allocation \parencite[pp.~345--346]{aljahdali2014}. 
                 These benefits are crucial for cloud providers, as they make the cloud business
                 model economically viable and scalable. 
-                In the context of modern SaaS platforms, multi-tenancy goes even further by enabling
-                unified management, frictionless onboarding, and simplified operational processes
-                that allow providers to add new tenants without introducing incremental complexity
-                or cost \parencite[pp.~9--11]{awsSaaSArchitectureFundamentals}.
+                In the context of modern \gls{saas} platforms, multi-tenancy goes even further by
+                enabling unified management, frictionless onboarding, and simplified operational
+                processes that allow providers to add new tenants without introducing incremental
+                complexity or cost \parencite[pp.~9--11]{awsSaaSArchitectureFundamentals}.
                 \\
                 However, while multi-tenancy is indispensable for achieving efficiency, scalability,
                 and cost-effectiveness, it simultaneously introduces complex security challenges,
@@ -214,15 +214,16 @@
 
                     \item\label{chal:transparency}
                         \textit{Control and transparency}.
-                        By design, SaaS moves both data storage and security controls out of the
-                        enterprise's boundary and into the provider's multi-tenant cloud,
+                        By design, \gls{saas} moves both data storage and security controls out of
+                        the enterprise's boundary and into the provider's multi-tenant cloud,
                         depriving organizations of direct oversight and assurance and thereby
                         heightening concern over how their critical information is protected,
                         replicated and kept available \parencite[pp.~3--4]{subashini2011}.
                         To complicate matters further, the customer might have no way to evaluate
-                        the SaaS vendors security measures, meaning the pricing and feature set will
-                        most likely determine which service is used in practice, often disregarding
-                        security concerns \parencites[p.~6]{everett2009}[p.~836]{khorshed2012}.
+                        the \gls{saas} vendors security measures, meaning the pricing and feature
+                        set will most likely determine which service is used in practice, often
+                        disregarding security concerns
+                        \parencites[p.~6]{everett2009}[p.~836]{khorshed2012}.
 
                     \item\label{chal:scheduling}
                         \textit{Scheduling}.
@@ -264,8 +265,8 @@
                         allocate resources for new tenants.
                         Multi-tenant system~\sic{} administrator manually does all the work of
                         allocation or changing tenant's~\sic{} resources.}
-                        However, to ensure efficiency and scalability, an API that allows automating
-                        deployments and dynamic changes in the application is needed.
+                        However, to ensure efficiency and scalability, an \gls{api} that allows
+                        automating deployments and dynamic changes in the application is needed.
 
                 \end{enumerate}
 
@@ -448,10 +449,10 @@
                 \textbf{etcd prefixes} are a simple, inbuilt way to group keys using a prefix
                 \parencite{etcdPrefix}.
                 This allows for resource isolation in \gls{kcp}.\@
-                A \textit{Custom Resource Definition} \textbf{(CRD)} is a declaratively specified
-                schema that registers a new API resource, defined by its group, version, kind, and
-                OpenAPI schema, into the Kubernetes control plane so the native API server stores
-                and serves the objects as first-class resources \parencite{kubernetesCRD}.
+                A \gls{crd} is a declaratively specified schema that registers a new  resource,
+                defined by its group, version, kind, and OpenAPI schema, into the Kubernetes control
+                plane so the native \gls{api} server stores and serves the objects as first-class
+                resources \parencite{kubernetesCRD}.
                 \\
                 \gls{kcp} implements the same \gls{rbac}-based authorization mechanism and cluster
                 role and cluster role binding principles as Kubernetes inside workspaces 
@@ -487,7 +488,41 @@
                 This in turn enables a degree of automation \parencite[p.~651]{nguyen2022}.
                 Every workspace has its own \gls{api} endpoint \parencite{kcpWorkspaces}.
                 This ensures, that more control can be shifted back to the customer.
-                
+                \gls{kcp} ships a curated set of built-in Kubernetes \glspl{api}, such as
+                \texttt{Namespaces}, \texttt{ConfigMaps}, \texttt{Secrets} and \gls{rbac} objects, 
+                so tenants can start working with familiar primitives immediately
+                \parencite{kcpAPIsBuiltIn}.
+                Additional functionality can be added per workspace simply by installing a
+                \gls{crd}, and \gls{kcp} permits multiple independent versions of the same \gls{crd}
+                to coexist across workspaces \parencite{kcpAPIs}.
+                \\
+                To share an \gls{api} with other tenants, a provider declares an
+                \texttt{APIResourceSchema} and then exports it through an \texttt{APIExport},
+                while consumers attach that \gls{api} to their workspace with an \texttt{APIBinding}
+                \parencite{kcpAPIsExport}.
+                This export/bind workflow lets platform teams evolve \glspl{api} centrally without
+                touching each consumer workspace, reinforcing the system's self-service goal
+                \parencite{kcpAPIsExport}.
+                \\
+                \gls{kcp} supports admission webhooks only through \gls{url}-based client
+                configurations, \texttt{service}-based webhooks and conversion webhooks are
+                currently unsupported, so operators must host their hooks externally
+                \parencite{kcpAPIsAdmissionWebhooks}.
+                \\
+                Because admission requests include the logical-cluster name, webhook back-ends can
+                enforce policies per workspace and thus maintain strong tenant isolation
+                \parencite{kcpAuthorization}.
+                Every \gls{rest} call is scoped under the path pattern
+                \texttt{/clusters/<workspace>}, ensuring that automation never leaks objects across
+                workspaces \parencite{kcpAPIsREST}.
+                \gls{api} providers can also access consumer data through a virtual-workspace
+                \gls{url} rooted at \texttt{/services/apiexport/…}, enabling safe cross-workspace
+                reconciliation loops without cluster-wide privileges \parencite{kcpAPIsREST}.
+                Together, built-in \glspl{api}, \glspl{crd}, the \gls{api}Export / \gls{api}Binding
+                model, admission controls and workspace-prefixed \gls{rest} routing give tenants a
+                rich yet safe surface for automation while keeping operational responsibility with
+                the platform team.
+
             \subsubsection{Sharding}\label{subsubsec:sharding}
                 \gls{kcp} employs sharding to \textbf{horizontally scale} the control-plane, letting
                 an installation grow far beyond the limits of a single \gls{api}-server/etcd
