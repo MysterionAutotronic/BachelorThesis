@@ -274,7 +274,7 @@
                 \parencites[p.~346]{aljahdali2014}[pp.~14576--14577]{senel2023}.
 
             \subsubsection{Kubernetes Control Plane (KCP) as a Promising Approach}\label{subsubsec:kcpApproach}
-                KCP offers three capabilities that map cleanly onto today's multi-tenancy pain
+                \gls{kcp} offers three capabilities that map cleanly onto today's multi-tenancy pain
                 points.
 
                 \begin{enumerate}[label={[\arabic*]:},
@@ -290,7 +290,7 @@
                     \item\label{chal:api}
                         \textit{API}
                         \gls{kcp} offers an Kubernetes-like \gls{api} that enables the use of
-                        standard tools and automation to a degree \see{subsubsec:automation}.
+                        standard tools and automation to a degree \see{subsubsec:api}.
                     
                     \item\label{chal:sharding}
                         \textit{Sharding}
@@ -423,14 +423,14 @@
         \newpage
 
         \subsection{Kubernetes Control Plane (KCP)}\label{subsec:kcp}
-            KCP is \enquote{An open source horizontally scalable control plane for Kubernetes-like
-            APIs} \parencite{kcpio}.
+            \gls{kcp} is \enquote{An open source horizontally scalable control plane for
+            Kubernetes-like APIs} \parencite{kcpio}.
             % nguyen 2022
             % KCP docs
 
             \subsubsection{Workspaces}\label{subsubsec:workspaces}
-                KPC introduces the concept of \textit{workspaces} to implement multi-tenancy.
-                In KCP, a workspace is a Kubernetes-cluster-like HTTPS endpoint exposed under
+                \gls{kcp} introduces the concept of \textit{workspaces} to implement multi-tenancy.
+                In \gls{kcp}, a workspace is a Kubernetes-cluster-like HTTPS endpoint exposed under
                 \texttt{/clusters/<parent>:<name>}, that regular tools such as \textit{kubectl},
                 \textit{Helm} or \textit{client-go} treat exactly like a real Kubernetes cluster.
                 Every workspace is backed by its own logical cluster stored in an isolated
@@ -443,11 +443,11 @@
                 that needs to be accessed by a distributed system or cluster of machines.
                 It gracefully handles leader elections during network partitions and can tolerate
                 machine failure, even in the leader node.}
-                etcd is the primary datastore used by KCP and K8s
+                etcd is the primary datastore used by \gls{kcp} and \gls{k8s}
                 \parencites{kcpDevStorageToRest}[p.~214]{sun2021}.
                 \textbf{etcd prefixes} are a simple, inbuilt way to group keys using a prefix
                 \parencite{etcdPrefix}.
-                This allows for resource isolation in KCP.\@
+                This allows for resource isolation in \gls{kcp}.\@
                 A \textit{Custom Resource Definition} \textbf{(CRD)} is a declaratively specified
                 schema that registers a new API resource, defined by its group, version, kind, and
                 OpenAPI schema, into the Kubernetes control plane so the native API server stores
@@ -474,7 +474,8 @@
                 This combination of strong isolation, familiar tooling, and hierarchical
                 organization makes workspaces offer an attractive solution to many of the problems
                 commonly faced in multi-tenant environments: each tenant gets the freedom of a full
-                dedicated cluster, yet operators manage only a single shared KCP control plane.
+                dedicated cluster, yet operators manage only a single shared \gls{kcp} control
+                plane.
             
             \subsubsection{API}\label{subsubsec:api}
                 As previously noted, most Kubernetes based multi-tenant systems currently require
