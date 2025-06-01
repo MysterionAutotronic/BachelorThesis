@@ -160,8 +160,8 @@
 
             \subsubsection{Kubernetes as the Foundation for Cloud-Native Applications}\label{subsubsec:foundationK8s}
                 As the de facto standard for deploying and managing 
-                \textit{cloud-native applications}, Kubernetes plays a pivotal role in modern cloud
-                architecture \parencite[p.~7--8]{poulton2021}.
+                \textit{cloud-native applications}, Kubernetes, commonly referred to as \gls{k8s}
+                plays a pivotal role in modern cloud architecture \parencite[p.~7--8]{poulton2021}.
                 Kubernetes works as an  orchestrator for \textit{containerized,
                 cloud-native microservice} applications, meaning it can deploy apps and dynamically
                 respond to changes \parencite[p.~3]{poulton2021}.
@@ -252,9 +252,9 @@
                         performance is within the (response time) \gls{sla} while other
                         tenants exceed their quotas (e.g., request rate)}.
                         As noted by~\cite[p.~18]{carrion2022} \enquote{Currently, it is difficult
-                        to achieve performance isolation for multi-tenancy on K8s clusters because
-                        this requires providing resource isolation and improving the abstraction of
-                        applications.}
+                        to achieve performance isolation for multi-tenancy on \gls{k8s} clusters
+                        because this requires providing resource isolation and improving the
+                        abstraction of applications.}
 
                     \item\label{chal:automation}
                         \textit{Automation}.
@@ -487,12 +487,35 @@
                 This in turn enables a degree of automation \parencite[p.~651]{nguyen2022}.
                 Every workspace has its own \gls{api} endpoint \parencite{kcpWorkspaces}.
                 This ensures, that more control can be shifted back to the customer.
-                \\
-
-
-
+                
             \subsubsection{Sharding}\label{subsubsec:sharding}
-
+                \gls{kcp} employs sharding to \textbf{horizontally scale} the control-plane, letting
+                an installation grow far beyond the limits of a single \gls{api}-server/etcd
+                pair \parencite{kcpSharding,kcpShardingShards}.
+                \\
+                Each shard hosts a set of logical clusters, so every workspace (and therefore every
+                tenant) gets its own Kubernetes-compatible consistency domain on that shard
+                \parencite{kcpShardingShards}.
+                Because \enquote{a set of known shards comprises a \gls{kcp} installation},
+                operators can add or remove shards at will, expanding or contracting capacity with
+                no downtime for existing workspaces \parencite{kcpShardingShards}.
+                \\
+                Cross-shard traffic is funneled through a dedicated \textbf{cache-server}, avoiding
+                the \( n \times (n - 1) \) explosion of of direct links that would otherwise appear
+                in large deployments \parencite{kcpShardingCacheServer}.
+                This cache-server also underpins \textbf{workspace migration and object
+                replication}, so tenants remain oblivious to topology changes while the platform
+                evolves underneath them \parencite{kcpShardingCacheServer}.
+                \\
+                Administrators can define \textbf{Partitions} that group shards, for example by
+                region or load profile, giving schedulers a topology-aware \gls{api} for controller
+                placement \parencite{kcpShardingPartitions}.
+                Partitions therefore deliver \textbf{geo-proximity, load distribution, and fault
+                isolation} for multi-tenant control-plane components
+                \parencite{kcpShardingPartitions}.
+                Taken together, sharding provides the scalability, noisy-neighbor isolation, and
+                topology flexibility required to run \textbf{large numbers of independent workspaces
+                in a single multi-tenant \gls{kcp} deployment}.
         \newpage
 
         \subsection{SaaS Architecture and Automation}\label{subsec:saas}
