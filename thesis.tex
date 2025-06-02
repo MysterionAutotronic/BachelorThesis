@@ -605,6 +605,24 @@
 
             \end{enumerate}
 
+            Automation is the foundation for utilizing the scaling effects that come with \gls{saas}
+            architectures. The onboarding service automatically orchestrates other services to
+            create users, tenant, isolation policies, provision and per-tenant resources
+            \parencite[p.~14]{awsSaaSArchitectureFundamentals}.
+            Once live, automated pipelines let new features roll to every tenant through a single,
+            shared process, giving operators a single pane of glass for the whole estate
+            \parencite[p.~10]{awsSaaSArchitectureFundamentals}.
+            However merely automating the provisioning of each customer environment and offloading
+            its management to an \gls{msp} still leaves tenants running potentially different,
+            separately-operated versions and distances the software provider from unified
+            onboarding, operations, and customer insight—so automation alone creates an \gls{msp}
+            setup, whereas true \gls{saas} requires one shared version and a single, provider-owned
+            control plane for every tenant \parencite[pp.~23--24]{awsSaaSArchitectureFundamentals}.
+            \\
+            Ultimately, \gls{saas} depends on automated, repeatable workflows that remove internal
+            and external friction and ensure stability, efficiency and repeatability for this
+            process \parencite[p.~14]{awsSaaSArchitectureFundamentals}. 
+
     \section{State of the Art and Related Work}\label{sec:related}
 
         \subsection{Zero-Downtime Deployment Strategies}\label{subsec:zeroDowntime}
