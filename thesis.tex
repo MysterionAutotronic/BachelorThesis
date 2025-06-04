@@ -152,12 +152,14 @@
 
     \cleardoublepage{}
     \begingroup
-        \let\addcontentsline\listoffigures
+        \renewcommand{\addcontentsline}[3]{}
+        \listoffigures
     \endgroup
 
     \cleardoublepage{}
     \begingroup
-        \let\addcontentsline\listoftables{}
+        \renewcommand{\addcontentsline}[3]{}
+        \listoftables{}
     \endgroup
 
     \newpage
