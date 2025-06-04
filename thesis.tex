@@ -135,11 +135,10 @@
     \newpage
 
     % Glossary
-    %\printglossaries{}\label{glossary}
-    %\markboth{Glossary}{Glossary}
     \printglossary[type=\acronymtype, title={Acronyms}]
     \cleardoublepage{}
     \printglossary[title={Glossary}]
+
 
     \cleardoublepage{}
 
@@ -152,10 +151,14 @@
     \newpage
 
     \cleardoublepage{}
-    \listoffigures
+    \begingroup
+        \let\addcontentsline\listoffigures
+    \endgroup
 
     \cleardoublepage{}
-    \listoftables{}
+    \begingroup
+        \let\addcontentsline\listoftables{}
+    \endgroup
 
     \newpage
 
