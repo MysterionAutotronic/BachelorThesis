@@ -146,6 +146,12 @@
 
     \newpage
 
+    \cleardoublepage{}
+    \listoffigures
+
+    \cleardoublepage{}
+    \listoftables{}
+
     \newpage
 
     \pagenumbering{arabic}
@@ -555,6 +561,8 @@
                 Taken together, sharding provides the scalability, noisy-neighbor isolation, and
                 topology flexibility required to run \textbf{large numbers of independent workspaces
                 in a single multi-tenant \gls{kcp} deployment}.
+
+            \subsubsection{High Availability}\label{subsubsec:highAvailability}
         \newpage
 
         \subsection{SaaS Architecture and Automation}\label{subsec:saas}
@@ -642,7 +650,37 @@
 
     \section{Conceptual Design}\label{sec:concept}
 
+        \subsection{Proposed Scenario}\label{subsec:scenario}
+
         \subsection{System Requirements}\label{subsec:requirements}
+
+            \subsubsection{Functional Requirements}\label{subsubsec:fr}
+
+                \begin{table}[ht]\label{tab:fr}
+                    \centering{}
+                    \begin{tabular}{lcc}
+                        \toprule
+                        FR ID & Title & Description \\
+                        \midrule
+                        FR1 & Test & TestDescription \\
+                        \bottomrule
+                    \end{tabular}
+                    \caption{Functional Requirements}
+                \end{table}
+
+            \subsubsection{Non Functional Requirements}\label{subsubsec:nfr}
+
+                \begin{table}[ht]\label{tab:nfr}
+                    \centering{}
+                    \begin{tabular}{lcc}
+                        \toprule
+                        NFR ID & Title & Description \\
+                        \midrule
+                        NFR1 & Test & TestDescription \\
+                        \bottomrule
+                    \end{tabular}
+                    \caption{Non Functional Requirements}
+                \end{table}
 
         \subsection{Architecture Design with KCP for SaaS}\label{subsec:architectureDesign}
 
@@ -679,12 +717,6 @@
         title = {References},
         heading = bibintoc
     ]
-
-    \cleardoublepage{}
-    \listoffigures
-
-    \cleardoublepage{}
-    \listoftables{}
 
     \cleardoublepage{}
     \appendix
