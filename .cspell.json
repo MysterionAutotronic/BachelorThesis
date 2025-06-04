@@ -46,11 +46,13 @@
         "makeglossaries",
         "namescope",
         "pandoc",
+        "rendez",
         "spinstr",
         "svgs",
         "synctex",
         "tabularx",
         "texlive",
+        "vous",
         "Younghan"
     ]
 }

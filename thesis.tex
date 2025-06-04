@@ -69,6 +69,7 @@
 % glossary
 \makeglossaries{}
 \input{glossary.tex}
+\input{acronyms.tex}
 
 \begin{document}
 
@@ -340,7 +341,7 @@
                 According to~\cite[pp.~855--856]{damarapati2025}, \gls{k8s@gls} has seen
                 unprecedented industry adoption due to its vendor neutrality, strong community
                 support, and flexible, extensible architecture in combination with enterprise
-                readiness caused by high availability, disaster recovery and security.
+                readiness caused by \gls{ha@gls}, disaster recovery and security.
                 \\
                 Moreover \gls{k8s@gls} enables faster time-to-market by providing a unified,
                 declarative control plane that abstracts away infrastructure,
@@ -571,6 +572,73 @@
                 in a single multi-tenant \gls{kcp} deployment}.
 
             \subsubsection{High Availability}\label{subsubsec:highAvailability}
+                As defined in~\cite[p.~3-3]{nist800-113} \gls{ha} \enquote{is a failover feature to
+                ensure availability during device or component interruptions}.
+                \\
+                \gls{kcp} employs several mechanisms to ensure \gls{ha}.
+                Firstly to achieve this “failover feature” at the control-plane level, \gls{kcp}
+                relies heavily on its \textbf{cache-server layer}
+                \parencite{kcpShardingCacheServer}.
+                While individual shards can (and will) go offline, the cache server provides a
+                logically-central, eventually-consistent replica of the small but critical objects
+                that every shard must be able to see in order to keep tenant workspaces, \gls{api}
+                bindings or scheduling decisions functioning \parencite{kcpShardingCacheServer}.
+                In essence, the cache server acts as a rendez-vous point that collapses the
+                \( n \times (n - 1) \) mesh of direct shard-to-shard links into a single, well-known
+                endpoint \parencite{kcpShardingCacheServer}.
+                Instead of every shard having to maintain and re-establish dozens of peer
+                connections after a failure, each shard needs only a single healthy path to any
+                replica of the cache tier \parencite{kcpShardingCacheServer}.
+                This single-hop topology is easier to debug, cheaper to secure, and—most
+                importantly—continues to deliver the global metadata that controllers require even
+                when one or several shards are offline \parencite{kcpShardingCacheServer}.
+                \\
+                As described in~\cite{kcpShardingCacheServer}, \gls{kcp} uses a write-once /
+                read-many replication model to populate and refresh that shared state:
+
+                \begin{enumerate}[label={[\arabic*]:},
+                    ref=Challenge~\arabic*,
+                    leftmargin=*,
+                    itemsep=0.6\baselineskip]
+
+                    \item\label{chal:writeControllers}
+                        \textit{Write controllers}
+                        that run on every shard stream a selected set of objects, such as
+                        \texttt{APIExport}, \texttt{APIResourceSchema}, \texttt{Shard}, certain
+                        \gls{rbac} rules and more into the cache server.
+                        Because the controller keeps its own authoritative copy, it can re-push data
+                        after a transient outage without the risk of split-brain.
+                        As noted by~\cite{redhatHA2021}, \gls{splitBrain} describes \enquote{a
+                        phenomenon where the cluster is separated from communication but each part
+                        continues working as separate clusters, potentially writing to the same data
+                        and possibly causing corruption or loss.}.
+
+                    \item\label{chal:readControllers}
+                        \textit{Read controllers}
+                        on all shards maintain informers that watch other shards' objects from the
+                        cache server.
+                        These informers are isolated from a shard's local \gls{etcd} and can
+                        therefore start with a more tolerant back-off strategy: a shard may declare
+                        itself \enquote{ready} for tenant traffic even if cache connectivity has not
+                        yet been re-established, and will self-heal once the link returns.
+                \end{enumerate}
+
+                Because objects in the cache server are stored per logical cluster but can be listed
+                via wildcard paths, each controller needs only one LIST/WATCH stream per resource
+                type rather than per cluster \parencite{kcpShardingCacheServer}.
+                This dramatically reduces the number of long-lived \gls{tcp} connections that must
+                survive a fail-over and further increases control-plane availability.
+                \\
+                Consequently, no individual shard becomes a single point of failure for global
+                control-plane metadata.
+                Only the cache tier must be deployed in a highly available configuration ---
+                something that can be achieved with standard Kubernetes Service + LoadBalancer
+                constructs or by running two or more replicas behind a global \gls{ip} address.
+                By funnelling cross-shard traffic through this purpose-built cache layer, \gls{kcp}
+                delivers the fail-over semantics described by~\cite{nist800-113}: metadata remains
+                available, and therefore the control plane remains operational, even when individual
+                components fail.
+
         \newpage
 
         \subsection{SaaS Architecture and Automation}\label{subsec:saas}
