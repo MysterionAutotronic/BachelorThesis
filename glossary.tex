@@ -1,18 +1,101 @@
-\newglossaryentry{test}{
-    name = {Test},
-    description = {Description for Test}
+\newacronym{k8s}{K8s}{\gls{k8s@gls}}
+\newglossaryentry{k8s@gls}{
+    name = {Kubernetes},
+    description = {Google-born container-orchestrator that underpins your whole platform}
 }
 
-\newacronym{kcp}{KCP}{Kubernetes Control Plane}
-\newacronym{k8s}{K8s}{Kubernetes}
-\newacronym{saas}{SaaS}{Software as a Service}
-\newacronym{sla}{SLA}{Service Level Agreement}
+\newglossaryentry{admissionWebhook}{
+    name = {Admission Webhook},
+    description = {external validator/mutator called by the \gls{api} server before objects are stored}
+}
+
+\newglossaryentry{etcd}{
+    name = {etcd},
+    description = {strongly-consistent key-value store that backs both \gls{k8s@gls} and \gls{kcp} metadata}
+}
+
+\newglossaryentry{multiTenancy}{
+    name = {multi-tenancy},
+    description = {many tenants sharing one platform while remaining logically isolated}
+}
+
+\newacronym{saas}{SaaS}{\gls{saas@gls}}
+\newglossaryentry{saas@gls}{
+    name = {Software as a Service},
+    description = {single provider-operated codebase served to all customers}
+}
+
+\newacronym{kcp}{KCP}{\gls{kcp@gls}}
+\newglossaryentry{kcp@gls}{
+    name = {Kubernetes Control Plane},
+    description = {multi-tenant, horizontally-scalable control-plane project}
+}
+
+\newacronym{msp}{MSP}{\gls{msp@gls}}
+\newglossaryentry{msp@gls}{
+    name = {Managed Service Provider},
+    description = {third-party that runs cloud workloads on a customer's behalf}
+}
+
+\newacronym{cgroups}{cgroups}{\gls{cgroups@gls}}
+\newglossaryentry{cgroups@gls}{
+    name = {control groups},
+    description = {Linux kernel feature used to cap CPU/-memory per container}
+}
+
+\newacronym{hpa}{HPA}{\gls{hpa@gls}}
+\newglossaryentry{hpa@gls}{
+    name = {Horizontal Pod Autoscaler},
+    description = {controller that scales pods based on metrics}
+}
+
+\newacronym{rbac}{RBAC}{\gls{rbac@gls}}
+\newglossaryentry{rbac@gls}{
+    name = {Role-Based Access Control},
+    description = {grant permissions via roles and role bindings}
+}
+
+\newacronym{abac}{ABAC}{\gls{abac@gls}}
+\newglossaryentry{abac@gls}{
+    name = {Attribute-Based Access Control},
+    description = {policy decisions based on user/resource attributes}
+}
+
+\newacronym{sla}{SLA}{\gls{sla@gls}}
+\newglossaryentry{sla@gls}{
+    name = {Service Level Agreement},
+    description = {contractual performance and availability guarantees}
+}
+
+\newglossaryentry{namespace}{
+    name = {namespace},
+    description = {namescope that virtually partitions a cluster in \gls{k8s@gls}}
+}
+
+\newglossaryentry{containerization}{
+    name = {containerization},
+    description = {packaging code and dependencies in \gls{os}-level \glspl{container}}
+}
+
+\newglossaryentry{performanceIsolation}{
+    name = {performance isolation},
+    description = {ensuring one noisy tenant can't violate another's \gls{sla}}
+}
+
+\newglossaryentry{microserviceArchitecture}{
+    name = {microservice architecture},
+    description = {system composed of small, independently deployable services}
+}
+
+\newglossaryentry{container}{
+    name = {container},
+    description = {A lightweight, portable, and isolated runtime environment that packages an application together with its dependencies and configuration. Containers share the host system's kernel but run in separate user spaces, enabling consistent execution across different environments.}
+}
+
 \newacronym{api}{API}{Application Programming Interface}
-\newacronym{rbac}{RBAC}{Role-Based Access Control}
-\newacronym{abac}{ABAC}{Attribute-Based Access Control}
 \newacronym{crd}{CRD}{Custom Resource Definition}
-\newacronym{url}{URL}{Unique Resource Identifier}
+\newacronym{url}{URL}{Uniform Resource Locator}
 \newacronym{rest}{REST}{Representational State Transfer}
 \newacronym{b2b}{B2B}{Business to Business}
 \newacronym{b2c}{B2C}{Business to Customer}
-\newacronym{msp}{MSP}{Managed Service Provider}
+\newacronym{os}{OS}{Operating System}

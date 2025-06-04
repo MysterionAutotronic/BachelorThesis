@@ -37,6 +37,7 @@
 \usepackage[acronym]{glossaries}
 \usepackage{booktabs}
 \usepackage{caption}
+\usepackage{mfirstuc}
 
 % show frames in draft
 %\usepackage{showframe}
@@ -133,8 +134,11 @@
     \newpage
 
     % Glossary
-    \printglossaries{}\label{glossary}
-    \markboth{Glossary}{Glossary}
+    %\printglossaries{}\label{glossary}
+    %\markboth{Glossary}{Glossary}
+    \printglossary[type=\acronymtype, title={Acronyms}]
+    \cleardoublepage{}
+    \printglossary[title={Glossary}]
 
     \cleardoublepage{}
 
@@ -170,9 +174,9 @@
 
             \subsubsection{Kubernetes as the Foundation for Cloud-Native Applications}\label{subsubsec:foundationK8s}
                 As the de facto standard for deploying and managing 
-                \textit{cloud-native applications}, Kubernetes, commonly referred to as \gls{k8s}
+                \textit{cloud-native applications}, \gls{k8s@gls}, commonly referred to as \gls{k8s}
                 plays a pivotal role in modern cloud architecture \parencite[p.~7--8]{poulton2021}.
-                Kubernetes works as an  orchestrator for \textit{containerized,
+                \gls{k8s@gls} works as an  orchestrator for \textit{containerized,
                 cloud-native microservice} applications, meaning it can deploy apps and dynamically
                 respond to changes \parencite[p.~3]{poulton2021}.
                 It offers a platform for declarative configuration and automation for containerized
@@ -187,18 +191,18 @@
                 allocation \parencite[pp.~345--346]{aljahdali2014}. 
                 These benefits are crucial for cloud providers, as they make the cloud business
                 model economically viable and scalable. 
-                In the context of modern \gls{saas} platforms, multi-tenancy goes even further by
-                enabling unified management, frictionless onboarding, and simplified operational
+                In the context of modern \gls{saas} platforms, \gls{multiTenancy} goes even further
+                by enabling unified management, frictionless onboarding, and simplified operational
                 processes that allow providers to add new tenants without introducing incremental
                 complexity or cost \parencite[pp.~9--11]{awsSaaSArchitectureFundamentals}.
                 \\
-                However, while multi-tenancy is indispensable for achieving efficiency, scalability,
-                and cost-effectiveness, it simultaneously introduces complex security challenges,
-                especially in shared environments where resource isolation is limited. 
+                However, while \gls{multiTenancy} is indispensable for achieving efficiency,
+                scalability, and cost-effectiveness, it simultaneously introduces complex security
+                challenges, especially in shared environments where resource isolation is limited. 
                 In particular, the potential for cross-tenant access and side-channel attacks makes
                 security in multi-tenant environments a primary concern
                 \parencite[pp.~345--346]{aljahdali2014}. 
-                As such, understanding and addressing multi-tenancy from both operational and
+                As such, understanding and addressing \gls{multiTenancy} from both operational and
                 security perspectives is essential when designing and securing modern cloud-native
                 platforms
                 \parencites[pp.~9--11]{awsSaaSArchitectureFundamentals}[p.~4]{isoConcepts}.
@@ -252,9 +256,9 @@
                         utilization and fairness is challenging}.
                     
                     \item\label{chal:isolation}
-                        \textit{Performance Isolation}
+                        \textit{Performance Isolation}.
                         A single tenant is able to significantly degrade the performance of other
-                        tenants working on the same hardware, if \textit{performance isolation}
+                        tenants working on the same hardware, if \textit{\gls{performanceIsolation}}
                         is not given \parencite[p.~195]{krebs2013}.
                         The fundamental performance expectations of a system are commonly formalized
                         in a \gls{sla}.
@@ -263,9 +267,9 @@
                         performance is within the (response time) \gls{sla} while other
                         tenants exceed their quotas (e.g., request rate)}.
                         As noted by~\cite[p.~18]{carrion2022} \enquote{Currently, it is difficult
-                        to achieve performance isolation for multi-tenancy on \gls{k8s} clusters
-                        because this requires providing resource isolation and improving the
-                        abstraction of applications.}
+                        to achieve \gls{performanceIsolation} for \gls{multiTenancy} on \gls{k8s}
+                        clusters because this requires providing resource isolation and improving
+                        the abstraction of applications.}
 
                     \item\label{chal:automation}
                         \textit{Automation}.
@@ -285,8 +289,8 @@
                 \parencites[p.~346]{aljahdali2014}[pp.~14576--14577]{senel2023}.
 
             \subsubsection{Kubernetes Control Plane (KCP) as a Promising Approach}\label{subsubsec:kcpApproach}
-                \gls{kcp} offers three capabilities that map cleanly onto today's multi-tenancy pain
-                points.
+                \gls{kcp} offers three capabilities that map cleanly onto today's \gls{multiTenancy}
+                pain points.
 
                 \begin{enumerate}[label={[\arabic*]:},
                     ref=Challenge~\arabic*,
@@ -300,7 +304,7 @@
 
                     \item\label{chal:api}
                         \textit{API}
-                        \gls{kcp} offers an Kubernetes-like \gls{api} that enables the use of
+                        \gls{kcp} offers an \gls{k8s@gls}-like \gls{api} that enables the use of
                         standard tools and automation to a degree \see{subsubsec:api}.
                     
                     \item\label{chal:sharding}
@@ -310,35 +314,35 @@
                 \end{enumerate}
 
             \subsubsection{Background: The Evolution of Kubernetes}\label{subsubsec:k8sEvolution}
-                Kubernetes, an open-source container orchestration platform developed by Google,
-                emerged from the need to manage the complexities of containerized applications
-                effectively and to support large-scale deployments in a cloud-native environment
-                \parencites{googlecloudWhatIsKubernetes}{kubernetesOverview}.
+                \gls{k8s@gls}, an open-source \gls{container} orchestration platform developed by
+                Google, emerged from the need to manage the complexities of containerized
+                applications effectively and to support large-scale deployments in a cloud-native
+                environment \parencites{googlecloudWhatIsKubernetes}{kubernetesOverview}.
                 It was originally developed at Google and released as open source in 2014
                 \parencite{googlecloudWhatIsKubernetes}.
-                Kubernetes was conceived as a successor to Google's internal container
+                \gls{k8s@gls} was conceived as a successor to Google's internal \gls{container}
                 management system called Borg, and designed to streamline the process of deploying,
                 scaling, and managing applications composed of microservices running in containers
                 \parencites[pp.~13--14]{verma2015}[p.~84]{bernstein2014}.
-                Since its inception, Kubernetes has gained traction among organizations because it
+                Since its inception, \gls{k8s@gls} has gained traction among organizations because it
                 provides robust features such as automated scaling,
                 self-healing, and service discovery, which have made it the de facto standard for
-                container orchestration in the tech industry
+                \gls{container} orchestration in the tech industry
                 \parencite[pp.~855--858]{damarapati2025}.
                 \\
                 As noted by~\cite[p.~457]{moravcik2022} by 2021 almost 90\% of organizations used
-                Kubernetes as an orchestrator for managing containers and over 70\% of organizations
+                \gls{k8s@gls} as an orchestrator for managing containers and over 70\% of organizations
                 used it in production \parencite{redhatStateOfK8sSecurityReport2021}.
-                The widespread adoption of Kubernetes is further underscored by Red Hat's latest
-                (2024) report, which no longer asks survey respondents if they use Kubernetes for
-                container orchestration, but rather \textbf{which} Kubernetes platform they use
+                The widespread adoption of \gls{k8s@gls} is further underscored by Red Hat's latest
+                (2024) report, which no longer asks survey respondents if they use \gls{k8s@gls} for
+                \gls{container} orchestration, but rather \textbf{which} \gls{k8s@gls} platform they use
                 \parencite[p.~27]{redhatStateOfK8sSecurityReport2024}.
-                According to~\cite[pp.~855--856]{damarapati2025}, Kubernetes has seen
+                According to~\cite[pp.~855--856]{damarapati2025}, \gls{k8s@gls} has seen
                 unprecedented industry adoption due to its vendor neutrality, strong community
                 support, and flexible, extensible architecture in combination with enterprise
                 readiness caused by high availability, disaster recovery and security.
                 \\
-                Moreover Kubernetes enables faster time-to-market by providing a unified,
+                Moreover \gls{k8s@gls} enables faster time-to-market by providing a unified,
                 declarative control plane that abstracts away infrastructure,
                 guarantees consistent environments from development to production,
                 and automates operational tasks such as scaling, rolling updates,
@@ -356,19 +360,20 @@
                 This adaptability reflects its fundamental design, which focuses on modularity and
                 extensibility, allowing developers to customize their orchestration needs.
                 \\
-                Overall, the history of Kubernetes showcases a transformative journey driven by the
+                Overall, the history of \gls{k8s@gls} showcases a transformative journey driven by the
                 evolving demands of software architecture and the necessity for efficient
                 application management in an increasingly complex technological landscape.
 
             \subsubsection{Background: Containerization as an Enabler of Kubernetes}\label{subsubsec:containerization}
-                \textit{Containerization} is a way to bundle an application's code with all its
+                \textit{\Gls{containerization}} is a way to bundle an application's code with all its
                 dependencies to run on any infrastructure thus enhancing portability
                 \parencite{awsWhatIsContainerization,dockerWhatContainer}.
                 The lightweight nature and isolation can be leveraged by cloud-native software by
-                enabling vertical and horizontal autoscaling facilitated by quick container boot
-                times, along with self-healing mechanisms and support for distributed, resilient
-                infrastructures \parencites{kubernetesAutoscalingWorkloads}{kubernetesSelfHealing}
-                    {awsWhatIsContainerization}[pp.~58--59]{davis2019}
+                enabling vertical and horizontal autoscaling facilitated by quick \gls{container}
+                boot times, along with self-healing mechanisms and support for distributed,
+                resilient infrastructures
+                \parencites{kubernetesAutoscalingWorkloads}{kubernetesSelfHealing}
+                    {awsWhatIsContainerization}[pp.~58--59]{davis2019}.
                 Furthermore it complements the microservice architectural pattern by enabling
                 isolated, low overhead deployments, ensuring consistent environments
                 \parencite[p.~209]{balalaie2016}.
@@ -386,7 +391,7 @@
                 to evolve independently, effectively addressing challenges associated with scaling
                 and maintenance without being tied to a singular technological framework
                 \parencite[pp.~202--203]{balalaie2016}.
-                Furthermore, the integration of microservices with platforms like Kubernetes
+                Furthermore, the integration of microservices with platforms like \gls{k8s@gls}
                 enhances deployment automation and orchestration, thus providing substantial
                 elasticity to accommodate fluctuating workloads \parencite[p.~170]{haugeland2021}.
                 Additionally, migrating legacy applications to microservices can foster
@@ -397,9 +402,9 @@
                 integration and deployment processes.
 
             \subsubsection{Background: Kubernetes Resource Isolation Mechanisms}\label{subsubsec:k8sResourceIsolation}
-                Kubernetes employs several resource isolation mechanisms, primarily through the use
-                of \textit{cgroups} (control groups) and \textit{namespaces} to limit resource
-                allocation for containers.
+                \gls{k8s@gls} employs several resource isolation mechanisms, primarily through the
+                use of \textit{\gls{cgroups}} (control groups) and \textit{namespaces} to limit
+                resource allocation for containers.
                 Cgroups are a Linux kernel feature that organizes processes into hierarchical
                 groups for fine-grained resource limitation and monitoring via a pseudo-filesystem
                 called \textit{cgroupfs} \parencites{kubernetesCgroupsV2}{cgroups7}.
@@ -408,25 +413,25 @@
                 different teams or projects \parencite{kubernetesNamespaces}.
                 However, these mechanisms may not always provide sufficient isolation necessary for
                 multi-tenant architectures, because the logical segregation offered by namespaces
-                does not address the fundamental security concerns associated with multi-tenancy 
-                \parencite[p.~651]{nguyen2022} and research indicates that the native isolation
-                strategies can lead to performance interference, where containers that share nodes
-                can experience significant degradation in performance due to CPU contention
-                \parencite[p.~158]{kim2021}.
+                does not address the fundamental security concerns associated with
+                \gls{multiTenancy} \parencite[p.~651]{nguyen2022} and research indicates that the
+                native isolation strategies can lead to performance interference, where containers
+                that share nodes can experience significant degradation in performance due to CPU
+                contention \parencite[p.~158]{kim2021}.
                 Specifically, critical services may be adversely affected when non-critical services
                 monopolize available resources, which undermines the quality of service in
                 multi-tenant environments \parencite[p.~30410]{li2019}.
                 \\
-                Moreover, while Kubernetes allows for container orchestration and resource
+                Moreover, while \gls{k8s@gls} allows for \gls{container} orchestration and resource
                 scheduling, it can lead to resource fragmentation, further exacerbating the issue
-                of performance isolation \parencite[p.~1]{jian2023}.
+                of \gls{performanceIsolation} \parencite[p.~1]{jian2023}.
                 A common approach in multi-tenant scenarios is to deploy separate clusters for each
                 tenant, which incurs substantial overhead—particularly in environments utilizing
                 virtual machines for isolation \parencite[pp.~144574--144575]{senel2023}.
-                In summary, although Kubernetes offers essential isolation mechanisms, the
+                In summary, although \gls{k8s@gls} offers essential isolation mechanisms, the
                 complexities of resource sharing and performance consistency in multi-tenant
                 applications highlight the need for enhanced strategies to ensure robust resource
-                management and performance isolation
+                management and \gls{performanceIsolation}
                 \parencites[p.~651]{nguyen2022}[p.~2]{jian2023}[p.~158]{kim2021}.
 
             \subsubsection{Relevance to SaaS and this Thesis}
@@ -435,47 +440,50 @@
 
         \subsection{Kubernetes Control Plane (KCP)}\label{subsec:kcp}
             \gls{kcp} is \enquote{An open source horizontally scalable control plane for
-            Kubernetes-like APIs} \parencite{kcpio}.
+            \gls{k8s@gls}-like APIs} \parencite{kcpio}.
             % nguyen 2022
             % KCP docs
 
             \subsubsection{Workspaces}\label{subsubsec:workspaces}
-                \gls{kcp} introduces the concept of \textit{workspaces} to implement multi-tenancy.
-                In \gls{kcp}, a workspace is a Kubernetes-cluster-like HTTPS endpoint exposed under
-                \texttt{/clusters/<parent>:<name>}, that regular tools such as \textit{kubectl},
-                \textit{Helm} or \textit{client-go} treat exactly like a real Kubernetes cluster.
+                \gls{kcp} introduces the concept of \textit{workspaces} to implement
+                \gls{multiTenancy}.
+                In \gls{kcp}, a workspace is a \gls{k8s@gls}-cluster-like HTTPS endpoint exposed
+                under \texttt{/clusters/<parent>:<name>}, that regular tools such as
+                \textit{kubectl}, \textit{Helm} or \textit{client-go} treat exactly like a real
+                \gls{k8s@gls} cluster.
                 Every workspace is backed by its own logical cluster stored in an isolated
-                \textbf{etcd prefix}, so objects in one workspace (including cluster-scoped
+                \textbf{\gls{etcd} prefix}, so objects in one workspace (including cluster-scoped
                 resources like \textbf{CRDs}) are completely invisible to others, delivering hard
-                multi-tenancy without spinning up separate control planes \parencite{kcpWorkspaces}.
+                \gls{multiTenancy} without spinning up separate control planes
+                \parencite{kcpWorkspaces}.
                 \\
-                As per the definition by the~\cite{etcd}, \enquote{\textbf{etcd} is a strongly
+                As per the definition by the~\cite{etcd}, \enquote{\textbf{\gls{etcd}} is a strongly
                 consistent, distributed key-value store that provides a reliable way to store data
                 that needs to be accessed by a distributed system or cluster of machines.
                 It gracefully handles leader elections during network partitions and can tolerate
                 machine failure, even in the leader node.}
-                etcd is the primary datastore used by \gls{kcp} and \gls{k8s}
+                \gls{etcd} is the primary datastore used by \gls{kcp} and \gls{k8s}
                 \parencites{kcpDevStorageToRest}[p.~214]{sun2021}.
-                \textbf{etcd prefixes} are a simple, inbuilt way to group keys using a prefix
+                \textbf{\gls{etcd} prefixes} are a simple, inbuilt way to group keys using a prefix
                 \parencite{etcdPrefix}.
                 This allows for resource isolation in \gls{kcp}.\@
                 A \gls{crd} is a declaratively specified schema that registers a new  resource,
-                defined by its group, version, kind, and OpenAPI schema, into the Kubernetes control
-                plane so the native \gls{api} server stores and serves the objects as first-class
+                defined by its group, version, kind, and OpenAPI schema, into the \gls{kcp@gls} so
+                the native \gls{api} server stores and serves the objects as first-class
                 resources \parencite{kubernetesCRD}.
                 \\
                 \gls{kcp} implements the same \gls{rbac}-based authorization mechanism and cluster
-                role and cluster role binding principles as Kubernetes inside workspaces 
+                role and cluster role binding principles as \gls{k8s@gls} inside workspaces 
                 \parencite{kcpAuthorization}.
-                However unlike Kubernetes \gls{kcp} does currently not support \gls{abac}
+                However unlike \gls{k8s@gls} \gls{kcp} does currently not support \gls{abac}
                 \parencites{kcpAuthorization}{kubernetesABAC}.
                 \gls{kcp} likely supports only \gls{rbac}-based authorization because \gls{abac} is
                 considered overly complex, hard to audit, and increasingly deprecated in favor of
                 \gls{rbac}, which offers a more structured and maintainable access control model
                 \parencite{kubernetesRBACBlog}.
                 This allows for consistent access control and permission management across all
-                workspaces, aligning with familiar Kubernetes patterns and simplifying multi-tenant
-                environment administration.
+                workspaces, aligning with familiar \gls{k8s@gls} patterns and simplifying
+                multi-tenant environment administration.
                 \\
                 Workspaces for a typed, parent-child tree, and each type can constrain which kind
                 of workspaces it can contain or be contained by, giving platform teams a structured
@@ -489,7 +497,7 @@
                 plane.
             
             \subsubsection{API}\label{subsubsec:api}
-                As previously noted, most Kubernetes based multi-tenant systems currently require
+                As previously noted, most \gls{k8s@gls} based multi-tenant systems currently require
                 manual intervention by an administrator to deploy new tenants or modify resource
                 allocation.
                 However \gls{kcp}, other than similar frameworks, like Capsule or Kiosk, provides an
@@ -498,7 +506,7 @@
                 This in turn enables a degree of automation \parencite[p.~651]{nguyen2022}.
                 Every workspace has its own \gls{api} endpoint \parencite{kcpWorkspaces}.
                 This ensures, that more control can be shifted back to the customer.
-                \gls{kcp} ships a curated set of built-in Kubernetes \glspl{api}, such as
+                \gls{kcp} ships a curated set of built-in \gls{k8s@gls} \glspl{api}, such as
                 \texttt{Namespaces}, \texttt{ConfigMaps}, \texttt{Secrets} and \gls{rbac} objects, 
                 so tenants can start working with familiar primitives immediately
                 \parencite{kcpAPIsBuiltIn}.
@@ -535,11 +543,11 @@
 
             \subsubsection{Sharding}\label{subsubsec:sharding}
                 \gls{kcp} employs sharding to \textbf{horizontally scale} the control-plane, letting
-                an installation grow far beyond the limits of a single \gls{api}-server/etcd
+                an installation grow far beyond the limits of a single \gls{api}-server/\gls{etcd}
                 pair \parencite{kcpSharding,kcpShardingShards}.
                 \\
                 Each shard hosts a set of logical clusters, so every workspace (and therefore every
-                tenant) gets its own Kubernetes-compatible consistency domain on that shard
+                tenant) gets its own \gls{k8s@gls}-compatible consistency domain on that shard
                 \parencite{kcpShardingShards}.
                 Because \enquote{a set of known shards comprises a \gls{kcp} installation},
                 operators can add or remove shards at will, expanding or contracting capacity with
