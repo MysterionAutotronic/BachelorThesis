@@ -38,6 +38,8 @@
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{mfirstuc}
+\usepackage{array}
+\usepackage{setspace}
 
 % show frames in draft
 %\usepackage{showframe}
@@ -54,6 +56,7 @@
 \newcommand{\thesistitle}{Conception, Implementation, and Evaluation of a Highly Scalable and Highly Available Kubernetes-Based SaaS Platform on Kubernetes Control Plane (KCP)}
 \newcommand{\sic}{\textnormal{\textit{[sic]}}}
 \newcommand{\see}[1]{(see~\autoref{#1}: \textit{\nameref{#1}})}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 
 % URL formatting
 \PassOptionsToPackage{hyphens}{url}
@@ -732,18 +735,33 @@
     \section{Conceptual Design}\label{sec:concept}
 
         \subsection{Proposed Scenario}\label{subsec:scenario}
+            To demonstrate the conception, implementation, and evaluation of a highly-scalable, 
+            highly available SaaS platform on \gls{kcp}, the thesis adopts a deliberately
+            light-weight yet realistic multi-tenant scenario:
+            \\
+            A \textbf{\gls{smb} Web-Presence-as-a-Service}, whose sole purpose is to give
+            \glspl{smb} an instantly available, single-page web presence.
+            The service sits between \gls{diy} website builders and full custom agency work.
+            Tenants enter their company facts, choose a theme, and receive a live, secure page,
+            without touching infrastructure.
 
         \subsection{System Requirements}\label{subsec:requirements}
 
             \subsubsection{Functional Requirements}\label{subsubsec:fr}
-
                 \begin{table}[ht]\label{tab:fr}
                     \centering{}
-                    \begin{tabular}{lcc}
+                    \renewcommand{\arraystretch}{1.5}
+                    \begin{tabular}{lcp{5cm}P{8cm}}
                         \toprule
-                        FR ID & Title & Description \\
+                        F ID & Scope & Title & Description \\
                         \midrule
-                        FR1 & Test & TestDescription \\
+                        \hypertarget{f1}{F-01} & \textit{Tenant} & Company Profile \gls{crud} & A tenant owner shall be able to perform CRUD operations on the company profile (name, address, contact, logo, about-text) through the dashboard \gls{api}. \\
+                        \hypertarget{f2}{F-02} & \textit{Tenant} & Service Catalog \gls{crud} & A tenant owner shall be able to manage a list of services/products. \\
+                        \hypertarget{f3}{F-03} & \textit{Tenant} & Ratings \gls{crud} & Public visitors shall be able to post 1-to-5-star ratings with comments; the public \gls{api} shall list ratings. \\
+                        \hypertarget{f4}{F-04} & \textit{Tenant} & Public Page Delivery & The public Next.js frontend shall render the latest template and tenant data via the per-tenant \gls{api}. \\
+                        \hypertarget{f5}{F-05} & \textit{Platform} & Tenant Provisioning & The dashboard shall create a new \gls{kcp} workspace, deploy the tenant stack, allocate the \gls{sql} schema and return a public \gls{url} in~$\leq$~60~s. \\
+                        \hypertarget{f6}{F-06} & \textit{Platform} & Config Storage and Retrieval & Template configuration for every tenant shall be stored under \texttt{/<tenant-id>/config.json} in the shared object bucket and fetched by the per-tenant \gls{api} at start-up or cache miss. \\
+                        \hypertarget{f7}{F-07} & \textit{Tenant} & Config Caching & The per-tenant \gls{api} shall cache configuration in-memory with a \gls{ttl}~$\geq$~24~h, falling back to the bucket on cache miss or version bump. \\
                         \bottomrule
                     \end{tabular}
                     \caption{Functional Requirements}
@@ -753,11 +771,12 @@
 
                 \begin{table}[ht]\label{tab:nfr}
                     \centering{}
-                    \begin{tabular}{lcc}
+                    \renewcommand{\arraystretch}{1.5}
+                    \begin{tabular}{lcp{5cm}P{8cm}}
                         \toprule
-                        NFR ID & Title & Description \\
+                        NF ID & Scope & Title & Description \\
                         \midrule
-                        NFR1 & Test & TestDescription \\
+                        \hypertarget{nf1}{NF-1} & T & Test & TestDescription \\
                         \bottomrule
                     \end{tabular}
                     \caption{Non Functional Requirements}
