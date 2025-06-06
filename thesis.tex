@@ -776,7 +776,16 @@
                         \toprule
                         NF ID & Scope & Title & Description \\
                         \midrule
-                        \hypertarget{nf1}{NF-1} & T & Test & TestDescription \\
+                        \hypertarget{nf1}{NF-01} & Tenant & Public Availability & The public page shall achieve $\geq$~99.95~\% monthly uptime; workspace moves or \gls{api} pod restarts shall cause 0 failed GET requests. \\
+                        \hypertarget{nf2}{NF-02} & Platform & Dashboard Availability & The owner dashboard shall achieve $\geq$~99.5~\% monthly uptime (so brief maintenance windows are acceptable). \\
+                        \hypertarget{nf3}{NF-03} & Tenant & Page Performance & p95 full-page load time shall be $\leq$~600~ms at 200~req/s from one region. \\
+                        \hypertarget{nf4}{NF-04} & Tenant & \gls{api} Latency & p95 latency for GET \texttt{/api/config} and GET \texttt{/api/reviews} shall be $\leq$~150~ms under the same load. \\
+                        \hypertarget{nf5}{NF-05} & Platform & Horizontal Scalability & The control plane shall handle at least 2 000 tenant workspaces with etcd IO $\leq$~70~\% and <~100~ms workspace-list latency. \\
+                        \hypertarget{nf6}{NF-06} & Platform & Cache Consistency & Config cache shall reflect bucket changes within 5~min after a tenant triggers “publish” in the dashboard. \\
+                        \hypertarget{nf7}{NF-07} & Platform & Tenant Isolation and Security & Data and traffic from one tenant shall not be accessible to another (\gls{rbac}, row-level security, network policies). \\
+                        \hypertarget{nf8}{NF-08} & Platform & Data Durability & Reviews and config data shall have an \gls{rpo}~=~0~h (\gls{wal}-based backups) and an \gls{rto}~$\leq$~2~h via cross-region restore. \\
+                        \hypertarget{nf9}{NF-09} & Platform & Disaster Recovery for Bucket & The shared bucket shall replicate to a secondary region with automatic fail-over; cached assets must remain available during a primary-region outage. \\
+                        \hypertarget{nf10}{NF-10} & Operator & Maintainability / \gls{ci}/\gls{cd} & A full platform deployment (dashboard + initializer + tenant chart) shall complete via GitOps pipeline in~$\leq$~15~min. \\
                         \bottomrule
                     \end{tabular}
                     \caption{Non Functional Requirements}
