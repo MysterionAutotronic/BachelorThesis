@@ -764,8 +764,11 @@
             % eventual consistency !
 
         \subsection{Kubernetes Scaling Methods}\label{subsec:k8sScaling}
+            % HPA
+            % other strats?
 
         \subsection{Multi-Tenancy Concepts in the Cloud}\label{subsec:mtConcepts}
+            % Kiosk, Capsule, also AWS, Azure
 
         \subsection{KCP}\label{subsec:relatedKCP}
             % nguyen2022
@@ -782,11 +785,38 @@
             The service sits between \gls{diy} website builders and full custom agency work.
             Tenants enter their company facts, choose a theme, and receive a live, secure page,
             without touching infrastructure.
+            A \gls{dataContract} is used to allow the frontend to be data-driven.
+            
+            \begin{table}[H]\label{tab:scenario}
+                \centering{}
+                \renewcommand{\arraystretch}{1.5}
+                \begin{tabular}{lP{4cm}P{8cm}}
+                    \toprule
+                    Actor & Responsibility & Interaction Pattern \\
+                    \midrule
+                    \gls{smb} tenant & Enters or edits company information; chooses a theme & Write-heavy only at onboarding, then sporadic \\
+                    End-User Visitor & Loads the generated page & Read-only; bursty traffic driven by marketing and search indexing \\
+                    Platform Operator & Maintains themes, monitors capacity, rolls out new platform versions & \gls{devops} \\
+                    \bottomrule
+                \end{tabular}
+                \caption{Actors in the case study}
+            \end{table}
+            
+            This scenario is attractive for evaluating \gls{kcp} because it combines high
+            \gls{multiTenancy} (potentially tens on thousands of logically isolated sites) with
+            skewed workload characteristics, like very high read \gls{fanOut} combined with low
+            per-tenant write rate.
+            The workload stresses horizontal scalability, especially of the control plane, without
+            the confounding complexity of rich business logic or deep data lineage.
+            Moreover, the fact model is sufficiently small to allow \textit{stateless} page
+            rendering, enabling the data plane to be scaled independently of the rendering tier.
+            The following subsection translates this narrative into concrete requirements.
+            
 
         \subsection{System Requirements}\label{subsec:requirements}
 
             \subsubsection{Functional Requirements}\label{subsubsec:fr}
-                \begin{table}[ht]\label{tab:fr}
+                \begin{table}[H]\label{tab:fr}
                     \centering{}
                     \renewcommand{\arraystretch}{1.5}
                     \begin{tabular}{lcp{4cm}P{8cm}}
@@ -807,7 +837,7 @@
 
             \subsubsection{Non Functional Requirements}\label{subsubsec:nfr}
 
-                \begin{table}[ht]\label{tab:nfr}
+                \begin{table}[H]\label{tab:nfr}
                     \centering{}
                     \renewcommand{\arraystretch}{1.5}
                     \begin{tabular}{lcp{4cm}P{8cm}}

@@ -1,3 +1,5 @@
+% TODO: uniform formatting
+
 \newglossaryentry{k8s@gls}{
     name = {Kubernetes},
     description = {Google-born container-orchestrator that underpins your whole platform}
@@ -86,10 +88,20 @@
 
 \newglossaryentry{ha@gls}{
     name = {high availability},
-    description = {architectural and operational strategies employed to ensure that applications remain accessible and operational even in the face of failures, whether those are due to hardware malfunction, network issues, or other disruptions}
+    description = {architectural and operational strategies employed to ensure that applications remain accessible and operational even in the face of failures, whether those are due to hardware malfunction, network issues, or other disruptions.}
 }
 
 \newglossaryentry{splitBrain}{
     name = {split-brain},
     description = {a phenomenon where the cluster is separated from communication but each part continues working as separate clusters, potentially writing to the same data and possibly causing corruption or loss.}
+}
+
+\newglossaryentry{dataContract}{
+    name = {data contract},
+    description = {a \textit{formal, version controlled agreement} between a data producer and its consumers, much like an \gls{api} specification.}
+}
+
+\newglossaryentry{fanOut}{
+    name = {fan-out},
+    description = {the pattern of sending one message, request, or event to many downstream consumers in parallel.}
 }
