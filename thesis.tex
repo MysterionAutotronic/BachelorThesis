@@ -227,13 +227,13 @@
                 scale \parencite{kubernetesOverview,redhatWhatIsKubernetes}.
 
             \subsubsection{The Importance of Multi-Tenancy in Modern SaaS Platforms}\label{subsubsec:mtImportance}
-                Multi-tenancy plays a fundamental role in modern cloud computing. 
+                Multi-tenancy plays a fundamental role in modern cloud computing.
                 By allowing multiple tenants to share the same infrastructure through
                 virtualization, it significantly increases resource utilization, reduces operational
                 costs, and enables essential features such as VM mobility and dynamic resource
                 allocation \parencite[pp.~345--346]{aljahdali2014}. 
                 These benefits are crucial for cloud providers, as they make the cloud business
-                model economically viable and scalable. 
+                model economically viable and scalable.
                 In the context of modern \gls{saas} platforms, \gls{multiTenancy} goes even further
                 by enabling unified management, frictionless onboarding, and simplified operational
                 processes that allow providers to add new tenants without introducing incremental
@@ -304,7 +304,7 @@
                         tenants working on the same hardware, if \textit{\gls{performanceIsolation}}
                         is not given \parencite[p.~195]{krebs2013}.
                         The fundamental performance expectations of a system are commonly formalized
-                        in a \gls{sla}.
+                        in a \acrfull{sla}.% manual acrfull bcs of gls in glossary
                         As noted by~\cite[p.~195]{krebs2013} \enquote{A system is said to be
                         performance isolated, if for tenants working within their quotas the
                         performance is within the (response time) \gls{sla} while other
@@ -332,8 +332,8 @@
                 \parencites[p.~346]{aljahdali2014}[pp.~14576--14577]{senel2023}.
 
             \subsubsection{Kubernetes Control Plane (KCP) as a Promising Approach}\label{subsubsec:kcpApproach}
-                \gls{kcp} offers three capabilities that map cleanly onto today's \gls{multiTenancy}
-                pain points.
+                \acrfull{kcp} offers three capabilities that map accurately onto today's
+                \gls{multiTenancy} pain points.% manual acrfull bcs glossary
 
                 \begin{enumerate}[label={[\arabic*]:},
                     ref=Challenge~\arabic*,
@@ -346,12 +346,12 @@
                         \textit{workspaces} \see{subsubsec:workspaces}.
 
                     \item\label{chal:api}
-                        \textit{API}
+                        \textit{API}.
                         \gls{kcp} offers an \gls{k8s@gls}-like \gls{api} that enables the use of
                         standard tools and automation to a degree \see{subsubsec:api}.
                     
                     \item\label{chal:sharding}
-                        \textit{Sharding}
+                        \textit{Sharding}.
                         \gls{kcp} offers sharding out of the box to manage high traffic and 
                         geo-distribution \see{subsubsec:sharding}.
                 \end{enumerate}
@@ -373,29 +373,29 @@
                 \gls{container} orchestration in the tech industry
                 \parencite[pp.~855--858]{damarapati2025}.
                 \\
-                As noted by~\cite[p.~457]{moravcik2022} by 2021 almost 90\% of organizations used
+                As noted by~\cite[p.~457]{moravcik2022} almost 90\% of organizations used
                 \gls{k8s@gls} as an orchestrator for managing containers and over 70\% of organizations
-                used it in production \parencite{redhatStateOfK8sSecurityReport2021}.
+                used it in production by 2021 \parencite{redhatStateOfK8sSecurityReport2021}.
                 The widespread adoption of \gls{k8s@gls} is further underscored by Red Hat's latest
                 (2024) report, which no longer asks survey respondents if they use \gls{k8s@gls} for
                 \gls{container} orchestration, but rather \textbf{which} \gls{k8s@gls} platform they use
                 \parencite[p.~27]{redhatStateOfK8sSecurityReport2024}.
                 According to~\cite[pp.~855--856]{damarapati2025}, \gls{k8s@gls} has seen
                 unprecedented industry adoption due to its vendor neutrality, strong community
-                support, and flexible, extensible architecture in combination with enterprise
-                readiness caused by \gls{ha@gls}, disaster recovery and security.
+                support, and flexible, extensible architecture in combination with readiness for
+                enterprise use caused by \gls{ha@gls}, disaster recovery and security.
                 \\
                 Moreover \gls{k8s@gls} enables faster time-to-market by providing a unified,
                 declarative control plane that abstracts away infrastructure,
                 guarantees consistent environments from development to production,
                 and automates operational tasks such as scaling, rolling updates,
-                and self-healing—advantages that translate directly into competitive delivery speed
+                and self-healing—advantages that translate directly into competitive delivery speed,
                 increasing its appeal to organizations of every size
                 \parencite[pp.~858--859]{damarapati2025}.
                 \\
-                Over the years, Kubernetes—and the many orchestration solutions inspired by or built
-                on it—has evolved to handle an increasingly diverse range of workloads,
-                supporting everything from conventional applications to emerging
+                Over the years, Kubernetes --- and the many orchestration solutions inspired by or
+                built on it --- has evolved to handle an increasingly diverse range of workloads,
+                supporting everything from conventional applications in to emerging
                 \textit{edge-native} deployments \parencites[p.~21]{biot2025}[pp.~1--4]{biot2025}.
                 Edge-native deployments are applications intended to run on computing
                 resources located at or near the data source --- the network \textit{edge} ---
@@ -411,10 +411,10 @@
                 \textit{\Gls{containerization}} is a way to bundle an application's code with all its
                 dependencies to run on any infrastructure thus enhancing portability
                 \parencite{awsWhatIsContainerization,dockerWhatContainer}.
-                The lightweight nature and isolation can be leveraged by cloud-native software by
-                enabling vertical and horizontal autoscaling facilitated by quick \gls{container}
-                boot times, along with self-healing mechanisms and support for distributed,
-                resilient infrastructures
+                The lightweight nature and isolation of \glspl{container} can be leveraged by
+                cloud-native software to enable both vertical and horizontal autoscaling,
+                facilitated by fast startup times, as well as self-healing mechanisms and support
+                for distributed, resilient infrastructures
                 \parencites{kubernetesAutoscalingWorkloads}{kubernetesSelfHealing}
                     {awsWhatIsContainerization}[pp.~58--59]{davis2019}.
                 Furthermore it complements the microservice architectural pattern by enabling
@@ -423,13 +423,14 @@
 
             \subsubsection{Background: The Role of Microservices in Cloud-Native Architectures}\label{subsubsec:microservices}
                 \textit{Microservices} play a pivotal role in cloud-native architectures by
-                promoting agility, scalability, and maintainability of applications.
+                promoting business agility, scalability, and maintainability of applications.
                 By decomposing applications into independent, granular services, microservices
                 facilitate development, testing, and deployment using diverse technology stacks,
                 enhancing interoperability across platforms
-                \parencites[p.~1]{waseem2020}[p.~1]{larrucea2018} and help prevent failures
-                in one component from propagating across the system, by isolating functionality into
-                distinct, self-contained services \parencite[p.~62]{davis2019}.
+                \parencites[p.~1]{waseem2020}[p.~1]{larrucea2018}.
+                Additionally, they help prevent failures in one component from propagating across
+                the system by isolating functionality into distinct, self-contained services
+                \parencite[p.~62]{davis2019}.
                 This architectural style aligns well with cloud environments, as it allows services
                 to evolve independently, effectively addressing challenges associated with scaling
                 and maintenance without being tied to a singular technological framework
@@ -446,21 +447,22 @@
 
             \subsubsection{Background: Kubernetes Resource Isolation Mechanisms}\label{subsubsec:k8sResourceIsolation}
                 \gls{k8s@gls} employs several resource isolation mechanisms, primarily through the
-                use of \textit{\gls{cgroups}} (control groups) and \textit{namespaces} to limit
+                use of \textit{\gls{cgroups}} and \textit{namespaces} to limit
                 resource allocation for containers.
-                Cgroups are a Linux kernel feature that organizes processes into hierarchical
+                \Gls{cgroups} are a Linux kernel feature that organizes processes into hierarchical
                 groups for fine-grained resource limitation and monitoring via a pseudo-filesystem
                 called \textit{cgroupfs} \parencites{kubernetesCgroupsV2}{cgroups7}.
-                \textit{Namespaces} are a mechanism for isolating groups of resources withing a
+                \textit{Namespaces} are a mechanism for isolating groups of resources within a
                 single cluster and scoping resource names to prevent naming conflicts across
                 different teams or projects \parencite{kubernetesNamespaces}.
-                However, these mechanisms may not always provide sufficient isolation necessary for
+                However, these mechanisms may not always provide the sufficient isolation needed for
                 multi-tenant architectures, because the logical segregation offered by namespaces
                 does not address the fundamental security concerns associated with
-                \gls{multiTenancy} \parencite[p.~651]{nguyen2022} and research indicates that the
-                native isolation strategies can lead to performance interference, where containers
-                that share nodes can experience significant degradation in performance due to CPU
-                contention \parencite[p.~158]{kim2021}.
+                \gls{multiTenancy} \parencite[p.~651]{nguyen2022}.
+                Additionally, research indicates that the native isolation strategies can lead to
+                performance interference, where containers that share nodes can experience
+                significant degradation in performance due to CPU contention
+                \parencite[p.~158]{kim2021}.
                 Specifically, critical services may be adversely affected when non-critical services
                 monopolize available resources, which undermines the quality of service in
                 multi-tenant environments \parencite[p.~30410]{li2019}.
@@ -528,9 +530,9 @@
                 workspaces, aligning with familiar \gls{k8s@gls} patterns and simplifying
                 multi-tenant environment administration.
                 \\
-                Workspaces for a typed, parent-child tree, and each type can constrain which kind
-                of workspaces it can contain or be contained by, giving platform teams a structured
-                way to delegate environments while retaining policy control
+                Workspaces allow for a typed, parent-child tree, and each type can constrain which
+                kind of workspaces it can contain or be contained by, giving platform teams a
+                structured way to delegate environments while retaining policy control
                 \parencite{kcpWorkspaces}.
                 \\
                 This combination of strong isolation, familiar tooling, and hierarchical
@@ -566,11 +568,12 @@
                 \parencite{kcpAPIsExport}.
                 \\
                 \gls{kcp} supports admission webhooks only through \gls{url}-based client
-                configurations, \texttt{service}-based webhooks and conversion webhooks are
+                configurations, while \texttt{service}-based webhooks and conversion webhooks are
                 currently unsupported, so operators must host their hooks externally
                 \parencite{kcpAPIsAdmissionWebhooks}.
+                % TODO: add admission webhooks to glossary
                 \\
-                Because admission requests include the logical-cluster name, webhook back-ends can
+                Because admission requests include the logical-cluster name, webhook back ends can
                 enforce policies per workspace and thus maintain strong tenant isolation
                 \parencite{kcpAuthorization}.
                 Every \gls{rest} call is scoped under the path pattern
@@ -704,53 +707,55 @@
                         and target segments.
 
                     \item\label{chal:saasOperationalEfficiency}
-                        \textit{Operational efficiency}
+                        \textit{Operational efficiency}.
                         \gls{saas} companies grow and scale by fostering a culture of
                         \textbf{operational efficiency} that unifies tooling, enables rapid
                         collective deployment across all customer environments, and eliminates
                         one-off customizations.
 
                     \item\label{chal:saasFrictionlessOnboarding}
-                        \textit{Frictionless onboarding}
-                        \gls{saas} providers must minimize friction in onboarding every \gls{b2b}
-                        and \gls{b2c} tenant by creating repeatable, efficient processes that
-                        accelerate time-to-value.
+                        \textit{Frictionless onboarding}.
+                        \gls{saas} providers must minimize friction in onboarding for every
+                        \gls{b2b} and \gls{b2c} tenant by creating repeatable, efficient processes
+                        that accelerate time-to-value.
 
                     \item\label{chal:saasInnovation}
-                        \textit{Innovation}
+                        \textit{Innovation}.
                         \gls{saas} providers build a flexible foundation that lets them respond to
-                        current customer needs while using that same agility to innovate and unlock
-                        new markets, opportunities, and efficiencies.
+                        current customer needs while using that same agility to innovate as well as
+                        unlock new markets, opportunities, and efficiencies.
 
                     \item\label{chal:saasMarketResponse}
-                        \textit{Market response}
+                        \textit{Market response}.
                         \gls{saas} replaces long-cycle releases with near-real-time agility,
                         enabling organizations to pivot strategy in response to emerging market
                         dynamics.
 
                     \item\label{chal:saasGrowth}
-                        \textit{Growth}
-                        \gls{saas} is a growth-oriented model that aligns organizational agility and
-                        efficiency to welcome rapid adoption of the offering. 
+                        \textit{Growth}.
+                        \gls{saas} is a growth-oriented model that promotes agility and efficiency,
+                        enabling rapid adoption.
 
             \end{enumerate}
 
-            Automation is the foundation for utilizing the scaling effects that come with \gls{saas}
-            architectures. The onboarding service automatically orchestrates other services to
-            create users, tenant, isolation policies, provision and per-tenant resources
+            Automation is the foundation for the utilization of the scaling effects that come along
+            with \gls{saas} architectures.
+            The onboarding service automatically orchestrates other services to
+            create users, tenant, isolation policies, provision, and per-tenant resources
             \parencite[p.~14]{awsSaaSArchitectureFundamentals}.
             Once live, automated pipelines let new features roll to every tenant through a single,
             shared process, giving operators a single pane of glass for the whole estate
             \parencite[p.~10]{awsSaaSArchitectureFundamentals}.
             However merely automating the provisioning of each customer environment and offloading
             its management to an \gls{msp} still leaves tenants running potentially different,
-            separately-operated versions and distances the software provider from unified
-            onboarding, operations, and customer insight—so automation alone creates an \gls{msp}
-            setup, whereas true \gls{saas} requires one shared version and a single, provider-owned
-            control plane for every tenant \parencite[pp.~23--24]{awsSaaSArchitectureFundamentals}.
+            separately-operated versions \parencite[pp.~23--24]{awsSaaSArchitectureFundamentals}.
+            Furthermore it distances the software provider from unified onboarding, operations, and
+            customer insight—so automation alone creates an \gls{msp} setup, whereas true \gls{saas}
+            requires one shared version and a single, provider-owned control plane for every tenant
+            \parencite[pp.~23--24]{awsSaaSArchitectureFundamentals}.
             \\
             Ultimately, \gls{saas} depends on automated, repeatable workflows that remove internal
-            and external friction and ensure stability, efficiency and repeatability for this
+            and external friction, and ensure stability, efficiency and repeatability for this
             process \parencite[p.~14]{awsSaaSArchitectureFundamentals}.
 
     \section{State of the Art and Related Work}\label{sec:related}
@@ -771,7 +776,7 @@
         \subsection{Proposed Scenario}\label{subsec:scenario}
             To demonstrate the conception, implementation, and evaluation of a highly-scalable, 
             highly available SaaS platform on \gls{kcp}, the thesis adopts a deliberately
-            light-weight yet realistic multi-tenant scenario:
+            light-weight yet realistic \textbf{case study}:
             \\
             A \textbf{\gls{smb} Web-Presence-as-a-Service}, whose sole purpose is to give
             \glspl{smb} an instantly available, single-page web presence.
