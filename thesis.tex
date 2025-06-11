@@ -567,11 +567,10 @@
                 touching each consumer workspace, reinforcing the system's self-service goal
                 \parencite{kcpAPIsExport}.
                 \\
-                \gls{kcp} supports admission webhooks only through \gls{url}-based client
+                \gls{kcp} supports \glspl{admissionWebhook} only through \gls{url}-based client
                 configurations, while \texttt{service}-based webhooks and conversion webhooks are
                 currently unsupported, so operators must host their hooks externally
                 \parencite{kcpAPIsAdmissionWebhooks}.
-                % TODO: add admission webhooks to glossary
                 \\
                 Because admission requests include the logical-cluster name, webhook back ends can
                 enforce policies per workspace and thus maintain strong tenant isolation
