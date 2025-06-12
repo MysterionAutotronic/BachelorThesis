@@ -964,6 +964,8 @@
             The \glspl{slo} can be summarized along the three quality dimensions
             \textbf{reliability and performance}, \textbf{scalability, consistency and security},
             and \textbf{durability and operability}.
+            \\
+            The following non-functional requirements provide the basis for the architecture design.
 
                 \renewcommand{\arraystretch}{1.5}
                 \begin{longtable}{@{}lcp{4cm}P{8cm}@{}}
@@ -998,6 +1000,77 @@
                 \end{longtable}
 
         \subsection{Architecture Design with KCP for SaaS}\label{subsec:architectureDesign}
+            
+            \subsubsection{Overview and Design Principles}\label{subsubsec:architectureOverview}
+
+                The platform must host potentially thousands of small, largely independent sites,
+                each with mostly predictable, read-heavy traffic and sporadic writes
+                (\see{subsec:scenario}).
+                Two architectural principles follow immediately:
+                \begin{enumerate}[label={[\arabic*]:},
+                    ref=Challenge~\arabic*,
+                    leftmargin=*,
+                    itemsep=0.6\baselineskip]
+
+                    \item\label{chal:isolationByWorkspace}
+                        \textit{Isolation by Workspace}.
+                        A dedicated \gls{k8s@gls} cluster per tenant is operationally inhibitive.
+                        Conversely, a flat namespace in a single cluster risks cross-tenant resource
+                        contention, complicated \gls{rbac}, and a noisy neighbor problem.
+                        \gls{kcp}'s \textit{workspace} abstraction offers the middle ground,
+                        providing strong boundaries at the \gls{api} layer while keeping a single
+                        point to manage tenants.
+
+                    \item\label{chal:pushState}
+                        \textit{Push state to the edge, pull control to the centre}.
+                        All \textit{public} traffic should terminate inside the tenant workspace
+                        (close to the cache and database), whereas \textit{administrative} traffic
+                        aggregates in a central place, that can be rate-limited and protected.
+
+                \end{enumerate}
+
+                These principles translate into the logical layout in (TODO: figure).
+
+            \subsubsection{Workspace Topology and Multi-Tenancy model}
+
+                \begin{table}[H]\label{tab:layersOverview}
+                    \centering
+                    \renewcommand{\arraystretch}{1.5}
+                    \begin{tabular}{lcp{4cm}P{8cm}}
+                        \toprule
+                        Layer & \gls{kcp} construct & Example resources & Provisioned Amount \\
+                        \midrule
+                        Parent (control) & Workspace (\texttt{root}) & Deployment / dashboard, dashboard-\gls{api}, object store & 1 (static) \\
+                        Tenant (data) & Workspace (\texttt{root:<tenant-id>}) & Deployment / Frontend, tenant-\gls{api}, stateful set \\
+                        \bottomrule
+                    \end{tabular}
+                    \caption{Layers overview}
+                \end{table}
+
+                Each workspace is created via the Workspace \gls{crd} exposed by \gls{kcp}'s
+                \gls{api}.
+                Creating a tenant in the Dashboard in turn creates a new \gls{kcp} workspace for the
+                tenant that is automatically provisioned.
+                Deleting a workspace tears down all associated resources.
+
+            \subsubsection{Tenant Workspace: Data Plane Components}
+                
+                % TODO: why scale based on cpu + qps
+
+                \begin{table}[H]\label{tab:tenantComponents}
+                    \centering
+                    \renewcommand{\arraystretch}{1.5}
+                    \begin{tabular}{lcp{4cm}P{8cm}}
+                        \toprule
+                        Component & Scaling & Purpose \\
+                        \midrule
+                        Frontend (\gls{next}) & \gls{hpa} based on \gls{cpu} and \gls{qps} & Serves static \gls{html} / \gls{js}, does \gls{ssr} for dynamic contents \\
+                        \gls{api} (\gls{node}) & \gls{hpa} & Auth-less \gls{rest} endpoints with cache consumed by the \gls{next} app.
+                        \gls{db}
+                        \bottomrule
+                    \end{tabular}
+                    \caption{Per Tenant Components}
+                \end{table}
 
         \subsection{Automated Deployment Strategies}\label{subsec:deploymentStrategies}
 
