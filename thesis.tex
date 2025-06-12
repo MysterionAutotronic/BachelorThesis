@@ -42,6 +42,9 @@
 \usepackage{setspace}
 \usepackage{substitutefont}
 
+% linting
+% chktex-file 1
+
 % show frames in draft
 %\usepackage{showframe}
 
@@ -71,11 +74,12 @@
 \author{David Linhardt}
 \date{\today}
 
+% page style / numbers
 \pagestyle{scrheadings}
 \cfoot{\thepage} % Page number in center of footer
 
 % glossary
-\makeglossaries{}
+\makeglossaries
 \input{glossary.tex}
 \input{acronyms.tex}
 
@@ -98,7 +102,7 @@
 
         \vspace{1cm}
 
-        \hrulefill{}
+        \hrulefill
 
         \vspace{4cm}
 
@@ -150,7 +154,7 @@
 
         \vspace{1cm}
 
-        \hrulefill{}
+        \hrulefill
 
         \vspace{2cm}
         
@@ -167,7 +171,7 @@
 
     \end{titlepage}
 
-    \restoregeometry{}
+    \restoregeometry
 
     \pagenumbering{roman}
 
@@ -178,11 +182,11 @@
 
     % Glossary
     \printglossary[type=\acronymtype, title={Acronyms}]
-    \cleardoublepage{}
+    \cleardoublepage
     \printglossary[title={Glossary}]
 
 
-    \cleardoublepage{}
+    \cleardoublepage
 
     % TOC
     \begingroup
@@ -192,16 +196,16 @@
 
     \newpage
 
-    \cleardoublepage{}
+    \cleardoublepage
     \begingroup
         \renewcommand{\addcontentsline}[3]{}
         \listoffigures
     \endgroup
 
-    \cleardoublepage{}
+    \cleardoublepage
     \begingroup
         \renewcommand{\addcontentsline}[3]{}
-        \listoftables{}
+        \listoftables
     \endgroup
 
     \newpage
@@ -322,11 +326,11 @@
                     \item\label{chal:automation}
                         \textit{Automation}.
                         As noted by~\cite[p.~651]{nguyen2022} \enquote{Presently, multi-tenant
-                        systems lack the facility of allowing clients to dynamic~\sic{}
+                        systems lack the facility of allowing clients to dynamic~\sic
                         change their resources based on their business demands or create and
                         allocate resources for new tenants.
-                        Multi-tenant system~\sic{} administrator manually does all the work of
-                        allocation or changing tenant's~\sic{} resources.}
+                        Multi-tenant system~\sic administrator manually does all the work of
+                        allocation or changing tenant's~\sic resources.}
                         However, to ensure efficiency and scalability, an \gls{api} that allows
                         automating deployments and dynamic changes in the application is needed.
 
@@ -798,7 +802,7 @@
             A \gls{dataContract} is used to allow the frontend to be data-driven.
             
             \begin{table}[H]\label{tab:scenario}
-                \centering{}
+                \centering
                 \renewcommand{\arraystretch}{1.5}
                 \begin{tabular}{lP{4cm}P{8cm}}
                     \toprule
@@ -827,7 +831,7 @@
 
             \subsubsection{Functional Requirements}\label{subsubsec:fr}
                 \begin{table}[H]\label{tab:fr}
-                    \centering{}
+                    \centering
                     \renewcommand{\arraystretch}{1.5}
                     \begin{tabular}{lcp{4cm}P{8cm}}
                         \toprule
@@ -847,28 +851,37 @@
 
             \subsubsection{Non Functional Requirements}\label{subsubsec:nfr}
 
-                % TODO: make this a longtable
-                \begin{table}[H]\label{tab:nfr}
-                    \centering{}
-                    \renewcommand{\arraystretch}{1.5}
-                    \begin{tabular}{lcp{4cm}P{8cm}}
-                        \toprule
-                        NF ID & Scope & Title & Description \\
-                        \midrule
-                        \hypertarget{nf1}{NF-01} & Tenant & Public Availability & The public page shall achieve $\geq$~99.95~\% monthly uptime; workspace moves or \gls{api} pod restarts shall cause 0 failed GET requests. \\
-                        \hypertarget{nf2}{NF-02} & Platform & Dashboard Availability & The owner dashboard shall achieve $\geq$~99.5~\% monthly uptime (so brief maintenance windows are acceptable). \\
-                        \hypertarget{nf3}{NF-03} & Tenant & Page Performance & p95 full-page load time shall be $\leq$~600~ms at 200~req/s from one region. \\
-                        \hypertarget{nf4}{NF-04} & Tenant & \gls{api} Latency & p95 latency for GET \texttt{/api/config} and GET \texttt{/api/reviews} shall be $\leq$~150~ms under the same load. \\
-                        \hypertarget{nf5}{NF-05} & Platform & Horizontal Scalability & The control plane shall handle at least 2 000 tenant workspaces with etcd IO $\leq$~70~\% and <~100~ms workspace-list latency. \\
-                        \hypertarget{nf6}{NF-06} & Platform & Cache Consistency & Config cache shall reflect bucket changes within 5~min after a tenant triggers “publish” in the dashboard. \\
-                        \hypertarget{nf7}{NF-07} & Platform & Tenant Isolation and Security & Data and traffic from one tenant shall not be accessible to another (\gls{rbac}, row-level security, network policies). \\
-                        \hypertarget{nf8}{NF-08} & Platform & Data Durability & Reviews and config data shall have an \gls{rpo}~=~0~h (\gls{wal}-based backups) and an \gls{rto}~$\leq$~2~h via cross-region restore. \\
-                        \hypertarget{nf9}{NF-09} & Platform & Disaster Recovery for Bucket & The shared bucket shall replicate to a secondary region with automatic fail-over; cached assets must remain available during a primary-region outage. \\
-                        \hypertarget{nf10}{NF-10} & Operator & Maintainability / \gls{ci}/\gls{cd} & A full platform deployment (dashboard + initializer + tenant chart) shall complete via GitOps pipeline in~$\leq$~15~min. \\
-                        \bottomrule
-                    \end{tabular}
-                    \caption{Non Functional Requirements}
-                \end{table}
+                \renewcommand{\arraystretch}{1.5}
+                \begin{longtable}{@{}lcp{4cm}P{8cm}@{}}
+                    \toprule
+                    NF ID & Scope & Title & Description \\
+                    \midrule
+                    \endfirsthead
+
+                    \toprule
+                    NF ID & Scope & Title & Description \\
+                    \midrule
+                    \endhead
+
+                    \bottomrule
+                    \endfoot
+
+                    \bottomrule
+                    \caption{Non-Functional Requirements}\label{tab:nfr}
+                    \endlastfoot
+
+                    \hypertarget{nf1}{NF-01} & Tenant & Public Availability & The public page shall achieve $\geq$~99.95~\% monthly uptime; workspace moves or \gls{api} pod restarts shall cause 0 failed GET requests. \\
+                    \hypertarget{nf2}{NF-02} & Platform & Dashboard Availability & The owner dashboard shall achieve $\geq$~99.5~\% monthly uptime (so brief maintenance windows are acceptable). \\
+                    \hypertarget{nf3}{NF-03} & Tenant & Page Performance & p95 full-page load time shall be $\leq$~600~ms at 200~req/s from one region. \\
+                    \hypertarget{nf4}{NF-04} & Tenant & \gls{api} Latency & p95 latency for GET \texttt{/api/config} and GET \texttt{/api/reviews} shall be $\leq$~150~ms under the same load. \\
+                    \hypertarget{nf5}{NF-05} & Platform & Horizontal Scalability & The control plane shall handle at least 2 000 tenant workspaces with etcd IO $\leq$~70~\% and <~100~ms workspace-list latency. \\
+                    \hypertarget{nf6}{NF-06} & Platform & Cache Consistency & Config cache shall reflect bucket changes within 5~min after a tenant triggers “publish” in the dashboard. \\
+                    \hypertarget{nf7}{NF-07} & Platform & Tenant Isolation and Security & Data and traffic from one tenant shall not be accessible to another (\gls{rbac}, row-level security, network policies). \\
+                    \hypertarget{nf8}{NF-08} & Platform & Data Durability & Reviews and config data shall have an \gls{rpo}~=~0~h (\gls{wal}-based backups) and an \gls{rto}~$\leq$~2~h via cross-region restore. \\
+                    \hypertarget{nf9}{NF-09} & Platform & Disaster Recovery for Bucket & The shared bucket shall replicate to a secondary region with automatic fail-over; cached assets must remain available during a primary-region outage. \\
+                    \hypertarget{nf10}{NF-10} & Operator & Maintainability / \gls{ci}/\gls{cd} & A full platform deployment (dashboard + initializer + tenant chart) shall complete via GitOps pipeline in~$\leq$~15~min. \\
+
+                \end{longtable}
 
         \subsection{Architecture Design with KCP for SaaS}\label{subsec:architectureDesign}
 
@@ -900,13 +913,13 @@
 
         \subsection{Future Outlook}\label{subsec:outlook}
 
-    \cleardoublepage{}
+    \cleardoublepage
     \printbibliography[
         title = {References},
         heading = bibintoc
     ]
 
-    \cleardoublepage{}
+    \cleardoublepage
     \appendix
 
 \end{document}
