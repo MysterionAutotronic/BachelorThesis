@@ -1,7 +1,7 @@
 \documentclass[11pt, a4paper, oneside, listof=totoc]{scrartcl}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[ngerman, english]{babel}
+\usepackage[ngerman, greek, english]{babel}
 \usepackage[onehalfspacing]{setspace}
 \usepackage{helvet}
 \usepackage[a4paper, left=2.5cm, right=2.5cm]{geometry}
@@ -40,12 +40,14 @@
 \usepackage{mfirstuc}
 \usepackage{array}
 \usepackage{setspace}
+\usepackage{substitutefont}
 
 % show frames in draft
 %\usepackage{showframe}
 
 % set language to english
 \selectlanguage{english}
+\substitutefont{LGR}{phv}{cmss}    % when LaTeX wants LGR/phv ⇒ use Computer Modern Sans
 
 % set font to sans-serif
 \renewcommand{\familydefault}{\sfdefault}
@@ -367,6 +369,11 @@
                 management system called Borg, and designed to streamline the process of deploying,
                 scaling, and managing applications composed of microservices running in containers
                 \parencites[pp.~13--14]{verma2015}[p.~84]{bernstein2014}.
+                The name \gls{k8s@gls} originates from the Greek word \textgreek{κυβερνήτης} meaning
+                helmsman or pilot \parencite{kubernetesOverview}.
+                The abbreviation \gls{k8s} results from counting the eight letters in between the
+                \enquote{K} and the \enquote{s} \parencite{kubernetesOverview}.
+                \\
                 Since its inception, \gls{k8s@gls} has gained traction among organizations because it
                 provides robust features such as automated scaling,
                 self-healing, and service discovery, which have made it the de facto standard for
