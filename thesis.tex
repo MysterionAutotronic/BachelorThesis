@@ -1060,18 +1060,103 @@
                 \begin{table}[H]\label{tab:tenantComponents}
                     \centering
                     \renewcommand{\arraystretch}{1.5}
-                    \begin{tabular}{lcp{4cm}P{8cm}}
+                    % TODO: fix spacings
+                    \begin{tabular}{lp{4cm}P{8cm}}
                         \toprule
                         Component & Scaling & Purpose \\
                         \midrule
                         Frontend (\gls{next}) & \gls{hpa} based on \gls{cpu} and \gls{qps} & Serves static \gls{html} / \gls{js}, does \gls{ssr} for dynamic contents \\
-                        \gls{api} (\gls{node}) & \gls{hpa} & Auth-less \gls{rest} endpoints with cache consumed by the \gls{next} app.
-                        \gls{db}
+                        \gls{api} (\gls{node}) & \gls{hpa} & Auth-less \gls{rest} endpoints with cache consumed by the \gls{next} app. \\
+                        \gls{db} & StatefulSet & Stores ratings \\
                         \bottomrule
                     \end{tabular}
                     \caption{Per Tenant Components}
                 \end{table}
 
+                The request flow of the visitor path can be summarized as follows:
+
+                \begin{enumerate}[label={[\arabic*]:},
+                    ref=Challenge~\arabic*,
+                    leftmargin=*,
+                    itemsep=0.6\baselineskip]
+
+                    \item\label{chal:frontend}
+                        \textit{Frontend}.
+                        The \gls{next} frontend is called.
+                    \item\label{chal:tenantApi}
+                        \textit{Tenant \gls{api}}.
+                        The \gls{next} frontend calls the tenant \gls{api} to get dynamic data.
+                        The tenant \gls{api} reads from the cache.
+
+                    \item\label{chal:db}
+                        \textit{Data sources}.
+                        The tenant \gls{api} periodically renews its cache based of a \gls{ttl}.
+                        The dynamic data (reviews) comes from the tenant \gls{db} while the data
+                        comes from the platform \gls{api}.
+                \end{enumerate}
+
+                This ensures, that for all customer interactions on the public website the workload
+                remains local to the tenant workspace, thus improving the traceability.
+            \subsubsection{Parent Workspace: Control Plane Components}\label{subsubsec:controlPlaneComponents}
+                
+                \begin{table}[H]\label{tab:parentComponents}
+                    \centering
+                    \renewcommand{\arraystretch}{1.5}
+                    % TODO: fix spacings
+                    \begin{tabular}{lp{4cm}P{8cm}}
+                        \toprule
+                        Component & Scaling & Purpose \\
+                        \midrule
+                        Dashboard & \gls{hpa} & Authenticated \gls{ui} for tenant owners; \gls{crud} operations on tenant data \\
+                        Parent \gls{api} & \gls{hpa} & validates input and writes \gls{json}; is polled by tenant \gls{api} on cache miss \\
+                        Object Store & TODO & holds \texttt{tenant-id/data.json} \\
+                        \bottomrule
+                    \end{tabular}
+                    \caption{Control Plane Components}
+                \end{table}
+
+                % Tenant clicks “Create site” in the Dashboard
+                % Dashboard sends POST /api/tenants -> Parent API.
+                % Parent API creates Workspace CR in KCP.
+                % Tenant-Provisioner receives event -> calls Helm -> writes DNS record -> returns public URL.
+                % Dashboard polls status until provisioning completes (≤ 60 s target).
+
+            \subsubsection{Data Synchronization and Caching Strategy}\label{syncAndCache}
+                The tenant \gls{api} polls the parent object store and caches the tenant data with a
+                \gls{ttl} in memory.
+                Optionally the parent \gls{api} sends an event to the tenant \gls{api} on updates,
+                instantly invalidating the cache.
+                Because of the lightweight nature of the cached data a cache separate from the
+                \gls{api} like a \gls{redis} instance is not required, because the overhead it
+                introduces likely doesn't outweigh the benefits.
+                \\
+                By caching tenant-specific data within the tenant \gls{api} and only polling the
+                parent \gls{api} on cache misses, the system effectively decouples the tenant
+                \gls{api} from the parent \gls{api}.
+                This design significantly improves resilience during traffic spikes and fan-out
+                scenarios by reducing direct dependency and shielding the parent \gls{api} from
+                high-frequency access patterns as choosing a long \gls{ttl} around 24 h for the
+                common case dramatically reduces load on the parent \gls{api}.
+
+            \subsubsection{Scalability, Isolation and Security}\label{scalabilityIsolationSecurity}
+                \begin{enumerate}[label={[\arabic*]:},
+                    ref=Challenge~\arabic*,
+                    leftmargin=*,
+                    itemsep=0.6\baselineskip]
+
+                    \item\label{chal:architectureScalability}
+                        \textit{Horizontal Scalability}.
+                        Inside the tenant workspace the \gls{fe} and the tenant-\gls{api} replicate
+                        linearly.
+
+                    \item\label{chal:architectureIsolation}
+                        \textit{Tenant \gls{api}}.
+                        
+
+                    \item\label{chal:architectureSecurity}
+                        \textit{Data sources}.
+                        
+                \end{enumerate}                
         \subsection{Automated Deployment Strategies}\label{subsec:deploymentStrategies}
 
     \section{Prototypical Implementation}\label{sec:prototype}
