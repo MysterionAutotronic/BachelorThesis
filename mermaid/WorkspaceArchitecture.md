@@ -8,17 +8,16 @@ flowchart TD
     subgraph TENANT[Tenant]
         FE[Frontend]
         API[API]
-        DB[DB]
+        DB[(DB)]
+		CONFIGMAP[(ConfigMap)]
 
         FE --> API
         API --> DB
+		API --> CONFIGMAP
     end
     FEDASH[Dashboard Frontend]
     DASHAPI[Dashboard API]
-    OBJECTSTORE[(Object Store)]
 
-    FEDASH --> DASHAPI
-    DASHAPI --> OBJECTSTORE
-
-    API --> DASHAPI
+	FEDASH --> DASHAPI
+	DASHAPI --> CONFIGMAP
 ```
