@@ -9,15 +9,15 @@ flowchart TD
         FE[Frontend]
         API[API]
         DB[(DB)]
-		CONFIGMAP[(ConfigMap)]
+		PVC[(PVC)]
 
         FE --> API
         API --> DB
-		API --> CONFIGMAP
+		API --> PVC
     end
     FEDASH[Dashboard Frontend]
     DASHAPI[Dashboard API]
 
 	FEDASH --> DASHAPI
-	DASHAPI --> CONFIGMAP
+	DASHAPI --> TENANT
 ```

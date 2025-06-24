@@ -1029,7 +1029,12 @@
 
                 \end{enumerate}
 
-                These principles translate into the logical layout in (TODO: figure).
+                These principles translate into the logical layout in \autoref{fig:system-architecture}.
+                \begin{figure}[htbp]
+                    \centering
+                    \includegraphics{images/WorkspaceArchitectureCropped.pdf}
+                    \caption{Overview of the system architecture}\label{fig:system-architecture}
+                \end{figure}
 
             \subsubsection{Workspace Topology and Multi-Tenancy model}
 
@@ -1040,7 +1045,7 @@
                         \toprule
                         Layer & \gls{kcp} construct & Example resources & Provisioned Amount \\
                         \midrule
-                        Parent (control) & Workspace (\texttt{root}) & Deployment / dashboard, dashboard-\gls{api}, object store & 1 (static) \\
+                        Parent (control) & Workspace (\texttt{root}) & Deployment / dashboard, dashboard-\gls{api} & 1 (static) \\
                         Tenant (data) & Workspace (\texttt{root:<tenant-id>}) & Deployment / Frontend, tenant-\gls{api}, stateful set \\
                         \bottomrule
                     \end{tabular}
@@ -1109,7 +1114,6 @@
                         \midrule
                         Dashboard & \gls{hpa} & Authenticated \gls{ui} for tenant owners; \gls{crud} operations on tenant data \\
                         Parent \gls{api} & \gls{hpa} & validates input and writes \gls{json}; is polled by tenant \gls{api} on cache miss \\
-                        Object Store & TODO & holds \texttt{tenant-id/data.json} \\
                         \bottomrule
                     \end{tabular}
                     \caption{Control Plane Components}
@@ -1122,21 +1126,6 @@
                 % Dashboard polls status until provisioning completes (≤ 60 s target).
 
             \subsubsection{Data Synchronization and Caching Strategy}\label{syncAndCache}
-                The tenant \gls{api} polls the parent object store and caches the tenant data with a
-                \gls{ttl} in memory.
-                Optionally the parent \gls{api} sends an event to the tenant \gls{api} on updates,
-                instantly invalidating the cache.
-                Because of the lightweight nature of the cached data a cache separate from the
-                \gls{api} like a \gls{redis} instance is not required, because the overhead it
-                introduces likely doesn't outweigh the benefits.
-                \\
-                By caching tenant-specific data within the tenant \gls{api} and only polling the
-                parent \gls{api} on cache misses, the system effectively decouples the tenant
-                \gls{api} from the parent \gls{api}.
-                This design significantly improves resilience during traffic spikes and fan-out
-                scenarios by reducing direct dependency and shielding the parent \gls{api} from
-                high-frequency access patterns as choosing a long \gls{ttl} around 24 h for the
-                common case dramatically reduces load on the parent \gls{api}.
 
             \subsubsection{Scalability, Isolation and Security}\label{scalabilityIsolationSecurity}
                 \begin{enumerate}[label={[\arabic*]:},
