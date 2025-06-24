@@ -1147,6 +1147,91 @@
                         \textit{Data sources}.
                         
                 \end{enumerate}                
+            
+            \subsubsection{Rationale for Config Injection Strategy}\label{subsubsec:rationale}
+                The tenant-specific configuration is injected directly into the \gls{api} container
+                at build time using \gls{docker} \texttt{--build-arg}, and deployed into the tenant
+                workspace.
+                This decision favors strong workspace isolation, avoids runtime complexities, and
+                simplifies the tenant lifecycle.
+                \\
+                The following alternatives were considered:
+
+                \begin{enumerate}[label={[\arabic*]:},
+                    ref=Challenge~\arabic*,
+                    leftmargin=*,
+                    itemsep=0.6\baselineskip]
+
+                    \item\label{chal:pv}
+                        \textit{\gls{pv}}.
+                        \glspl{pv} offer cluster-wide storage, but they are bound to the
+                        underlying infrastructure and not scoped to individual workspaces.
+                        Since tenant data must remain fully isolated within its respective
+                        workspace, using a shared \gls{pv} would have violated this design
+                        constraint.
+                        
+                    \item\label{chal:pvc}
+                        \textit{\gls{pvc}}.
+                        \glspl{pvc} are workspace-scoped and technically suitable for storing tenant
+                        configuration.
+                        However, managing their lifecycle dynamically per tenant (including updates
+                        and clean-up) would introduce significant operational complexity.
+
+                    \item\label{chal:configMap}
+                        \textit{ConfigMap}.
+                        A ConfigMap is a lightweight and \gls{k8s} native way to inject
+                        configuration, but it has a very constraining size limit (typically 1 MiB)
+                        and is not designed for cross-workspace usage.
+                        Since KCP workspaces enforce strict isolation, injecting a ConfigMap from
+                        the parent workspace into the tenant workspace would violate boundary
+                        constraints, or require custom controllers.
+
+                    \item\label{chal:gitRepo}
+                        \textit{Git Repository}.
+                        Polling or pulling tenant configuration from a Git repository would offer
+                        central control and versioning, but would couple each tenant's runtime to an
+                        external dependency.
+                        It would also require embedding Git credentials or \gls{ssh} keys within the
+                        workspace, raising security concerns and operational burden.
+                        Furthermore the data does not live inside the tenant violating isolation
+                        principles.
+
+                    \item\label{chal:initContainer}
+                        \textit{initContainer + emptyDir}.
+                        This approach involves using an \texttt{initContainer} to write the config
+                        into an \texttt{emptyDir} shared volume before the main \gls{api} container
+                        starts.
+                        While this ensures data locality, the config is ephemeral and lost on pod
+                        restart or rescheduling.
+                        Additionally, updates would require a full pod redeployment and controlled
+                        init re-execution, adding complexity.
+
+                    \item\label{chal:tenantDB}
+                        \textit{Tenant \gls{db}}.
+                        Storing the configuration in the tenant database would offer persistence and
+                        locality.
+                        However access control for the write operations and reaching out to the
+                        \gls{db} from the parent workspace are critical pain points.
+
+                    \item\label{chal:redis}
+                        \textit{\gls{redis}}.
+                        A Redis store within the tenant workspace was considered for fast config
+                        access.
+                        However, this introduces a full additional service dependency per tenant,
+                        which contradicts the goals of lightweight and cost-efficient tenant
+                        deployments.
+                        Redis also requires persistence management if configuration must survive
+                        restarts.
+
+                    \item\label{cahl:centralStore}
+                        \textit{Central Document Store}
+                        Maintaining a central document store in the root workspace (e.g. MongoDB)
+                        was ruled out due to isolation concerns.
+                        This would require the tenant \gls{api} to reach out beyond its workspace
+                        boundary, which is explicitly avoided in the current architecture to enforce
+                        strict data sovereignty per tenant.
+                \end{enumerate}    
+
         \subsection{Automated Deployment Strategies}\label{subsec:deploymentStrategies}
 
     \section{Prototypical Implementation}\label{sec:prototype}
