@@ -11,6 +11,7 @@ if ! command -v pdfcrop &> /dev/null; then
 fi
 
 for pdf_file in "$PDF_DIR"/*.pdf; do
+    [[ "$pdf_file" == *"$CROPPED.pdf" ]] && continue
     [ -e "$pdf_file" ] || continue
     base_name="$(basename "$pdf_file" .pdf)"
     cropped_file="$PDF_DIR/$base_name$CROPPED.pdf"
