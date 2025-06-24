@@ -2,22 +2,24 @@
 ---
 config:
       theme: redux
-title: Workspace
 ---
 flowchart TD
-    subgraph TENANT[Tenant]
+    subgraph TENANT[Tenant Workspace]
         FE[Frontend]
         API[API]
         DB[(DB)]
-		PVC[(PVC)]
 
-        FE --> API
-        API --> DB
-		API --> PVC
+        API <--> FE
+        DB <--> API
     end
-    FEDASH[Dashboard Frontend]
-    DASHAPI[Dashboard API]
+    subgraph ROOT[Root Workspace]
+        FEDASH[Dashboard Frontend]
+        DASHAPI[Dashboard API]
+        TEMP[(Temp Config Store)]
 
-	FEDASH --> DASHAPI
+		DASHAPI <--> TEMP
+    end
+	API --> DASHAPI
+	DASHAPI <--> FEDASH
 	DASHAPI --> TENANT
 ```
