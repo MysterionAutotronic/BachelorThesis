@@ -52,6 +52,7 @@
         "namescope",
         "OBJECTSTORE",
         "pandoc",
+        "pdfcrop",
         "rendez",
         "spinstr",
         "svgs",
