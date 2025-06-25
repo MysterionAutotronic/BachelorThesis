@@ -1330,6 +1330,10 @@
                     structure and behavior.
                     \gls{next} also allows efficient static generation of tenant-specific content
                     during build time.
+                    To further streamline provisioning, a pre-defined set of layout and component
+                    \textit{skeletons} is embedded in the template repository.  
+                    These skeletons provide a consistent structure for common views, while still
+                    allowing per-tenant extension and branding.
 
                 \item\label{chal:dashboardAPI}
                     \textit{Dashboard \gls{api}}.
@@ -1372,7 +1376,7 @@
             the development process maintainable.
             Furthermore it aims to live inside the \gls{ts} ecosystem, simplifying the development
             process.
-            
+
     \section{Prototypical Implementation}\label{sec:prototype}
 
         \subsection{Infrastructure with KCP}\label{subsec:infrastructure}
