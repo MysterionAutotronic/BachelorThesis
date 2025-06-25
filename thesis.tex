@@ -1305,7 +1305,74 @@
         \subsection{Automated Deployment Strategies}\label{subsec:deploymentStrategies}
 
         \subsection{Choice of Technologies}\label{subsec:technologies}
+            The platform architecture leverages modern, well-supported technologies that align with
+            the core design principles of modularity, performance, and isolation.
+            Each major component is built using tools selected for their suitability in a
+            cloud-native, tenant-isolated SaaS environment.
 
+            \begin{enumerate}[label={[\arabic*]:},
+                ref=Challenge~\arabic*,
+                leftmargin=*,
+                itemsep=0.6\baselineskip]
+                \item\label{chal:dashboardFE}
+                    \textit{Dashboard \gls{fe}}.
+                    The central Dashboard is implemented using \texttt{\gls{next}}.
+                    Its file-based routing, support for both static and server-side rendering, and
+                    seamless integration with TypeScript make it a suitable choice for building a
+                    modular and responsive frontend.
+                    Reusability and developer ergonomics were key factors in this decision.
+
+                \item\label{chal:tenantFE}
+                    \textit{Tenant \gls{fe}}.
+                    Each tenant is provisioned with a separate frontend instance based on a shared
+                    \texttt{\gls{next}} template.
+                    This enables customization at the workspace level while maintaining consistent
+                    structure and behavior.
+                    \gls{next} also allows efficient static generation of tenant-specific content
+                    during build time.
+
+                \item\label{chal:dashboardAPI}
+                    \textit{Dashboard \gls{api}}.
+                    The control plane's \gls{api} is built using \texttt{\gls{node}} and
+                    \texttt{\gls{express}}, providing a lightweight, fast, and \gls{json}-native web
+                    service environment.
+                    It integrates a volatile \texttt{node-cache} layer for storing configuration
+                    artifacts during tenant provisioning, minimizing external dependencies.
+
+                \item\label{chal:tenantAPI}
+                    \textit{Tenant \gls{api}}.
+                    Each tenant workspace contains its own
+                    \texttt{\gls{node}}~+~\texttt{\gls{express}} \gls{api} instance.
+                    This ensures strict separation of runtime logic and supports injection of static
+                    configuration at image build time.
+                    The framework's flexibility and ecosystem make it well-suited for containerized
+                    multi-tenant deployment.
+
+                \item\label{chal:tempConfigStore}
+                    \textit{Temporary Config Store}.
+                    During tenant creation, configuration files are temporarily stored on the
+                    Dashboard \gls{api}'s local filesystem.
+                    These files are injected into the tenant image using Docker's
+                    \texttt{--build-arg} and \texttt{COPY} mechanisms.
+                    This avoids cross-workspace communication and external storage dependencies.
+
+                \item\label{chal:tenantDB2}
+                    \textit{Tenant \gls{db}}.
+                    The tenants database layer is provided by \texttt{Citus}, a horizontally
+                    scalable extension of PostgreSQL.\@
+                    Citus allows sharded, isolated storage of tenant data and supports scaling out
+                    as load increases.
+                    Its compatibility with PostgreSQL clients simplifies development and
+                    integration.
+
+            \end{enumerate}
+
+            This technology selection provides a robust foundation for implementing the desired
+            multi-tenant \gls{saas} architecture while keeping the operational footprint minimal and
+            the development process maintainable.
+            Furthermore it aims to live inside the \gls{ts} ecosystem, simplifying the development
+            process.
+            
     \section{Prototypical Implementation}\label{sec:prototype}
 
         \subsection{Infrastructure with KCP}\label{subsec:infrastructure}
