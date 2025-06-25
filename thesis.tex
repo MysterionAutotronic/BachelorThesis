@@ -825,7 +825,50 @@
             Moreover, the fact model is sufficiently small to allow \textit{stateless} page
             rendering, enabling the data plane to be scaled independently of the rendering tier.
             The following subsection translates this narrative into concrete requirements.
+
+            \subsubsection{Representative User Journey}\label{subsubsec:userJourney}
+                To contextualize the conceptual design, this subsection describes a representative
+                end-to-end journey from the perspective of the primary user: the \gls{smb} tenant.
+
+                \begin{enumerate}[label={[\arabic*]:},
+                    ref=Challenge~\arabic*,
+                    leftmargin=*,
+                    itemsep=0.6\baselineskip]
+
+                    \item\label{chal:ujOnboarding}
+                        \textit{Onboarding}.
+                        The tenant accesses the dashboard and creates an account.
+                        They enter basic company information, select a theme, and upload optional
+                        assets like a logo or background image.
+
+                    \item\label{chal:ujProvisioning}
+                        \textit{Workspace Provisioning}.
+                        Upon submission, the platform automatically provisions a dedicated \gls{kcp}
+                        workspace, generates a static \texttt{config.json} file, and triggers
+                        deployment of the tenant-specific frontend and \gls{api}.
+
+                    \item\label{chal:ujPublication}
+                        \textit{Site Publication}.
+                        Once deployed, the tenant receives a public \gls{url} pointing to their live
+                        web presence.
+                        The frontend fetches dynamic content such as reviews from the tenant-local
+                        \gls{api}.
+
+                    \item\label{chal:ujUse}
+                        \textit{Ongoing Use}.
+                        The tenant can return to the dashboard at any time to update content.
+                        Any changes result in regeneration of the config and a controlled
+                        redeployment.
+                    \item\label{chal:ujInteraction}
+                        \textit{End-User Interaction}.
+                        Visitors reach the tenant's public page, browse the content, and can
+                        optionally submit reviews.
+                        These reviews are stored in the tenant's isolated database.
+
+                \end{enumerate}
             
+                This journey provides the foundation for the functional (\see{subsubsec:fr}) and
+                non-functional (\see{subsubsec:nfr}) requirements in the subsequent sections.
 
         \subsection{System Requirements}\label{subsec:requirements}
 
@@ -1303,6 +1346,7 @@
                 \end{enumerate}                
 
         \subsection{Automated Deployment Strategies}\label{subsec:deploymentStrategies}
+            \cleardoublepage
 
         \subsection{Choice of Technologies}\label{subsec:technologies}
             The platform architecture leverages modern, well-supported technologies that align with
@@ -1376,6 +1420,7 @@
             the development process maintainable.
             Furthermore it aims to live inside the \gls{ts} ecosystem, simplifying the development
             process.
+            \cleardoublepage
 
     \section{Prototypical Implementation}\label{sec:prototype}
 
