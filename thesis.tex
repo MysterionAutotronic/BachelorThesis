@@ -799,7 +799,7 @@
             The service sits between \gls{diy} website builders and full custom agency work.
             Tenants enter their company facts, choose a theme, and receive a live, secure page,
             without touching infrastructure.
-            A \gls{dataContract} is used to allow the frontend to be data-driven.
+            A \gls{dataContract} is used to allow the public frontend to be data-driven.
             
             \begin{table}[H]
                 \centering
@@ -964,8 +964,8 @@
                         \hypertarget{f3}{F-03} & \textit{Tenant} & Ratings \gls{crud} & Public visitors shall be able to post 1-to-5-star ratings with comments; the public \gls{api} shall list ratings. \\
                         \hypertarget{f4}{F-04} & \textit{Tenant} & Public Page Delivery & The public Next.js frontend shall render the latest template and tenant data via the per-tenant \gls{api}. \\
                         \hypertarget{f5}{F-05} & \textit{Platform} & Tenant Provisioning & The dashboard shall create a new \gls{kcp} workspace, deploy the tenant stack, allocate the \gls{sql} schema and return a public \gls{url} in~$\leq$~60~s. \\
-                        \hypertarget{f6}{F-06} & \textit{Platform} & Config Storage and Retrieval & Template configuration for every tenant shall be stored under \texttt{/<tenant-id>/config.json} in the shared object bucket and fetched by the per-tenant \gls{api} at start-up or cache miss. \\
-                        \hypertarget{f7}{F-07} & \textit{Tenant} & Config Caching & The per-tenant \gls{api} shall cache configuration in-memory with a \gls{ttl}~$\geq$~24~h, falling back to the bucket on cache miss or version bump. \\
+                        \hypertarget{f6}{F-06} & \textit{Platform} & Config Storage and Retrieval & Template configuration for every tenant shall be stored inside the tenants \gls{api} as a \gls{json} file. \\
+                        \hypertarget{f7}{F-07} & \textit{Tenant} & Config Caching & The per-tenant \gls{api} shall cache configuration in-memory with a \gls{ttl}~$\geq$~24~h, falling back to the \gls{json} file on cache miss. \\
                         \bottomrule
                     \end{tabular}
                     \caption{Functional Requirements}
@@ -978,7 +978,7 @@
                 \\
                 By keeping the scope this narrow, the thesis can focus evaluation on control-plane
                 scalability, \gls{ha}, and page-delivery performance, without being distracted by
-                edge functionality that would no exercise \gls{kcp} in a meaningful way.
+                edge functionality that would not exercise \gls{kcp} in a meaningful way.
 
             \subsubsection{Non Functional Requirements}\label{subsubsec:nfr}
 
@@ -1036,10 +1036,9 @@
                     \hypertarget{nf3}{NF-03} & Tenant & Page Performance & p95 full-page load time shall be $\leq$~600~ms at 200~req/s from one region. \\
                     \hypertarget{nf4}{NF-04} & Tenant & \gls{api} Latency & p95 latency for GET \texttt{/api/config} and GET \texttt{/api/reviews} shall be $\leq$~150~ms under the same load. \\
                     \hypertarget{nf5}{NF-05} & Platform & Horizontal Scalability & The control plane shall handle at least 2 000 tenant workspaces with etcd IO $\leq$~70~\% and <~100~ms workspace-list latency. \\
-                    \hypertarget{nf6}{NF-06} & Platform & Cache Consistency & Config cache shall reflect bucket changes within 5~min after a tenant triggers “publish” in the dashboard. \\
+                    \hypertarget{nf6}{NF-06} & Platform & Cache Consistency & Config cache shall reflect config changes within 15~min after a tenant triggers “publish” in the dashboard. \\
                     \hypertarget{nf7}{NF-07} & Platform & Tenant Isolation and Security & Data and traffic from one tenant shall not be accessible to another (\gls{rbac}, row-level security, network policies). \\
                     \hypertarget{nf8}{NF-08} & Platform & Data Durability & Reviews and config data shall have an \gls{rpo}~=~0~h (\gls{wal}-based backups) and an \gls{rto}~$\leq$~2~h via cross-region restore. \\
-                    \hypertarget{nf9}{NF-09} & Platform & Disaster Recovery for Bucket & The shared bucket shall replicate to a secondary region with automatic fail-over; cached assets must remain available during a primary-region outage. \\
                     \hypertarget{nf10}{NF-10} & Operator & Maintainability / \gls{ci}/\gls{cd} & A full platform deployment (dashboard + initializer + tenant chart) shall complete via GitOps pipeline in~$\leq$~15~min. \\
 
                 \end{longtable}
@@ -1299,7 +1298,7 @@
                         \textit{Data sources}.
                         The tenant \gls{api} periodically renews its cache based of a \gls{ttl}.
                         The dynamic data (reviews) comes from the tenant \gls{db} while the data
-                        comes from the platform \gls{api}.
+                        comes from the tenant \gls{api}.
                 \end{enumerate}
 
                 This ensures, that for all customer interactions on the public website the workload
