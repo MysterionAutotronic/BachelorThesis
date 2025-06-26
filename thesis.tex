@@ -810,7 +810,7 @@
                     \midrule
                     \gls{smb} tenant & Enters or edits company information; chooses a theme & Write-heavy only at onboarding, then sporadic \\
                     End-User Visitor & Loads the generated page & Read-only; bursty traffic driven by marketing and search indexing \\
-                    Platform Operator & Maintains themes, monitors capacity, rolls out new platform versions & \gls{devops} \\
+                    Platform Operator & Maintains themes, monitors capacity, rolls out new platform versions & \Gls{devops} \\
                     \bottomrule
                 \end{tabular}
                 \caption{Actors, their responsibilities, and interaction patterns in the case case study}\label{tab:scenario}
@@ -820,10 +820,8 @@
             \gls{multiTenancy} (potentially tens on thousands of logically isolated sites) with
             skewed workload characteristics, like very high read \gls{fanOut} combined with low
             per-tenant write rate.
-            The workload stresses horizontal scalability, especially of the control plane, without
-            the confounding complexity of rich business logic or deep data lineage.
-            Moreover, the fact model is sufficiently small to allow \textit{stateless} page
-            rendering, enabling the data plane to be scaled independently of the rendering tier.
+            The workload stresses horizontal scalability, without the confounding complexity of rich
+            business logic or deep data lineage.
             The following subsection translates this narrative into concrete requirements.
 
             \subsubsection{Representative User Journey}\label{subsubsec:userJourney}
@@ -867,8 +865,8 @@
 
                 \end{enumerate}
             
-                This journey provides the foundation for the functional (\see{subsubsec:fr}) and
-                non-functional (\see{subsubsec:nfr}) requirements in the subsequent sections.
+                This journey provides the foundation for the functional \see{subsubsec:fr} and
+                non-functional \see{subsubsec:nfr} requirements in the subsequent sections.
 
                 \cleardoublepage
 
@@ -892,7 +890,7 @@
 
                     \item\label{chal:benchmark}
                         \textit{Benchmark for implementation}.
-                        During prototyping (\see{sec:prototype}) the tables in this chapter become
+                        During prototyping \see{sec:prototype} the tables in this chapter become
                         acceptance criteria that guide configuration, automation scripts, and
                         performance-test baselines.
 
@@ -936,8 +934,9 @@
 
             \subsubsection{Functional Requirements}\label{subsubsec:fr}
 
-                The prototype offers only a handful of end-to-end user journeys, yet each journey
-                must be supported in a self-service and repeatable way across thousands of tenants.
+                The prototype offers only a handful of end-to-end user journeys
+                \see{subsubsec:userJourney}, yet each journey must be supported in a self-service
+                and repeatable way across thousands of tenants.
                 The purpose of this subsection is therefore to distill the actor interactions listed
                 in \autoref{tab:scenario} into a concise set of \textit{functional} statements that
                 can later be traced unambiguously to implementation artifacts and test cases.
@@ -962,8 +961,8 @@
                         \hypertarget{f1}{F-01} & \textit{Tenant} & Company Profile \gls{crud} & A tenant owner shall be able to perform CRUD operations on the company profile (name, address, contact, logo, about-text) through the dashboard \gls{api}. \\
                         \hypertarget{f2}{F-02} & \textit{Tenant} & Service Catalog \gls{crud} & A tenant owner shall be able to manage a list of services/products. \\
                         \hypertarget{f3}{F-03} & \textit{Tenant} & Ratings \gls{crud} & Public visitors shall be able to post 1-to-5-star ratings with comments; the public \gls{api} shall list ratings. \\
-                        \hypertarget{f4}{F-04} & \textit{Tenant} & Public Page Delivery & The public Next.js frontend shall render the latest template and tenant data via the per-tenant \gls{api}. \\
-                        \hypertarget{f5}{F-05} & \textit{Platform} & Tenant Provisioning & The dashboard shall create a new \gls{kcp} workspace, deploy the tenant stack, allocate the \gls{sql} schema and return a public \gls{url} in~$\leq$~60~s. \\
+                        \hypertarget{f4}{F-04} & \textit{Tenant} & Public Page Delivery & The per-tenant public frontend shall render the latest template and tenant data via the per-tenant \gls{api}. \\
+                        \hypertarget{f5}{F-05} & \textit{Platform} & Tenant Provisioning & The dashboard shall create a new \gls{kcp} workspace, deploy the tenant stack and return a public \gls{url} in~$\leq$~60~s. \\
                         \hypertarget{f6}{F-06} & \textit{Platform} & Config Storage and Retrieval & Template configuration for every tenant shall be stored inside the tenants \gls{api} as a \gls{json} file. \\
                         \hypertarget{f7}{F-07} & \textit{Tenant} & Config Caching & The per-tenant \gls{api} shall cache configuration in-memory with a \gls{ttl}~$\geq$~24~h, falling back to the \gls{json} file on cache miss. \\
                         \bottomrule
@@ -1067,7 +1066,8 @@
 
                     \item\label{chal:isolationByWorkspace}
                         \textit{Isolation by Workspace}.
-                        A dedicated \gls{k8s@gls} cluster per tenant is operationally inhibitive.
+                        A dedicated vanilla \gls{k8s@gls} cluster per tenant is operationally
+                        inhibitive.
                         Conversely, a flat namespace in a single cluster risks cross-tenant resource
                         contention, complicated \gls{rbac}, and a noisy neighbor problem.
                         \gls{kcp}'s \textit{workspace} abstraction offers the middle ground,
@@ -1076,9 +1076,10 @@
 
                     \item\label{chal:dependencies}
                         \textit{Dependencies}.
-                        The system minimizes runtime dependencies (e.g., centralized config stores
-                        or service meshes) in favor of static or build-time mechanisms to reduce
-                        operational complexity and deployment effort.
+                        The system minimizes runtime dependencies in favor of static or build-time
+                        mechanisms, e.g.\ injecting the config into the \gls{api} at build time
+                        \see{subsubsec:rationale} to reduce operational complexity and deployment
+                        effort.
 
                     \item\label{chal:scalabilitySupport}
                         \textit{Scalability}.
@@ -1109,7 +1110,8 @@
                 This architectural foundation enables a modular and future-proof SaaS platform that
                 favors operational autonomy, extensibility, and secure multi-tenancy.
                 \\
-                Furthermore these principles translate into the logical layout in \autoref{fig:system-architecture}.
+                Summed up these principles translate into the logical layout in
+                \autoref{fig:system-architecture}.
                 \vspace{0.5cm}
                 \begin{figure}[H]
                     \centering
@@ -1145,6 +1147,7 @@
                         Since tenant data must remain fully isolated within its respective
                         workspace, using a shared \gls{pv} would have violated this design
                         constraint.
+                        Furthermore \glspl{pv} would introduce significant operational complexity.
                         
                     \item\label{chal:pvc}
                         \textit{\gls{pvc}}.
@@ -1157,10 +1160,13 @@
                         \textit{ConfigMap}.
                         A ConfigMap is a lightweight and \gls{k8s} native way to inject
                         configuration, but it has a very constraining size limit (typically 1 MiB)
-                        and is not designed for cross-workspace usage.
+                        and is not designed for cross-workspace usage.  
                         Since KCP workspaces enforce strict isolation, injecting a ConfigMap from
                         the parent workspace into the tenant workspace would violate boundary
-                        constraints, or require custom controllers.
+                        constraints, or require custom controllers.  
+                        It was primarily not considered a viable long-term option due to its limited
+                        support for binary data and poor scalability with growing or media-rich
+                        configuration payloads.
 
                     \item\label{chal:gitRepo}
                         \textit{Git Repository}.
@@ -1179,8 +1185,8 @@
                         starts.
                         While this ensures data locality, the config is ephemeral and lost on pod
                         restart or rescheduling.
-                        Additionally, updates would require a full pod redeployment and controlled
-                        init re-execution, adding complexity.
+                        Additionally, updates would require a full pod redeployment including
+                        controlled init re-execution, adding complexity.
 
                     \item\label{chal:tenantDB}
                         \textit{Tenant \gls{db}}.
@@ -1197,12 +1203,12 @@
                         which contradicts the goals of lightweight and cost-efficient tenant
                         deployments.
                         Redis also requires persistence management if configuration must survive
-                        restarts.
+                        restarts, therefore adding complexity.
 
                     \item\label{cahl:centralStore}
                         \textit{Central Document Store}
-                        Maintaining a central document store in the root workspace (e.g. MongoDB)
-                        was ruled out due to isolation concerns.
+                        Maintaining a central document store in the root workspace (e.g. MongoDB or
+                        MinIO) was ruled out due to isolation concerns.
                         This would require the tenant \gls{api} to reach out beyond its workspace
                         boundary, which is explicitly avoided in the current architecture to enforce
                         strict data sovereignty per tenant.
@@ -1218,6 +1224,7 @@
 
             \subsubsection{Workspace Topology and Multi-Tenancy model}\label{subsubsec:workspaceTopology}
 
+                % TODO: fix spacings
                 \begin{table}[H]\label{tab:layersOverview}
                     \centering
                     \renewcommand{\arraystretch}{1.5}
@@ -1226,7 +1233,7 @@
                         Layer & \gls{kcp} construct & Example resources & Provisioned Amount \\
                         \midrule
                         Parent (control) & Workspace (\texttt{root}) & \texttt{dashboard}, \texttt{dashboard-api} Deployments & 1 (static) \\
-                        Tenant (data) & Workspace (\texttt{root:<tenant-id>}) & \texttt{frontend}, \texttt{tenant-api} Deployments, \texttt{db} StatefulSet & 1 per tenant \\
+                        Tenant (data) & Workspace (\texttt{root:<tenant-id>}) & \texttt{frontend}, \texttt{tenant-api} Deployments, \texttt{\gls{db}} StatefulSet & 1 per tenant \\
                         \bottomrule
                     \end{tabular}
                     \caption{Overview of architectural layers}
@@ -1297,8 +1304,8 @@
                     \item\label{chal:db}
                         \textit{Data sources}.
                         The tenant \gls{api} periodically renews its cache based of a \gls{ttl}.
-                        The dynamic data (reviews) comes from the tenant \gls{db} while the data
-                        comes from the tenant \gls{api}.
+                        The dynamic data (reviews) comes from the tenant \gls{db} while the static
+                        data (config) comes from the tenant \gls{api}.
                 \end{enumerate}
 
                 This ensures, that for all customer interactions on the public website the workload
@@ -1314,7 +1321,7 @@
                         Component & Scaling & Purpose \\
                         \midrule
                         Dashboard & \gls{hpa} & Authenticated \gls{ui} for tenant owners; \gls{crud} operations on tenant data \\
-                        Parent \gls{api} & \gls{hpa} & validates input and writes \gls{json}; is polled by tenant \gls{api} on cache miss \\
+                        Parent \gls{api} & \gls{hpa} & validates input and writes \gls{json} \\
                         \bottomrule
                     \end{tabular}
                     \caption{Control Plane Components}
