@@ -7,6 +7,11 @@
 makeglossaries thesis
 ```
 
+### Crop PDF
+```sh
+pdfcrop input.pdf output.pdf
+```
+
 <details>
 
 <summary><strong>bash</strong></summary>
