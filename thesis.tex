@@ -1327,12 +1327,6 @@
                     \caption{Control Plane Components}
                 \end{table}
 
-                % Tenant clicks “Create site” in the Dashboard
-                % Dashboard sends POST /api/tenants -> Parent API.
-                % Parent API creates Workspace CR in KCP.
-                % Tenant-Provisioner receives event -> calls Helm -> writes DNS record -> returns public URL.
-                % Dashboard polls status until provisioning completes (≤ 60 s target).
-
             \subsubsection{Data Synchronization and Caching Strategy}\label{syncAndCache}
 
             \subsubsection{Scalability, Isolation and Security}\label{scalabilityIsolationSecurity}
