@@ -1328,6 +1328,7 @@
                 \end{table}
 
             \subsubsection{Data Synchronization and Caching Strategy}\label{syncAndCache}
+                TODO
 
             \subsubsection{Scalability, Isolation and Security}\label{scalabilityIsolationSecurity}
                 \begin{enumerate}[label={[\arabic*]:},
@@ -1342,16 +1343,156 @@
 
                     \item\label{chal:architectureIsolation}
                         \textit{Tenant \gls{api}}.
+                        TODO
                         
 
                     \item\label{chal:architectureSecurity}
                         \textit{Data sources}.
+                        TODO
                         
                 \end{enumerate}
                 
                 \cleardoublepage
 
         \subsection{Automated Deployment Strategies}\label{subsec:deploymentStrategies}
+            Platform success depends on a deployment workflow that is fully automated, repeatable,
+            and invisible to tenants.
+            The design therefore distinguishes between the \textbf{first-time (initial) deployment}
+            of a tenant workspace and the \textbf{continuous update policy} that keeps thousands of
+            workspaces on a single, uniform release without interrupting production traffic.
+
+            \subsubsection{Initial Tenant Deployment Pipeline}\label{subsubsec:initialDeeployment}
+                When a new customer completes the on-boarding flow \hyperlink{f5}{F-05}, the
+                Dashboard-\gls{api} running in the root workspace emits a custom resource
+                (\texttt{TenantDeploymentRequest}) that seeds a GitOps pipeline
+                (TODO: insert figure).
+                The pipeline is implemented as a set of \textit{\gls{tekton}} tasks that run
+                directly under the control of the Dashboard-\gls{api}, therefore no separate
+                \textit{\gls{argocd}} controller is required.
+
+
+                \begin{enumerate}[label={[\arabic*]:},
+                    ref=Challenge~\arabic*,
+                    leftmargin=*,
+                    itemsep=0.6\baselineskip]
+
+                    \item\label{chal:bootstrap}
+                        \textit{Workspace bootstrap}.  
+                        A controller watching for \texttt{TenantDeploymentRequest} objects
+                        calls the \gls{kcp} \gls{api} to create a dedicated workspace
+                        \texttt{root:\textless{}tenant-id\textgreater{}} and assigns only the
+                        minimal \gls{rbac} roles required by the tenant components.
+
+
+                    \item\label{chal:imageBuild}
+                        \textit{Image build}.
+                        A build task invokes \texttt{docker buildx} with
+                        \texttt{--build-arg CONFIG\_JSON} to inject the tenant-specific
+                        configuration into the \gls{api} image layer
+                        (cf.~\autoref{subsubsec:rationale}).  
+                        The resulting \gls{api} and \gls{fe} images are pushed to the internal
+                        registry and tagged
+                        \texttt{:\textless{}tenant-id\textgreater{}-\textless{}git-sha\textgreater{}}.
+
+                    \item\label{chal:manifestRendering}
+                        \textit{Manifest rendering}.
+                        Helm/Kustomize templates are parameterized with the tenant ID, image
+                        tags and a computed \texttt{ROUTE\_BASE} and rendered to plain \gls{yaml}.
+
+                    \item\label{chal:routeAllocation}
+                        \textit{Route allocation}.
+                        The pipeline creates an \texttt{Ingress} (NGINX) or \texttt{Route}
+                        (OpenShift) inside the tenant workspace.
+                        A wildcard \gls{dns} entry (\texttt{*.example.com}) avoids central \gls{dns}
+                        updates and keeps certificates simple.
+
+                    \item\label{chal:applyManifests}
+                        \textit{Deployment}.  
+                        A Helm \texttt{upgrade --install} task applies the rendered manifests
+                        in the tenant workspace, rolling out the \gls{fe}, \gls{api} and
+                        backing \gls{db}.  
+                        Readiness probes ensure the pipeline blocks until all Pods are ready.
+
+                    \item\label{chal:callback}
+                        \textit{Status callback}.  
+                        Once every component is healthy, a final task POSTs the public \glspl{url}
+                        and the image \gls{sha} back to the Dashboard-\gls{api}, which in turn marks
+                        the tenant as \enquote{active} for subsequent logins.
+                        
+                \end{enumerate}
+
+                By chaining these Tekton tasks the platform turns the single
+                \texttt{TenantDeploymentRequest} event into a fully-isolated, routable tenant
+                environment in one pass.
+                Every artefact is generated from code that lives in Git, every cluster mutation is
+                scoped to the tenant workspace, and every build is automatically signed by
+                Tekton~Chains.
+                Consequently the pipeline satisfies all functional requirements (TODO: which) while
+                remaining short enough to version-control next to the product source and easy to
+                extend with additional steps (e.g.\ quota enforcement or cost metering) as the
+                service matures.
+
+            \subsubsection{Continuous Deployment}\label{subsubsec:continuousDeployment}
+                After the initial hand-off the platform must react to two kinds of change without
+                operator intervention:
+
+                \begin{enumerate}[label={[\arabic*]:},
+                    ref=Challenge~\arabic*,
+                    leftmargin=*,
+                    itemsep=0.6\baselineskip]
+
+                    \item\label{chal:cdCode}
+                        \textit{Source-code updates}.
+                        A merge on the main branch of either the tenant \gls{fe} or the tenant
+                        \gls{api} Git repository emits a signed GitHub Webhook TODO: finish this
+                        when more info is available
+                        
+                    \item\label{chal:cdData}
+                        \textit{Content-driven updates (single tenant rebuild)}.
+                        When business users change dynamic catalogue data or feature flags, the
+                        dashboard \gls{api} issues a \texttt{TenantReconfigureRequest} object
+                        that carries the new \texttt{config.json} payload.  
+                        A dedicated Tekton pipeline in that tenant's workspace performs a rebuild of
+                        the tenant \gls{api} image with a new \texttt{config.json}.
+                        Following this a local helm upgrade of the tenant \gls{api} is performed,
+                        while the \gls{fe} and \gls{db} remain untouched.
+
+                \end{enumerate}
+
+                \subsubsection{Zero-Downtime Rollout}\label{subsubsec:zeroDowntime}
+                    Both continuous-deployment pipelines create a parallel deployment
+                    (\texttt{-green}) alongside the live one (\texttt{-blue}) and wire then through
+                    the same Cluster.
+                    TODO: Source for Blue-Green.
+                    TODO: Source for canary.
+                    The Tekton post-deploy task then:
+                    
+                    \begin{enumerate}[label={[\arabic*]:},
+                        ref=Challenge~\arabic*,
+                        leftmargin=*,
+                        itemsep=0.6\baselineskip]
+
+                        \item\label{chal:readinessProbe}
+                            \textit{Readiness probe}.
+                            Verifies readiness probes and functional smoke-tests on the green Pods.
+
+                        \item\label{chal:shiftTraffic}.
+                            \textit{Shift traffic}.
+                            Shifts traffic incrementally by patching the weight on the tenant's
+                            ingress.
+
+                        \item\label{chal:canaryWindow}
+                            \textit{Canary window}.
+                            Aborts and rewinds the weight if any \gls{slo} breach or error-budget
+                            drain is detected during the canary window.
+                        
+                        \item\label{chal:deletion}
+                            \textit{Deletion}.
+                            Deletes the blue deployment only after 100 \% of requests have
+                            successfully moved to green.
+
+                    \end{enumerate}
+
             \cleardoublepage
 
         \subsection{Choice of Technologies}\label{subsec:technologies}
