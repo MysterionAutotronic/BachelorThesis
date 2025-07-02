@@ -774,8 +774,47 @@
     \section{State of the Art and Related Work}\label{sec:related}
 
         \subsection{Zero-Downtime Deployment Strategies}\label{subsec:zeroDowntime}
-            % syncer / controller !
-            % eventual consistency !
+            At its core, zero-downtime deployment aims to upgrade all service instances while the
+            application remains fully functional \parencite[n.\,p., inside front matter]{davis2019}.
+            A broad consensus now centres on three primary techniques: rolling updates, blue-green
+            deployments and canary releases, because each enables seamless updates without service
+            interruptions \parencite[p.~1]{rakshit2024}.
+            \\
+            \textbf{Rolling updates} incrementally replace small batches of instances, a process
+            that integrates smoothly with \gls{ci}/\gls{cd} pipelines and minimizes downtime
+            \parencite[p.~1]{rakshit2024}.
+            They are recognized as a standard zero-downtime mechanism that upgrades subsets of
+            instances in sequence \parencite[n.\,p., inside front matter]{davis2019}.
+            A noted drawback is that coexistence of old and new versions can create temporary
+            latency spikes under heavy load \parencite[p.~1]{rakshit2024}.
+            \\
+            \textbf{Blue-green deployments} run two identical environments in parallel so traffic
+            can switch to the “green” version only after validation, thereby preserving high
+            availability and cutting the blast radius of faults \parencite[p.~1]{rakshit2024}.
+            This parallel setup allows thorough testing before traffic is rerouted, minimizing the
+            introduction of new bugs \parencite[p.~1]{rakshit2024}.
+            The principal trade-off is resource overhead because two full environments must be
+            maintained during the transition \parencite[p.~1]{rakshit2024}.
+            \\
+            \textbf{Canary releases} expose a new version to a small subset of users, gather
+            real-time feedback and progressively expand the rollout when metrics look healthy
+            \parencite[pp.~1--2]{rakshit2024}.
+            Successful canaries rely on automated testing and continuous monitoring to catch
+            regressions early \parencite[p.~2]{rakshit2024}.
+            Yet managing multiple live versions can complicate performance tracking
+            \parencite[p.~2]{rakshit2024}.
+            Canaries are, according to~\cite[pp.~33--34]{awsOverviewDeploymentOptions}
+            \enquote{a type of blue/green deployment strategy that is more risk-averse}.
+            \\
+            \textbf{In-place deployments} are generally regarded as the fourth deployment option,
+            however they do not offer zero downtime
+            \parencite[p.~34]{awsOverviewDeploymentOptions}.
+            \\
+            Together, these four patterns make up today's deployment toolkit: the first three
+            achieve zero-downtime rollouts, whereas in-place deployments trade reduced resource
+            overhead for a short service disruption window.
+
+            \cleardoublepage
 
         \subsection{Kubernetes Scaling Methods}\label{subsec:k8sScaling}
             Kubernetes exposes several native autoscaling primitives that together enable both

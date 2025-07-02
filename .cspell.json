@@ -58,6 +58,7 @@
         "pandoc",
         "pdfcrop",
         "rendez",
+        "rollouts",
         "spinstr",
         "svgs",
         "synctex",
