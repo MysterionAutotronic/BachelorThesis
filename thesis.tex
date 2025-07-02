@@ -1682,6 +1682,36 @@
         \subsection[Tenant Provisioning]{Tenant Provisioning (Automation, Multi-Tenancy)}\label{subsec:tenantProvisioning}
 
         \subsection[Scaling Mechanisms]{Scaling Mechanisms (Horizontal Pod Autoscaler)}\label{subsec:scaling}
+            \gls{hpa} in Kubernetes can react to any metric that the control plane exposes through
+            resource or custom-metrics \glspl{api}.
+            For a request-driven \textit{express} service, such as the tenant-\gls{api} the most
+            accurate signal would be \textbf{\gls{qps}} at the ingress of each pod, because it
+            tracks the real work performed and is immune to the noise that \gls{cpu}-bound metrics
+            introduce when background jobs or garbage collection dominate a sample window.
+            Nevertheless, the implementation in its prototypical nature deliberately relies on the
+            built-in \textbf{\gls{cpu} utilization metric} alone, contrary to the architectural
+            design.
+            The choice is pragmatic rather than idealistic.
+            Instrumenting per-pod \gls{qps} would require an extra metrics pipeline or at minimum a
+            side-car that counts requests, a Prometheus deployment to scrape the counter, and a
+            Prometheus adapter (or custom-metrics server) so the \gls{hpa} controller can consume
+            the data.
+            Each of those moving parts introduces significant configuration surface, security
+            considerations, and potential failure modes that distract from the core objective of
+            this thesis: to validate multi-tenant isolation and deployment strategies, not to
+            engineer a production-grade observability stack.
+            \gls{cpu} metrics, by contrast, are available out of the box from the kubelet and
+            require only two declarative lines in the \gls{hpa} manifest.
+            //
+            Using \gls{cpu} as the scaling trigger therefore keeps the infrastructure lightweight,
+            repeatable, and easy to grasp while still demonstrating that the platform can
+            elastically adjust capacity under load.
+            In a real-world \gls{saas} environment the \gls{hpa} spec could be refined to a compound
+            metric using \gls{qps} latency percentiles, or custom business \glspl{kpi}, but for a
+            prototype aimed at architectural proof of concept, the built-in metric is
+            \enquote{good enough} and avoids adding too much complexity out of the thesis scope.
+
+            \cleardoublepage
 
         \subsection[Monitoring and Logging]{Monitoring and Logging (Prometheus, Grafana)}\label{subsec:monitoring}
 
