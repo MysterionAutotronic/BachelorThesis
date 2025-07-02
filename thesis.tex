@@ -853,9 +853,73 @@
             \cleardoublepage
 
         \subsection{Multi-Tenancy Concepts in the Cloud}\label{subsec:mtConcepts}
-            % Kiosk, Capsule, also AWS, Azure
+            As already described in \autoref{subsubsec:mtImportance}, a multi-tenant solution is one
+            that is used by multiple customers or tenants \parencite[p.~57]{azureWhitepaper}.
+            As observed by~\cite[p.~137]{azureWhitepaper}, architects can position themselves
+            anywhere on a continuum that shares every resource among tenants at one extreme and
+            deploys isolated resources for every tenant at the other.
+            \gls{aws} names the same continuum with the terms \textit{silo} (dedicated) and
+            \textit{pool} (shared) \parencite[pp.~19--22]{awsSaaSArchitectureFundamentals}.
+            It emphasizes that these models are \textit{not all-or-nothing concepts} and can be
+            mixed per service or layer \parencite[p.~19]{awsSaaSArchitectureFundamentals}.
+            To operate such mixtures efficiently, \gls{aws} separates a shared
+            \textit{control plane}, covering onboarding, identity, billing and other global
+            services, from an \textit{application plane} that hosts tenant workloads
+            \parencite[p.~10]{awsSaaSArchitectureFundamentals}.
+            Azure highlights the \textit{Deployment Stamps} pattern, which deploys dedicated
+            infrastructure for one or a small set of tenants to maximize isolation while reducing
+            cost and operational overhead \parencite[pp.~137--138]{azureWhitepaper}.
+            \\
+            Inside Kubernetes clusters, open-source systems such as \textbf{KCP}, \textbf{Capsule}
+            and \textbf{Kiosk} partition a physical cluster into logical clusters via separate
+            \gls{api} servers or operators that enforce control-plane isolation
+            \parencite[p.~651]{nguyen2022}.
+            As noted further by~\cite{nguyen2022}, \gls{kcp} has an \gls{api} server to provide
+            customers with an easy way to access their resources and supports advanced features such
+            as inheritance and automated resource allocation, while Capsule and Kiosk use a
+            Kubernetes extension to access their resources.
+            The same study distinguishes \textit{multi-tenant team} deployments that mainly share
+            cluster namespaces from \textit{multi-tenant customer} deployments that demand full
+            isolation of data and control planes \parencite[p.~651]{nguyen2022}.
+            Capsule and Kiosk take a lighter “flat namespace” route.  
+            Capsule lets admins \textit{replicate resources across a tenant's namespaces} or copy
+            them between tenants, easing day-to-day ops, but the authors caution that the pattern
+            \enquote{“may not be fully scalable for extensive tenant settings”} and is not designed
+            for edge scenarios \parencite[p.~144581]{senel2023}.
+            Kiosk models each tenant as an \textit{account} that may create a \textit{space}:
+            \enquote{“each space is strictly tied to only one namespace”} using templates
+            \parencite[p.~144581]{senel2023}
+            Yet multi-cluster support is still on the roadmap and the codebase, however according
+            to~\cite{senel2023}, it \enquote{“does not seem to be under active development”}.
+            At the \textit{namespace only} end of the spectrum, the \gls{hnc} constructs
+            multi-tenancy entirely from nested namespaces and policy inheritance, delivering
+            near-zero control-plane overhead at the cost of weaker isolation
+            \parencite[p.~144581]{senel2023}.
+            \\
+            Stepping up the isolation ladder, \textit{virtual-cluster frameworks}, such as
+            \textbf{vcluster} run a full \gls{k8s@gls} \gls{api} server as a pod inside the host
+            cluster, thus \enquote{each vcluster has a separate \gls{api} server and data store}
+            while its workloads are still scheduled onto the shared worker nodes
+            \parencite[pp.~144580--144581]{senel2023}.
+            Other implementations of the same pattern (\textbf{VirtualCluster}, \textbf{k3v},
+            \textbf{Kamaji}) follow this design with varying degrees of data-plane isolation
+            \parencite[pp.~144580--144581]{senel2023}.
+            At the opposite extreme, \textbf{Arktos} represents a deep-modification approach: it
+            injects tenant primitives directly into the \gls{k8s@gls} \gls{api} gateway and
+            partitions, targeting \enquote{a single regional control plane to manage 300 000 nodes
+            that multiple tenants will share} \parencite[p.~144582]{senel2023}.
+            These additions complete the design space: hierarchical-namespace frameworks minimize
+            overhead, virtual-cluster frameworks trade moderate cost for a dedicated control plane
+            per tenant, and tenant-aware forks such as Arktos pursue extreme scale with built-in
+            multi-tenancy primitives.
+            \\
+            Ultimately, architects must weigh isolation, cost efficiency, performance,
+            implementation complexity, and manageability to select the tenancy model that best fits
+            their \gls{saas} workload \parencite[p.~137]{azureWhitepaper}.
 
-        \subsection{KCP}\label{subsec:relatedKCP}
+            \cleardoublepage
+
+        \subsection{Related Work on KCP}\label{subsec:relatedKCP}
             % nguyen2022
 
     \section{Conceptual Design}\label{sec:concept}
