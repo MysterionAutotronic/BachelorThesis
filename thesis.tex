@@ -920,7 +920,39 @@
             \cleardoublepage
 
         \subsection{Related Work on KCP}\label{subsec:relatedKCP}
-            % nguyen2022
+            Only two publicly available efforts examine \gls{kcp} in depth: a peer-reviewed
+            prototype by~\cite{nguyen2022} and a series of community workshops and conference
+            presentations hosted at KubeCon and the platform engineering day \gls{eu} in Paris, all
+            collected in the \texttt{kcp-dev/contrib} repository~\cite{kcpContrib}.
+            \\
+            \textcite{nguyen2022} propose \enquote{a design of
+            \textit{dynamic resource allocation in \sic Kubernetes multi-tenancy system} to address
+            the missing dynamic resource allocation in the multi-tenant Kubernetes control plane}.
+            Their architecture adds \enquote{\textit{scheduler/rescheduler}, Prometheus-driven
+            autoscaler, and a \textit{cloud provisioner} that can spin up new clusters based on
+            workload changes} \parencite[p.~653]{nguyen2022}.
+            Central to the design is the \gls{kcp} \enquote{\textit{logical cluster}, a virtual
+            cluster whose \gls{api} resources are stored separately and can be created at
+            \textit{'nearly zero' cost for an empty cluster}} \parencite[p.~652]{nguyen2022}.
+            Preliminary tests report \enquote{\textit{fast Pod creation time with the help of a
+            policies-based scheduler}}, but a comprehensive evaluation is deferred to future work
+            \parencites[p.~651]{nguyen2022}[p.~654]{nguyen2022}.
+            \\
+            Practical know-how is instead championed by the KubeCon 2025 London workshop, which
+            frames \gls{kcp} as a way to \enquote{\textit{reimagine how we deliver true \gls{saas}
+            experiences for platform engineers}} on the official \gls{cncf} YouTube channel
+            \parencite{kubeconLondonYT}.
+            All workshop material is collected in \texttt{kcp-dev/contrib}, \enquote{a repository
+            containing
+            \textit{demo code, slides and other materials used in meetups and conferences}}
+            \parencite{kcpContrib} underscoring that \gls{kcp} expertise is presently
+            practitioner-driven rather than research-driven.
+            Together, the academic prototype validates \gls{kcp}'s elasticity potential, while the
+            workshop series illustrates its \gls{api}-centric platform model—highlighting both
+            \gls{kcp}'s promise and the current research gap in systematic performance and security
+            evaluation.
+
+            \cleardoublepage
 
     \section{Conceptual Design}\label{sec:concept}
 
