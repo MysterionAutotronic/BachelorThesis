@@ -1460,12 +1460,34 @@
                 \end{enumerate}
 
                 \subsubsection{Zero-Downtime Rollout}\label{subsubsec:zeroDowntime}
-                    Both continuous-deployment pipelines create a parallel deployment
-                    (\texttt{-green}) alongside the live one (\texttt{-blue}) and wire then through
-                    the same Cluster.
-                    TODO: Source for Blue-Green.
-                    TODO: Source for canary.
-                    The Tekton post-deploy task then:
+
+                    Both continuous-deployment pipelines should deploy the updated version of the
+                    tenant's application with zero downtime for customers while ensuring stability.
+                    This can be achieved through a \textit{canary deployment}.
+                    A canary deployment is a type of blue-green deployment strategy
+                    \parencite[pp.~33--34]{awsOverviewDeploymentOptions}.
+                    Blue-green deployments are a common deployment strategy to ensure zero downtime.
+                    In a blue-green deployment the currently running application (blue) runs
+                    alongside the newly deployed, updated application (green)
+                    \parencite[pp.~32--33]{awsOverviewDeploymentOptions}[pp.~176--178]{davis2019}.
+                    This allows for testing the green version in production, while still having the
+                    blue version live to handle production traffic
+                    \parencite[pp.~176--178]{davis2019}.
+                    With a canary deployment, the cut-over from blue to green is performed
+                    gradually \parencite[pp.~33--34]{awsOverviewDeploymentOptions}.
+                    A small percentage of traffic is first routed to the green application,
+                    the \textit{canary-group}, so that its real-world behavior can be observed under
+                    production load \parencite[pp.~33--34]{awsOverviewDeploymentOptions}.
+                    If no regressions are detected, the remaining traffic is shifted either in one
+                    further step or through a series of linear increments until 100 \% of users are
+                    served by the green version
+                    \parencite[pp.~33--34]{awsOverviewDeploymentOptions}.
+                    Because the blue environment remains intact throughout the process, any anomaly
+                    can be mitigated instantly by redirecting requests back to it, thereby
+                    minimizing blast radius while still achieving zero downtime for customers
+                    \parencite[pp.~33--34]{awsOverviewDeploymentOptions}.
+                    \\
+                    Broken down step by step, the pipelines should act as follows:
                     
                     \begin{enumerate}[label={[\arabic*]:},
                         ref=Challenge~\arabic*,
