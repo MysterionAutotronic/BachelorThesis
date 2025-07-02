@@ -778,8 +778,40 @@
             % eventual consistency !
 
         \subsection{Kubernetes Scaling Methods}\label{subsec:k8sScaling}
-            % HPA
-            % other strats?
+            Kubernetes exposes several native autoscaling primitives that together enable both
+            workload-centric and infrastructure-centric elasticity
+            \parencite{kubernetesAutoscaling}.
+            The \gls{hpa} dynamically increases or decreases the replica count of scalable
+            controllers such as \textit{Deployments} or \textit{StatefulSets} in response to metrics
+            like \gls{cpu} utilization or custom application signals
+            \parencite{kubernetesAutoscaling}.
+            When right-sizing individual containers is preferable, the \gls{vpa} can recommend or
+            automatically apply new \gls{cpu}- and memory-request values for running Pods
+            \parencite{kubernetesAutoscaling}.
+            To ensure that sufficient capacity exists for these Pod-level changes, the Cluster
+            Autoscaler grows or shrinks the underlying node pool by interacting with the cloud
+            provider or on-premises infrastructure \parencite{kubernetesAutoscaling}.
+            The documentation also highlights complementary techniques—such as event-driven
+            autoscaling with \gls{keda} and scheduled scaling profiles, that extend Kubernetes
+            beyond simple metric-based triggers \parencite{kubernetesAutoscaling}.
+            A recent survey by~\cite[p.~1]{senjab2023} categorizes
+            \enquote{autoscaling-enabled scheduling} as one of the major research thrusts in
+            Kubernetes scheduling literature.
+            The authors note that such schedulers couple placement decisions with dynamic resource
+            provisioning to reduce latency, boost utilization and cut operational costs
+            \parencite[p.~20]{senjab2023}.
+            Many of the reviewed schemes embed forecasting or reinforcement-learning models that
+            tune HPA or cluster-level loops in real time \parencite[pp.~16--19]{senjab2023}.
+            Open challenges identified include balancing multi-tenant fairness during bursts,
+            preventing \gls{sla} violations while scaling and cutting energy consumption for greener
+            operations \parencite[pp.~20--23]{senjab2023}.
+            The official project therefore provides \gls{hpa}, \gls{vpa} and the Cluster Autoscaler
+            as modular building blocks for elasticity \parencite{kubernetesAutoscaling}.
+            Contemporary research is now striving to orchestrate these primitives holistically
+            inside the scheduler, paving the way for truly self-adaptive Kubernetes clusters
+            \parencites[pp.~6--7]{senjab2023}[p.~22]{senjab2023}.
+
+            \cleardoublepage
 
         \subsection{Multi-Tenancy Concepts in the Cloud}\label{subsec:mtConcepts}
             % Kiosk, Capsule, also AWS, Azure
@@ -1305,8 +1337,6 @@
                 \cleardoublepage
 
             \subsubsection{Tenant Workspace: Data Plane Components}
-                
-                % TODO: why scale based on cpu + qps
 
                 \begin{table}[H]\label{tab:tenantComponents}
                     \centering
