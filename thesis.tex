@@ -1222,6 +1222,44 @@
                 benefits it provides in terms of system architecture and security boundaries.
                 \cleardoublepage
 
+            \subsubsection{Data Synchronization and Caching Strategy}\label{syncAndCache}
+                As the tenant-\gls{api} is built with its own \textbf{static} \texttt{config.json}
+                as shown above \see{subsubsec:rationale}, the resulting caching strategy is
+                straightforward.
+                At startup the tenant-\gls{api} reads the immutable \texttt{config.json} that is
+                baked into the container images \gls{fs}.
+                Because the file never changes, while the image is running, the \gls{api} loads its
+                content once, materializes the contents \textbf{in memory}, and attaches a single
+                long-lived cache entry with a \gls{ttl} of 24~hours.
+                A daily \gls{ttl} offers two advantages without introducing the complexity of an
+                explicit cache invalidation.
+                
+                \begin{enumerate}[label={[\arabic*]:},
+                    ref=Challenge~\arabic*,
+                    leftmargin=*,
+                    itemsep=0.6\baselineskip]
+
+                    \item\label{chal:cachePerformance}
+                        \textit{Performance}.
+                        Subsequent requests bypass \gls{fs} \gls{io} entirely and are served from
+                        memory, massively increasing speed and reducing disk pressure under burst
+                        traffic.
+
+                    \item\label{chal:cacheResilience}
+                        \textit{Resilience and self-healing}.
+                        Although the file is static, a bounded \gls{ttl} guarantees that each pod
+                        refreshes its configuration once per day, so \textit{\gls{bitrot}} or a
+                        silently corrupted memory page cannot persist indefinitely.
+                        
+                \end{enumerate}
+
+                Because the only legitimate way to alter tenant configuration is to build and deploy
+                a new image, a shorter \gls{ttl} or a manual cache-flush \gls{api} would add
+                operational complexity without practical benefit.
+                Caching the configuration with a long \gls{ttl} therefore strikes the best balance
+                between maximal runtime throughput and the minimal housekeeping needed to keep every
+                pod's view of configuration fresh and fault-tolerant over time.
+
             \subsubsection{Workspace Topology and Multi-Tenancy model}\label{subsubsec:workspaceTopology}
 
                 % TODO: fix spacings
@@ -1327,10 +1365,11 @@
                     \caption{Control Plane Components}
                 \end{table}
 
-            \subsubsection{Data Synchronization and Caching Strategy}\label{syncAndCache}
-                TODO
-
             \subsubsection{Scalability, Isolation and Security}\label{scalabilityIsolationSecurity}
+                The described architecture should be able to provide a high level of scalability,
+                isolation and security for the stated use case.
+                It should achieve this as follows:
+
                 \begin{enumerate}[label={[\arabic*]:},
                     ref=Challenge~\arabic*,
                     leftmargin=*,
@@ -1338,19 +1377,64 @@
 
                     \item\label{chal:architectureScalability}
                         \textit{Horizontal Scalability}.
-                        Inside the tenant workspace the \gls{fe} and the tenant-\gls{api} replicate
-                        linearly.
+                        Inside the tenant workspace the tenant-\gls{fe} and the tenant-\gls{api} run
+                        as stateless deployments.
+                        A \gls{hpa} driven by \gls{cpu} utilization and \gls{qps} metrics adds or
+                        removes replicas linearly, so throughput increases proportionally with the
+                        number of pods \see{tab:perTenantComponents}.
+                        Because the \gls{api} keeps no local state, new replicas can be scheduled on
+                        any node without coordination, ensuring that burst traffic on popular sites
+                        never impacts neighboring tenants.
 
                     \item\label{chal:architectureIsolation}
-                        \textit{Tenant \gls{api}}.
-                        TODO
-                        
+                        \textit{Tenant Isolation}.
+                        Every customer receives its ows dedicated \gls{kcp} workspace at onboarding
+                        time.
+                        A workspace maps to a private logical cluster stored in an independent
+                        \gls{etcd} prefix, so objects created by one tenant are completely invisible
+                        to others.
+                        All runtime artifacts --- \gls{fe} pods, \gls{api} pods, \gls{db} and even
+                        the \texttt{config.json} injected into the \gls{api} --- live exclusively
+                        inside that workspace.
+                        The platform never mounts cross-workspace volumes or reaches out to shared
+                        data services.
+                        Because there is \textbf{no shared state across workspaces} the design
+                        should eliminate noisy-neighbor effects, simplify compliance and guarantee
+                        data sovereignty for every tenant.
 
                     \item\label{chal:architectureSecurity}
-                        \textit{Data sources}.
-                        TODO
+                        \textit{Security}.
+                        Multi-tenancy is only acceptable if confidentiality and integrity are
+                        preserved across tenant boundaries.
+                        \autoref{subsubsec:challenges} highlighted, that residual-data exposure,
+                        cross-tenant access and side-channel attacks are the primary threats in
+                        shared environments.
+                        Because every tenant runs inside its \textbf{own} \gls{kcp} workspace,
+                        backed by a private \gls{etcd} prefix, objects created in one workspace are
+                        completely invisible to others, including non-namespaced objects like
+                        \glspl{crd} \parencite{kcpWorkspaces}.
+                        This hard logical boundary, combined with the absence of any shared state
+                        outside the workspace allows for:
+                        \\
+                        \textbf{Data confidentiality}, as data resides inside the tenant,
+                        eliminating residual-data exposure vectors.
+                        \\
+                        \textbf{Privilege containment}, as workspace-local \gls{rbac} rules grant
+                        only verbs needed to operate intra-workspace resources and there are no
+                        cluster-wide roles, blocking lateral movement and privilege-escalation
+                        attempts.
+                        \\
+                        \textbf{Secure storage}, as only the tenant-\gls{api} has write access on
+                        the tenant-\gls{db}.
+                        \\
+                        By confining a potential attacker to the compromised workspace, the
+                        architecture should neutralize the multi-tenant security risks identified
+                        earlier while still reaping the economic benefits of sharing the underlying
+                        platform.
                         
                 \end{enumerate}
+
+                Collectively the security measures have to fulfill \hyperlink{NF-07}{nf7}.
                 
                 \cleardoublepage
 
