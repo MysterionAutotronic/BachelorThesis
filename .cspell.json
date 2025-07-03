@@ -22,7 +22,8 @@
         "**/*.dvi",
         "**/*.ps",
         "**/*.DS_Store",
-        "**/Thumbs.db"
+        "**/Thumbs.db",
+        "**/plantuml/**"
     ],
     "words": [
         "acrfull",
@@ -60,6 +61,7 @@
         "OBJECTSTORE",
         "pandoc",
         "pdfcrop",
+        "plantuml",
         "reimagine",
         "rendez",
         "rescheduler",
@@ -70,6 +72,8 @@
         "tabularx",
         "Tekton",
         "texlive",
+        "tpdf",
+        "tsvg",
         "vcluster",
         "Vercel",
         "vous",

@@ -1,0 +1,31 @@
+@startuml Workspace Architecture
+skinparam componentStyle uml2
+
+' ========== TENANT WORKSPACE ==========
+package "Tenant Workspace" {
+  [Frontend] as FE
+  component "Tenant API" as TAPI {
+      artifact "config.json" as CFG
+  }
+  database "Tenant DB" as TDB
+
+  FE   ..> TAPI : «REST»
+  TAPI ..> CFG  : read «file»
+  TAPI ..> TDB  : «SQL»
+}
+
+' ========== ROOT WORKSPACE ============
+package "Root Workspace" {
+  [Dashboard Frontend] as DF
+  component "Dashboard API" as DAPI {
+      artifact "Temp\nconfig.json" as TMP
+  }
+
+  DF   ..> DAPI : «REST»
+  DAPI ..> TMP  : write «file»
+}
+
+' ========== CROSS-WORKSPACE ============
+DAPI ..> TAPI : «REST»\nfetch current config
+DAPI ..> "Tenant Workspace" : «build & deploy»
+@enduml
