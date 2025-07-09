@@ -20,9 +20,11 @@ package "Root Workspace" {
   component "Dashboard API" as DAPI {
       artifact "Temp\nconfig.json" as TMP
   }
+  database "Tenant Store\nRedis" as REDIS
 
   DF   ..> DAPI : «REST»
   DAPI ..> TMP  : write «file»
+  DAPI ..> REDIS: read / write «key»
 }
 
 ' ========== CROSS-WORKSPACE ============
