@@ -1,5 +1,25 @@
 # Bachelor Thesis Project
 
+## Implementation Repositories
+
+### Infrastructure
+[BachelorThesis_Infra](https://github.com/MysterionAutotronic/BachelorThesis_Infra)
+
+### Dashboard Frontend
+[BachelorThesis_DashboardFE](https://github.com/MysterionAutotronic/BachelorThesis_DashboardFE)
+
+### Dashboard Backend
+[BachelorThesis_DashboardBE](https://github.com/MysterionAutotronic/BachelorThesis_DashboardBE)
+
+### Tenant Frontend
+[BachelorThesis_TenantFE](https://github.com/MysterionAutotronic/BachelorThesis_TenantFE)
+
+### Tenant Backend
+[BachelorThesis_TenantFE](https://github.com/MysterionAutotronic/BachelorThesis_TenantBE)
+
+### ConfigSchema
+[BachelorThesis_ConfigSchema](https://github.com/MysterionAutotronic/BachelorThesis_ConfigSchema)
+
 ## Scripts
 
 ### Make Glossary
