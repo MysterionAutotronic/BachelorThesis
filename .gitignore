@@ -17,6 +17,7 @@
 *.vrb
 *.bcf
 *.run.xml
+*.pytxcode
 
 # Editors
 *.swp
