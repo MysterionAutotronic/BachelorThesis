@@ -42,3 +42,6 @@ Thumbs.db
 *.glo
 *.gls
 *.ist
+
+# Code folder
+code/*
