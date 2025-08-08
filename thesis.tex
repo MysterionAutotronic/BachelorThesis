@@ -166,6 +166,15 @@
     \lstinputlisting[style=code,language=#2,caption={#3},label={#4},#1]{#1}%
 }
 
+% GitHub link helpers
+\newcommand{\ghowner}{MysterionAutotronic}
+\newcommand{\ghrepo}[1]{%
+    \href{https://github.com/\ghowner/#1}{\nolinkurl{#1}}%
+}
+\newcommand{\ghmain}[1]{%
+    \href{https://github.com/\ghowner/#1/tree/main}{\texttt{main}}%
+}
+
 \begin{document}
 
     \newgeometry{top=1cm, bottom=1cm, left=2.5cm, right=2.5cm}
@@ -1991,17 +2000,24 @@
 
         % Appendix A: Overview
         \section{Repository Overview}\label{app:repos-overview}
-            \begin{longtable}{@{}lp{4cm}P{8cm}@{}}
-            \toprule
-            Repository & Commit/Tag & Scope \\
-            \midrule
-            TenantFE     & \texttt{<commit-or-tag>} & Next.js tenant frontend (per-workspace) \\
-            TenantBE     & \texttt{<commit-or-tag>} & Express tenant API (+ in-memory cache) \\
-            ConfigSchema & \texttt{<commit-or-tag>} & JSON schema / validation for config.json \\
-            DashboardFE  & \texttt{<commit-or-tag>} & Central operator/tenant dashboard (Next.js) \\
-            DashboardBE  & \texttt{<commit-or-tag>} & Onboarding + pipeline triggers (Express) \\
-            Infra        & \texttt{<commit-or-tag>} & KCP / TMC setup and cluster configuration \\
-            \bottomrule
+            \noindent\emph{Note.} The following template repositories are included for completeness.
+            They have no dedicated appendix sections.
+
+            \begin{longtable}{@{}lP{10cm}@{}}
+                \toprule
+                Repository & Scope \\
+                \midrule
+                \ghrepo{BachelorThesis_TenantFE}     & Next.js tenant frontend (per-workspace) \\
+                \ghrepo{BachelorThesis_TenantBE}     & Express tenant API (+ in-memory cache) \\
+                \ghrepo{BachelorThesis_ConfigSchema} & JSON schema / validation for \texttt{config.json} \\
+                \ghrepo{BachelorThesis_DashboardFE}  & Central operator/tenant dashboard (Next.js) \\
+                \ghrepo{BachelorThesis_DashboardBE}  & Onboarding + pipeline triggers (Express) \\
+                \ghrepo{BachelorThesis_Infra}        & KCP / cluster manifests and automation \\
+                \addlinespace
+                \multicolumn{2}{@{}l}{\textit{Templates:}}\\
+                \ghrepo{BachelorThesis_TemplateFE}   & Template for frontends (Next.js) \\
+                \ghrepo{BachelorThesis_TemplateBE}   & Template for backends (Express) \\
+                \bottomrule
             \end{longtable}
 
         \cleardoublepage
