@@ -84,6 +84,88 @@
 \input{glossary.tex}
 \input{acronyms.tex}
 
+% code listings style
+\lstdefinestyle{code}{
+    basicstyle=\ttfamily\small,
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    numbersep=8pt,
+    breaklines=true,
+    breakatwhitespace=true,
+    postbreak=\mbox{\textcolor{gray}{$\hookrightarrow$}\space},
+    tabsize=2,
+    showstringspaces=false,
+    frame=lines,
+    xleftmargin=1em,
+    xrightmargin=1em
+}
+
+% listings languages
+\lstdefinelanguage{YAML}{
+    morekeywords={true,false,null},
+    sensitive=false,
+    comment=[l]{\#},
+    morecomment=[s]{/*}{*/},
+    morestring=[b]',
+    morestring=[b]"
+}
+\lstdefinelanguage{Dockerfile}{
+    morekeywords={FROM,RUN,CMD,LABEL,MAINTAINER,EXPOSE,ENV,ADD,COPY,ENTRYPOINT,VOLUME,WORKDIR,USER,ONBUILD,STOPSIGNAL,ARG,HEALTHCHECK,SHELL},
+    sensitive=true,
+    morecomment=[l]{\#},
+    morestring=[b]',
+    morestring=[b]"
+}
+\lstdefinelanguage{JavaScript}{
+    morekeywords={break,case,catch,continue,debugger,default,delete,do,else,finally,for,function,if,in,instanceof,new,return,switch,this,throw,try,typeof,var,void,while,with,let,const,yield,async,await,of},
+    morekeywords=[2]{Promise,Array,Boolean,Date,Error,Function,Math,Number,Object,RegExp,String,Map,Set,WeakMap,WeakSet,Symbol,BigInt,JSON,console,Intl,Reflect,Proxy},
+    sensitive=true,
+    morecomment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    morestring=[b]',
+    morestring=[b]",
+    morestring=[b]`
+}
+\lstdefinelanguage{TypeScript}[]{JavaScript}{
+    morekeywords={type,interface,readonly,enum,namespace,abstract,public,private,protected,implements,declare,module,require,unknown,never},
+}
+\lstdefinelanguage{TSX}[]{TypeScript}{
+    alsoletter={<,>},
+    morestring=[s]{<}{>},
+}
+\lstdefinelanguage{bash}{
+    morekeywords={if,then,fi,else,elif,for,while,do,done,case,esac,select,function,until,in,time,coproc},
+    morekeywords=[2]{sudo,echo,exit,printf,cd,ls,cat,awk,sed,grep,head,tail,tar,ssh,scp,kill,ps,docker,kubectl,helm,make},
+    alsoletter={-},
+    sensitive=true,
+    morecomment=[l]{\#},
+    morestring=[b]',
+    morestring=[b]",
+    morestring=[b]`
+}
+\lstdefinelanguage{JSON}{
+    morestring=[b]",
+    showstringspaces=false,
+    morekeywords={true,false,null},
+    sensitive=false,
+    alsoletter={-}
+}
+
+% lowercase language aliases
+\lstdefinelanguage{javascript}[]{JavaScript}{}
+\lstdefinelanguage{typescript}[]{TypeScript}{}
+\lstdefinelanguage{tsx}[]{TSX}{}
+\lstdefinelanguage{shell}[]{bash}{}
+\lstdefinelanguage{sh}[]{bash}{}
+\lstdefinelanguage{docker}[]{Dockerfile}{}
+\lstdefinelanguage{json}[]{JSON}{}
+
+% macro for listings
+\newcommand{\codesnippet}[4][]{%
+    \lstinputlisting[style=code,language=#2,caption={#3},label={#4},#1]{#1}%
+}
+
 \begin{document}
 
     \newgeometry{top=1cm, bottom=1cm, left=2.5cm, right=2.5cm}
@@ -1907,4 +1989,116 @@
     \cleardoublepage
     \appendix
 
+        % Appendix A: Overview
+        \section{Repository Overview}\label{app:repos-overview}
+            \begin{longtable}{@{}lp{4cm}P{8cm}@{}}
+            \toprule
+            Repository & Commit/Tag & Scope \\
+            \midrule
+            TenantFE     & \texttt{<commit-or-tag>} & Next.js tenant frontend (per-workspace) \\
+            TenantBE     & \texttt{<commit-or-tag>} & Express tenant API (+ in-memory cache) \\
+            ConfigSchema & \texttt{<commit-or-tag>} & JSON schema / validation for config.json \\
+            DashboardFE  & \texttt{<commit-or-tag>} & Central operator/tenant dashboard (Next.js) \\
+            DashboardBE  & \texttt{<commit-or-tag>} & Onboarding + pipeline triggers (Express) \\
+            Infra        & \texttt{<commit-or-tag>} & KCP / TMC setup and cluster configuration \\
+            \bottomrule
+            \end{longtable}
+
+            % One-paragraph rationale tying code to evaluation:
+            The code snapshots above correspond to the versions used for measurements in
+            \see{subsec:performance}. Exact commits ensure reproducibility.
+
+        \cleardoublepage
+
+        % Appendix B: TenantFE
+        \section{TenantFE (Selected Code)}\label{app:tenantfe}
+            \subsection*{Directory Structure}
+            \begin{lstlisting}[style=code,caption={TenantFE directory tree (trimmed)},label={lst:tenantfe-tree}]
+                tenantfe/
+                app/
+                    layout.tsx
+                    page.tsx
+                    api/
+                components/
+                    Header.tsx
+                    Hero.tsx
+                lib/
+                    fetchConfig.ts
+                next.config.js
+                Dockerfile
+            \end{lstlisting}
+
+            \subsection*{Key Files}
+
+            \subsection*{Build and Runtime}
+
+            % \vspace{0.5\baselineskip}
+            % \noindent\textit{Relevance:} rationale for including this code
+
+        \cleardoublepage
+
+        % Appendix C: TenantBE
+        \section{TenantBE (Selected Code)}\label{app:tenantbe}
+            \subsection*{Directory Structure}
+            \begin{lstlisting}[style=code,caption={TenantBE directory tree (trimmed)},label={lst:tenantbe-tree}]
+                tenantbe/
+                src/
+                    index.ts
+                    cache.ts
+                    routes/
+                    config.ts
+                    reviews.ts
+                Dockerfile
+            \end{lstlisting}
+
+            \subsection*{Key Files}
+
+            \subsection*{Build and Runtime}
+
+            % \vspace{0.5\baselineskip}
+            % \noindent\textit{Relevance:} rationale for including this code
+
+        \cleardoublepage
+
+        % Appendix D: Config Schema
+        \section{ConfigSchema}\label{app:configschema}
+
+            % \vspace{0.5\baselineskip}
+            % \noindent\textit{Relevance:} rationale for including this code
+
+        \cleardoublepage
+
+        % Appendix E: DashboardFE
+        \section{DashboardFE (Selected Code)}\label{app:dashboardfe}
+
+            % \vspace{0.5\baselineskip}
+            % \noindent\textit{Relevance:} rationale for including this code
+
+        \cleardoublepage
+
+        % Appendix F: DashboardBE
+        \section{DashboardBE (Selected Code)}\label{app:dashboardbe}
+            
+            % \vspace{0.5\baselineskip}
+            % \noindent\textit{Relevance:} rationale for including this code
+
+        \cleardoublepage
+
+        % Appendix G: Infra
+        \section{Infra (Manifests and Charts)}\label{app:infra}
+
+            % \vspace{0.5\baselineskip}
+            % \noindent\textit{Relevance:} rationale for including this code
+
+        \cleardoublepage
+
+        % Appendix H: Documentation Excerpts
+        \section{Documentation Excerpts}\label{app:docs}
+
+        \cleardoublepage
+
+        % Appendix I: Diverse Screenshots
+        \section{Slack Channel Screenshots}\label{app:slack}
+
+            \noindent\textit{Note:} User names and sensitive data are redacted to comply with privacy requirements.
 \end{document}
