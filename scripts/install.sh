@@ -27,7 +27,7 @@ spinner $!
 
 # APT install
 progress_message "Installing required APT packages"
-sudo apt install -y texlive-full pandoc biber lmodern imagemagick flatpak inkscape tree 2>&1 | tee install.log &
+sudo apt install -y texlive-full pandoc biber lmodern imagemagick flatpak inkscape tree python3-pygments python3-pip python3-venv 2>&1 | tee install.log &
 spinner $!
 
 # flatpak install
@@ -35,6 +35,11 @@ progress_message "Installing required flatpak packages"
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install -y flathub org.jabref.jabref
 spinner $!
+
+# pygments upgrade for tsx
+progress_message "Upgrading Pygments for TSX support"
+python3 -m venv ~/.venvs/latex
+~/.venvs/latex/bin/pip install -U Pygments
 
 # Check for success
 if [ $? -eq 0 ]; then

@@ -1,7 +1,8 @@
 \documentclass[11pt, a4paper, oneside, listof=totoc]{scrartcl}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[ngerman, greek, english]{babel}
+\PassOptionsToPackage{main=english, shorthands=off}{babel}
+\usepackage[english, ngerman, greek]{babel}
 \usepackage[onehalfspacing]{setspace}
 \usepackage{helvet}
 \usepackage[a4paper, left=2.5cm, right=2.5cm]{geometry}
@@ -17,13 +18,11 @@
     maxbibnames=999,
     url=true
 ]{biblatex}
-\usepackage{csquotes}
 \usepackage[hidelinks]{hyperref}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{listings}
 \usepackage{xcolor}
-\usepackage{courier}
 \usepackage{needspace}
 \usepackage{trace}
 \usepackage{longtable}
@@ -33,7 +32,6 @@
 \usepackage{svg}
 \usepackage{xurl}
 \usepackage{enumitem}
-\usepackage{csquotes}
 \usepackage[acronym]{glossaries}
 \usepackage{booktabs}
 \usepackage{caption}
@@ -44,7 +42,13 @@
 \usepackage{plantuml}
 \usepackage{pmboxdraw}
 \usepackage{fvextra}
+\usepackage{csquotes}
 \usepackage{capt-of}
+\usepackage[newfloat]{minted}
+\usepackage[varqu,scaled=0.95]{zi4}
+
+% set up minted
+\SetupFloatingEnvironment{listing}{name=Listing}
 
 % linting
 % chktex-file 1
@@ -87,88 +91,78 @@
 \input{glossary.tex}
 \input{acronyms.tex}
 
-% code listings style
-\lstdefinestyle{code}{
-    basicstyle=\ttfamily\small,
-    numbers=left,
-    numberstyle=\tiny,
-    stepnumber=1,
-    numbersep=8pt,
-    breaklines=true,
-    breakatwhitespace=true,
-    postbreak=\mbox{\textcolor{gray}{$\hookrightarrow$}\space},
-    tabsize=2,
-    showstringspaces=false,
-    frame=lines,
-    xleftmargin=1em,
-    xrightmargin=1em
-}
+% % code listings style
+% \lstdefinestyle{code}{
+%     basicstyle=\ttfamily\small,
+%     numbers=left,
+%     numberstyle=\tiny,
+%     stepnumber=1,
+%     numbersep=8pt,
+%     breaklines=true,
+%     breakatwhitespace=true,
+%     postbreak=\CodePostbreak,
+%     tabsize=2,
+%     showstringspaces=false,
+%     frame=lines,
+%     xleftmargin=1em,
+%     xrightmargin=1em
+% }
 
-% listings languages
-\lstdefinelanguage{YAML}{
-    morekeywords={true,false,null},
-    sensitive=false,
-    comment=[l]{\#},
-    morecomment=[s]{/*}{*/},
-    morestring=[b]',
-    morestring=[b]"
-}
-\lstdefinelanguage{Dockerfile}{
-    morekeywords={FROM,RUN,CMD,LABEL,MAINTAINER,EXPOSE,ENV,ADD,COPY,ENTRYPOINT,VOLUME,WORKDIR,USER,ONBUILD,STOPSIGNAL,ARG,HEALTHCHECK,SHELL},
-    sensitive=true,
-    morecomment=[l]{\#},
-    morestring=[b]',
-    morestring=[b]"
-}
-\lstdefinelanguage{JavaScript}{
-    morekeywords={break,case,catch,continue,debugger,default,delete,do,else,finally,for,function,if,in,instanceof,new,return,switch,this,throw,try,typeof,var,void,while,with,let,const,yield,async,await,of},
-    morekeywords=[2]{Promise,Array,Boolean,Date,Error,Function,Math,Number,Object,RegExp,String,Map,Set,WeakMap,WeakSet,Symbol,BigInt,JSON,console,Intl,Reflect,Proxy},
-    sensitive=true,
-    morecomment=[l]{//},
-    morecomment=[s]{/*}{*/},
-    morestring=[b]',
-    morestring=[b]",
-    morestring=[b]`
-}
-\lstdefinelanguage{TypeScript}[]{JavaScript}{
-    morekeywords={type,interface,readonly,enum,namespace,abstract,public,private,protected,implements,declare,module,require,unknown,never},
-}
-\lstdefinelanguage{TSX}[]{TypeScript}{
-    alsoletter={<,>},
-    morestring=[s]{<}{>},
-}
-\lstdefinelanguage{bash}{
-    morekeywords={if,then,fi,else,elif,for,while,do,done,case,esac,select,function,until,in,time,coproc},
-    morekeywords=[2]{sudo,echo,exit,printf,cd,ls,cat,awk,sed,grep,head,tail,tar,ssh,scp,kill,ps,docker,kubectl,helm,make},
-    alsoletter={-},
-    sensitive=true,
-    morecomment=[l]{\#},
-    morestring=[b]',
-    morestring=[b]",
-    morestring=[b]`
-}
-\lstdefinelanguage{JSON}{
-    morestring=[b]",
-    showstringspaces=false,
-    morekeywords={true,false,null},
-    sensitive=false,
-    alsoletter={-}
-}
+% % listings macros
+% \newcommand{\CodePostbreak}{\mbox{\textcolor{gray}{\(\hookrightarrow\)}\space}}
 
-% lowercase language aliases
-\lstdefinelanguage{javascript}[]{JavaScript}{}
-\lstdefinelanguage{typescript}[]{TypeScript}{}
-\lstdefinelanguage{tsx}[]{TSX}{}
-\lstdefinelanguage{shell}[]{bash}{}
-\lstdefinelanguage{sh}[]{bash}{}
-\lstdefinelanguage{docker}[]{Dockerfile}{}
-\lstdefinelanguage{json}[]{JSON}{}
+% % listings languages
+% \lstdefinelanguage{YAML}{
+%     morekeywords={true,false,null},
+%     sensitive=false,
+%     comment=[l]{\#},
+%     morecomment=[s]{/*}{*/},
+%     morestring=[b]',
+%     morestring=[b]"
+% }
+% \lstdefinelanguage{Dockerfile}{
+%     morekeywords={FROM,RUN,CMD,LABEL,MAINTAINER,EXPOSE,ENV,ADD,COPY,ENTRYPOINT,VOLUME,WORKDIR,USER,ONBUILD,STOPSIGNAL,ARG,HEALTHCHECK,SHELL},
+%     sensitive=true,
+%     morecomment=[l]{\#},
+%     morestring=[b]',
+%     morestring=[b]"
+% }
+% \lstdefinelanguage{bash}{
+%     morekeywords={if,then,fi,else,elif,for,while,do,done,case,esac,select,function,until,in,time,coproc},
+%     morekeywords=[2]{sudo,echo,exit,printf,cd,ls,cat,awk,sed,grep,head,tail,tar,ssh,scp,kill,ps,docker,kubectl,helm,make},
+%     alsoletter={-},
+%     sensitive=true,
+%     morecomment=[l]{\#},
+%     morestring=[b]',
+%     morestring=[b]",
+%     morestring=[b]`
+% }
+% \lstdefinelanguage{JSON}{
+%     morestring=[b]",
+%     showstringspaces=false,
+%     morekeywords={true,false,null},
+%     sensitive=false,
+%     alsoletter={-}
+% }
+% \lstdefinelanguage{JavaScript}{
+%     morekeywords={break,case,catch,continue,debugger,default,delete,do,else,finally,for,function,if,in,instanceof,new,return,switch,this,throw,try,typeof,var,void,while,with,let,const,yield,async,await,of},
+%     morekeywords=[2]{Promise,Array,Boolean,Date,Error,Function,Math,Number,Object,RegExp,String,Map,Set,WeakMap,WeakSet,Symbol,BigInt,JSON,console,Intl,Reflect,Proxy},
+%     sensitive=true,
+%     morecomment=[l]{//},
+%     morecomment=[s]{/*}{*/}%
+% }
+% \lstdefinelanguage{TypeScript}[]{JavaScript}{
+%     morekeywords={type,interface,readonly,enum,namespace,abstract,public,private,protected,implements,declare,module,require,unknown,never}%
+% }
 
-% macros for listings
-\newcommand{\codesnippet}[4][]{%
-    \lstinputlisting[style=code,language=#2,caption={#3},label={#4},#1]{#1}%
-}
-\newcommand{\file}[1]{\textcolor{blue}{#1}}
+% % lowercase language aliases
+% \lstdefinelanguage{javascript}[]{JavaScript}{}
+% \lstdefinelanguage{typescript}[]{TypeScript}{}
+% \lstdefinelanguage{tsx}[]{TSX}{}
+% \lstdefinelanguage{shell}[]{bash}{}
+% \lstdefinelanguage{sh}[]{bash}{}
+% \lstdefinelanguage{docker}[]{Dockerfile}{}
+% \lstdefinelanguage{json}[]{JSON}{}
 
 % GitHub link helpers
 \newcommand{\ghowner}{MysterionAutotronic}
@@ -181,6 +175,8 @@
 
 % clickable reference to appendix section
 \DeclareRobustCommand{\appref}[1]{\hyperref[#1]{Appendix~\ref*{#1}}}
+
+\AtBeginDocument{\selectlanguage{english}}
 
 \begin{document}
 
@@ -2034,19 +2030,80 @@
         % Appendix B: TenantFE
         \section{TenantFE (Selected Code)}\label{app:tenantfe}
             \subsection*{Directory Structure}
-            \begin{figure}[H]
-                \centering
-                \VerbatimInput[
-                    formatcom=\ttfamily\small,
-                    obeytabs=true, showtabs=false,
-                    showspaces=false, frame=single
-                ]{trees/BachelorThesis_TenantFE.trimmed.tree}
-                \caption{TenantFE directory tree (trimmed)}\label{fig:tenantfe-tree}
-            \end{figure}
+                \begin{figure}[H]
+                    \centering
+                    \VerbatimInput[
+                        formatcom=\ttfamily\small,
+                        obeytabs=true, showtabs=false,
+                        showspaces=false, frame=single
+                    ]{\detokenize{trees/BachelorThesis_TenantFE.trimmed.tree}}
+                    \caption{TenantFE directory tree (trimmed)}\label{fig:tenantfe-tree}
+                \end{figure}
 
             \subsection*{Key Files}
+                % API routes
+                \begin{listing}[H]
+                    \caption{API route: \texttt{src/app/api/config/route.ts}}
+                    \label{lst:tenantfe-config-route}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{typescript}{\detokenize{code/BachelorThesis_TenantFE/tenant_fe/src/app/api/config/route.ts}}
+                \end{listing}
 
-            \subsection*{Build and Runtime}
+                \begin{listing}[H]
+                    \caption{API route: \texttt{src/app/api/crash/route.ts}}
+                    \label{lst:tenantfe-crash-route}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{typescript}{\detokenize{code/BachelorThesis_TenantFE/tenant_fe/src/app/api/crash/route.ts}}
+                \end{listing}
+
+                % Pages and libs
+                \begin{listing}[H]
+                    \caption{Root page: \texttt{src/app/page.tsx}}
+                    \label{lst:tenantfe-page}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{tsx}{\detokenize{code/BachelorThesis_TenantFE/tenant_fe/src/app/page.tsx}}
+                \end{listing}
+
+            %     \lstinputlisting[
+            %         style=code,
+            %         language=TSX,
+            %         caption={Config provider: \texttt{src/lib/ConfigProvider.tsx}},
+            %         label={lst:tenantfe-configprovider}
+            %     ]{code/BachelorThesis_TenantFE/tenant_fe/src/lib/ConfigProvider.tsx}
+
+            %     % layout
+            %     \lstinputlisting[
+            %         style=code,
+            %         language=TSX,
+            %         caption={Layout: \texttt{src/app/layout.tsx}},
+            %         label={lst:tenantfe-layout}
+            %     ]{code/BachelorThesis_TenantFE/tenant_fe/src/app/layout.tsx}
+
+            % \subsection*{Build and Runtime}
+            %     \lstinputlisting[
+            %         style=code,
+            %         language=Dockerfile,
+            %         caption={TenantFE Dockerfile},
+            %         label={lst:tenantfe-dockerfile}
+            %     ]{code/BachelorThesis_TenantFE/Dockerfile}
 
             % \vspace{0.5\baselineskip}
             % \noindent\textit{Relevance:} rationale for including this code
@@ -2062,7 +2119,7 @@
                     formatcom=\ttfamily\small,
                     obeytabs=true, showtabs=false,
                     showspaces=false, frame=single
-                ]{trees/BachelorThesis_TenantBE.trimmed.tree}
+                ]{\detokenize{trees/BachelorThesis_TenantBE.trimmed.tree}}
                 \caption{TenantBE directory tree (trimmed)}\label{fig:tenantbe-tree}
             \end{figure}
 
@@ -2085,7 +2142,7 @@
                     formatcom=\ttfamily\small,
                     obeytabs=true, showtabs=false,
                     showspaces=false, frame=single
-                ]{trees/BachelorThesis_ConfigSchema.trimmed.tree}
+                ]{\detokenize{trees/BachelorThesis_ConfigSchema.trimmed.tree}}
                 \caption{ConfigSchema directory tree (trimmed)}\label{fig:configschema-tree}
             \end{figure}
 
@@ -2104,7 +2161,7 @@
                     formatcom=\ttfamily\small,
                     obeytabs=true, showtabs=false,
                     showspaces=false, frame=single
-                ]{trees/BachelorThesis_DashboardFE.trimmed.tree}
+                ]{\detokenize{trees/BachelorThesis_DashboardFE.trimmed.tree}}
                 \caption{DashboardFE directory tree (trimmed)}\label{fig:dashboardfe-tree}
             \end{figure}
 
@@ -2121,7 +2178,7 @@
                     formatcom=\ttfamily\small,
                     obeytabs=true, showtabs=false,
                     showspaces=false, frame=single
-                ]{trees/BachelorThesis_DashboardBE.trimmed.tree}
+                ]{\detokenize{trees/BachelorThesis_DashboardBE.trimmed.tree}}
                 \caption{DashboardBE directory tree (trimmed)}\label{fig:dashboardbe-tree}
             \end{figure}
 
@@ -2138,7 +2195,7 @@
                 breakanywhere=true,
                 obeytabs=true, showtabs=false, showspaces=false,
                 formatcom=\ttfamily\small
-            ]{trees/BachelorThesis_Infra.trimmed.tree}
+            ]{\detokenize{trees/BachelorThesis_Infra.trimmed.tree}}
             \captionof{figure}{Infra directory tree (trimmed)}\label{fig:infra-tree}
 
             % \vspace{0.5\baselineskip}

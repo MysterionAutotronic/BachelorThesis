@@ -50,3 +50,7 @@ code/*
 # Trees
 *.tree
 !*.trimmed.tree
+
+# Pygments
+*.pygtex
+*.pygstyle
