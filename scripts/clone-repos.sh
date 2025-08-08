@@ -1,41 +1,30 @@
-if [ ! -d "BachelorThesis_TenantFE" ]; then
-    echo "Cloning Tenant Frontend repository..."
-    git clone https://github.com/MysterionAutotronic/BachelorThesis_TenantFE.git
-else
-    echo "Tenant Frontend repository already exists."
-fi
+#!/usr/bin/env bash
+set -euo pipefail
 
-if [ ! -d "BachelorThesis_TenantBE" ]; then
-    echo "Cloning Tenant Backend repository..."
-    git clone https://github.com/MysterionAutotronic/BachelorThesis_TenantBE.git
-else
-    echo "Tenant Backend repository already exists."
-fi
+ROOT_DIR="$(pwd)"
+CODE_DIR="$ROOT_DIR/code"
+mkdir -p "$CODE_DIR"
 
-if [ ! -d "BachelorThesis_DashboardFE" ]; then
-    echo "Cloning Dashboard Frontend repository..."
-    git clone https://github.com/MysterionAutotronic/BachelorThesis_DashboardFE.git
-else
-    echo "Dashboard Frontend repository already exists."
-fi
+clone_or_update() {
+    local name="$1" url="$2" ref="${3:-}"      # optional 3rd arg: branch/tag/commit
+    local dest="$CODE_DIR/$name"
 
-if [ ! -d "BachelorThesis_DashboardBE" ]; then
-    echo "Cloning Dashboard Backend repository..."
-    git clone https://github.com/MysterionAutotronic/BachelorThesis_DashboardBE.git
-else
-    echo "Dashboard Backend repository already exists."
-fi
+    if [[ ! -d "$dest/.git" ]]; then
+        echo "Cloning $name -> $dest"
+        git clone "$url" "$dest"
+    else
+        echo "Updating $name in $dest"
+        git -C "$dest" fetch --all --prune
+    fi
 
-if [ ! -d "BachelorThesis_ConfigSchema" ]; then
-    echo "Cloning ConfigSchema repository..."
-    git clone https://github.com/MysterionAutotronic/BachelorThesis_ConfigSchema.git
-else
-    echo "ConfigSchema repository already exists."
-fi
+    if [[ -n "$ref" ]]; then
+        git -C "$dest" checkout -q "$ref"
+    fi
+}
 
-if [ ! -d "BachelorThesis_Infra" ]; then
-    echo "Cloning Infra repository..."
-    git clone https://github.com/MysterionAutotronic/BachelorThesis_Infra.git
-else
-    echo "Infra repository already exists."
-fi
+clone_or_update "BachelorThesis_TenantFE"  "https://github.com/MysterionAutotronic/BachelorThesis_TenantFE.git"
+clone_or_update "BachelorThesis_TenantBE"  "https://github.com/MysterionAutotronic/BachelorThesis_TenantBE.git"
+clone_or_update "BachelorThesis_DashboardFE" "https://github.com/MysterionAutotronic/BachelorThesis_DashboardFE.git"
+clone_or_update "BachelorThesis_DashboardBE" "https://github.com/MysterionAutotronic/BachelorThesis_DashboardBE.git"
+clone_or_update "BachelorThesis_ConfigSchema" "https://github.com/MysterionAutotronic/BachelorThesis_ConfigSchema.git"
+clone_or_update "BachelorThesis_Infra"     "https://github.com/MysterionAutotronic/BachelorThesis_Infra.git"
