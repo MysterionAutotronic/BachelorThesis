@@ -46,3 +46,7 @@ Thumbs.db
 
 # Code folder
 code/*
+
+# Trees
+*.tree
+!*.trimmed.tree

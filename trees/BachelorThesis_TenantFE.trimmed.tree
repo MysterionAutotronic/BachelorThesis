@@ -1,0 +1,16 @@
+./BachelorThesis_TenantFE//
+├── Dockerfile
+└── tenant_fe/
+    ├── public/
+    ├── src/
+    │   ├── app/
+    │   │   ├── api/
+    │   │   │   ├── config/
+    │   │   │   │   └── route.ts
+    │   │   │   └── crash/
+    │   │   │       └── route.ts
+    │   │   ├── layout.tsx
+    │   │   └── page.tsx
+    │   └── lib/
+    │       └── ConfigProvider.tsx
+    └── tsconfig.json

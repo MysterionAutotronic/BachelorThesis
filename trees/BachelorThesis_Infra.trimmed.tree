@@ -1,0 +1,48 @@
+./code/BachelorThesis_Infra//
+├── config/
+│   └── config.example.json
+├── k8s/
+│   ├── apibindings/
+│   │   └── standard-bindings.yaml
+│   ├── cluster/
+│   │   └── kind-config.yaml
+│   ├── deployments/
+│   │   ├── dashboard-be.yaml
+│   │   ├── dashboard-fe.yaml
+│   │   ├── debug.yaml
+│   │   ├── tenant-be.yaml
+│   │   └── tenant-fe.yaml
+│   ├── ingress/
+│   │   └── dashboard-ingress.yaml
+│   ├── kcp-crds/
+│   │   ├── apis.kcp.io_apibindings.yaml
+│   │   └── apis.kcp.io_apiexports.yaml
+│   ├── rbac/
+│   │   └── root.yaml
+│   ├── roleBinding/
+│   │   └── tmc-role-binding.yaml
+│   └── workspaces/
+│       └── root-dashboard-cluster.yaml
+└── scripts/
+    ├── add-to-hosts.sh*
+    ├── build/
+    │   ├── dashboardBE.sh*
+    │   ├── dashboardFE.sh*
+    │   ├── tenantBE.sh*
+    │   └── tenantFE.sh*
+    ├── cleanup-hosts.sh*
+    ├── clone-repos.sh*
+    ├── CRDs/
+    │   └── create-tenant-x-CRD.sh*
+    ├── create-dashboard-workspace.sh*
+    ├── create-tenant-x-cluster.sh*
+    ├── create-tenant-x-workspace.sh*
+    ├── install-deps.sh*
+    ├── path.sh*
+    ├── restore-kind-context.sh*
+    ├── setup-kcp.sh*
+    ├── setup-krew-plugins.sh*
+    ├── setup-tmc.sh*
+    ├── start-kcp.sh*
+    ├── start-tmc-kcp.sh*
+    └── update-krew.sh*

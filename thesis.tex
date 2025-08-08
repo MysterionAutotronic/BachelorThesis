@@ -42,6 +42,9 @@
 \usepackage{setspace}
 \usepackage{substitutefont}
 \usepackage{plantuml}
+\usepackage{pmboxdraw}
+\usepackage{fvextra}
+\usepackage{capt-of}
 
 % linting
 % chktex-file 1
@@ -161,10 +164,11 @@
 \lstdefinelanguage{docker}[]{Dockerfile}{}
 \lstdefinelanguage{json}[]{JSON}{}
 
-% macro for listings
+% macros for listings
 \newcommand{\codesnippet}[4][]{%
     \lstinputlisting[style=code,language=#2,caption={#3},label={#4},#1]{#1}%
 }
+\newcommand{\file}[1]{\textcolor{blue}{#1}}
 
 % GitHub link helpers
 \newcommand{\ghowner}{MysterionAutotronic}
@@ -2027,25 +2031,18 @@
                 \bottomrule
             \end{longtable}
 
-        \cleardoublepage
-
         % Appendix B: TenantFE
         \section{TenantFE (Selected Code)}\label{app:tenantfe}
             \subsection*{Directory Structure}
-            \begin{lstlisting}[style=code,caption={TenantFE directory tree (trimmed)},label={lst:tenantfe-tree}]
-                tenantfe/
-                app/
-                    layout.tsx
-                    page.tsx
-                    api/
-                components/
-                    Header.tsx
-                    Hero.tsx
-                lib/
-                    fetchConfig.ts
-                next.config.js
-                Dockerfile
-            \end{lstlisting}
+            \begin{figure}[H]
+                \centering
+                \VerbatimInput[
+                    formatcom=\ttfamily\small,
+                    obeytabs=true, showtabs=false,
+                    showspaces=false, frame=single
+                ]{trees/BachelorThesis_TenantFE.trimmed.tree}
+                \caption{TenantFE directory tree (trimmed)}\label{fig:tenantfe-tree}
+            \end{figure}
 
             \subsection*{Key Files}
 
@@ -2059,16 +2056,15 @@
         % Appendix C: TenantBE
         \section{TenantBE (Selected Code)}\label{app:tenantbe}
             \subsection*{Directory Structure}
-            \begin{lstlisting}[style=code,caption={TenantBE directory tree (trimmed)},label={lst:tenantbe-tree}]
-                tenantbe/
-                src/
-                    index.ts
-                    cache.ts
-                    routes/
-                    config.ts
-                    reviews.ts
-                Dockerfile
-            \end{lstlisting}
+            \begin{figure}[H]
+                \centering
+                \VerbatimInput[
+                    formatcom=\ttfamily\small,
+                    obeytabs=true, showtabs=false,
+                    showspaces=false, frame=single
+                ]{trees/BachelorThesis_TenantBE.trimmed.tree}
+                \caption{TenantBE directory tree (trimmed)}\label{fig:tenantbe-tree}
+            \end{figure}
 
             \subsection*{Key Files}
 
@@ -2082,6 +2078,17 @@
         % Appendix D: Config Schema
         \section{ConfigSchema}\label{app:configschema}
 
+            \subsection*{Directory Structure}
+            \begin{figure}[H]
+                \centering
+                \VerbatimInput[
+                    formatcom=\ttfamily\small,
+                    obeytabs=true, showtabs=false,
+                    showspaces=false, frame=single
+                ]{trees/BachelorThesis_ConfigSchema.trimmed.tree}
+                \caption{ConfigSchema directory tree (trimmed)}\label{fig:configschema-tree}
+            \end{figure}
+
             % \vspace{0.5\baselineskip}
             % \noindent\textit{Relevance:} rationale for including this code
 
@@ -2090,21 +2097,49 @@
         % Appendix E: DashboardFE
         \section{DashboardFE (Selected Code)}\label{app:dashboardfe}
 
+            \subsection*{Directory Structure}
+            \begin{figure}[H]
+                \centering
+                \VerbatimInput[
+                    formatcom=\ttfamily\small,
+                    obeytabs=true, showtabs=false,
+                    showspaces=false, frame=single
+                ]{trees/BachelorThesis_DashboardFE.trimmed.tree}
+                \caption{DashboardFE directory tree (trimmed)}\label{fig:dashboardfe-tree}
+            \end{figure}
+
             % \vspace{0.5\baselineskip}
             % \noindent\textit{Relevance:} rationale for including this code
 
-        \cleardoublepage
-
         % Appendix F: DashboardBE
         \section{DashboardBE (Selected Code)}\label{app:dashboardbe}
+
+            \subsection*{Directory Structure}
+            \begin{figure}[H]
+                \centering
+                \VerbatimInput[
+                    formatcom=\ttfamily\small,
+                    obeytabs=true, showtabs=false,
+                    showspaces=false, frame=single
+                ]{trees/BachelorThesis_DashboardBE.trimmed.tree}
+                \caption{DashboardBE directory tree (trimmed)}\label{fig:dashboardbe-tree}
+            \end{figure}
+
+        \cleardoublepage
             
             % \vspace{0.5\baselineskip}
             % \noindent\textit{Relevance:} rationale for including this code
 
-        \cleardoublepage
-
         % Appendix G: Infra
-        \section{Infra (Manifests and Charts)}\label{app:infra}
+        \section{Infra (Scripts and Manifests)}\label{app:infra}
+
+            \VerbatimInput[
+                breaklines=true,
+                breakanywhere=true,
+                obeytabs=true, showtabs=false, showspaces=false,
+                formatcom=\ttfamily\small
+            ]{trees/BachelorThesis_Infra.trimmed.tree}
+            \captionof{figure}{Infra directory tree (trimmed)}\label{fig:infra-tree}
 
             % \vspace{0.5\baselineskip}
             % \noindent\textit{Relevance:} rationale for including this code

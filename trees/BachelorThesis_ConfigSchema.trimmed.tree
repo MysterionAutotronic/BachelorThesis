@@ -1,0 +1,7 @@
+./code/BachelorThesis_ConfigSchema//
+├── dist/
+├── src/
+│   └── index.ts
+├── tests/
+│   └── index.test.ts
+└── tsconfig.build.json

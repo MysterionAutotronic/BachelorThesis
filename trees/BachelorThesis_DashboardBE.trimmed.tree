@@ -1,0 +1,6 @@
+./code/BachelorThesis_DashboardBE//
+├── Dockerfile
+├── src/
+│   ├── redis.ts
+│   └── server.ts
+└── tsconfig.json
