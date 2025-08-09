@@ -2159,15 +2159,149 @@
         \section{DashboardFE (Selected Code)}\label{app:dashboardfe}
 
             \subsection*{Directory Structure}
-            \begin{figure}[H]
-                \centering
-                \VerbatimInput[
-                    formatcom=\ttfamily\small,
-                    obeytabs=true, showtabs=false,
-                    showspaces=false, frame=single
-                ]{\detokenize{trees/BachelorThesis_DashboardFE.trimmed.tree}}
-                \caption{DashboardFE directory tree (trimmed)}\label{fig:dashboardfe-tree}
-            \end{figure}
+                \begin{figure}[H]
+                    \centering
+                    \VerbatimInput[
+                        formatcom=\ttfamily\small,
+                        obeytabs=true, showtabs=false,
+                        showspaces=false, frame=single
+                    ]{\detokenize{trees/BachelorThesis_DashboardFE.trimmed.tree}}
+                    \caption{DashboardFE directory tree (trimmed)}\label{fig:dashboardfe-tree}
+                \end{figure}
+
+            \subsection*{Key Files}
+                \begin{flushleft}
+                    \captionof{listing}{API route: \texttt{src/app/api/config}}\label{lst:dashboardfe-api-config}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{ts}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/app/api/config/route.ts}}
+                \end{flushleft}
+
+                \begin{listing}[H]
+                    \caption{Root page: \texttt{src/app/page.tsx}}\label{lst:dashboardfe-root-page}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{tsx}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/app/page.tsx}}
+                \end{listing}
+
+                \begin{listing}[H]
+                    \caption{Layout: \texttt{src/app/layout.tsx}}\label{lst:dashboardfe-layout}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{tsx}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/app/layout.tsx}}
+                \end{listing}
+
+                \begin{listing}[H]
+                    \caption{Dashboard page: \texttt{src/app/dashboard/page.tsx}}\label{lst:dashboardfe-dashboard-page}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{tsx}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/app/dashboard/page.tsx}}
+                \end{listing}
+
+                \begin{listing}[H]
+                    \caption{Login page: \texttt{src/app/login/page.tsx}}\label{lst:dashboardfe-login-page}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{tsx}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/app/login/page.tsx}}
+                \end{listing}
+
+                \begin{listing}[H]
+                    \caption{Login action: \texttt{src/app/login/actions.ts}}\label{lst:dashboardfe-login-action}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{ts}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/app/login/actions.ts}}
+                \end{listing}
+
+                \begin{flushleft}
+                    \captionof{listing}{Config form component: \texttt{src/components/ConfigForm.tsx}}\label{lst:dashboardfe-config-form}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{tsx}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/components/ConfigForm.tsx}}
+                \end{flushleft}
+
+                \begin{listing}[H]
+                    \caption{Dashboard button component: \texttt{src/components/DashboardButton.tsx}}\label{lst:dashboardfe-dashboard-button}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{tsx}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/components/DashboardButton.tsx}}
+                \end{listing}
+
+                \begin{listing}[H]
+                    \caption{Login form component: \texttt{src/components/LoginForm.tsx}}\label{lst:dashboardfe-login-form}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{tsx}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/components/LoginForm.tsx}}
+                \end{listing}
+
+                \begin{listing}[H]
+                    \caption{Auth lib: \texttt{src/lib/auth.ts}}\label{lst:dashboardfe-auth-lib}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{ts}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/lib/auth.ts}}
+                \end{listing}
+
+            \subsection*{Build and Runtime}
+                \begin{flushleft}
+                    \captionof{listing}{Dockerfile}\label{lst:dashboardfe-dockerfile}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{docker}{\detokenize{code/BachelorThesis_DashboardFE/Dockerfile}}
+                \end{flushleft}
 
             % \vspace{0.5\baselineskip}
             % \noindent\textit{Relevance:} rationale for including this code
@@ -2186,7 +2320,43 @@
                 \caption{DashboardBE directory tree (trimmed)}\label{fig:dashboardbe-tree}
             \end{figure}
 
-        \cleardoublepage
+            \subsection*{Key Files}
+                \begin{flushleft}
+                    \captionof{listing}{Server: \texttt{src/server.ts}}\label{lst:dashboardbe-server}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{ts}{\detokenize{code/BachelorThesis_DashboardBE/src/server.ts}}
+                \end{flushleft}
+
+                \begin{listing}[H]
+                    \caption{Redis: \texttt{src/lib/redis.ts}}\label{lst:dashboardbe-redis}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{ts}{\detokenize{code/BachelorThesis_DashboardBE/src/redis.ts}}
+                \end{listing}
+
+            \subsection*{Build and Runtime}
+                \begin{listing}[H]
+                    \caption{Dockerfile}\label{lst:dashboardbe-dockerfile}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{docker}{\detokenize{code/BachelorThesis_DashboardBE/Dockerfile}}
+                \end{listing}
             
             % \vspace{0.5\baselineskip}
             % \noindent\textit{Relevance:} rationale for including this code
