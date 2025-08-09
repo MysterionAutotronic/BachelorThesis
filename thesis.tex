@@ -2102,15 +2102,53 @@
         \section{ConfigSchema}\label{app:configschema}
 
             \subsection*{Directory Structure}
-            \begin{figure}[H]
-                \centering
-                \VerbatimInput[
-                    formatcom=\ttfamily\small,
-                    obeytabs=true, showtabs=false,
-                    showspaces=false, frame=single
-                ]{\detokenize{trees/BachelorThesis_ConfigSchema.trimmed.tree}}
-                \caption{ConfigSchema directory tree (trimmed)}\label{fig:configschema-tree}
-            \end{figure}
+                \begin{figure}[H]
+                    \centering
+                    \VerbatimInput[
+                        formatcom=\ttfamily\small,
+                        obeytabs=true, showtabs=false,
+                        showspaces=false, frame=single
+                    ]{\detokenize{trees/BachelorThesis_ConfigSchema.trimmed.tree}}
+                    \caption{ConfigSchema directory tree (trimmed)}\label{fig:configschema-tree}
+                \end{figure}
+
+            \subsection*{Key Files}
+                \begin{flushleft}
+                    \captionof{listing}{Index: \texttt{src/index.ts}}\label{lst:configschema-index}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{ts}{\detokenize{code/BachelorThesis_ConfigSchema/src/index.ts}}
+                \end{flushleft}
+
+                \begin{flushleft}
+                    \captionof{listing}{Index test: \texttt{src/index.test.ts}}\label{lst:configschema-index-test}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{ts}{\detokenize{code/BachelorThesis_ConfigSchema/tests/index.test.ts}}
+                \end{flushleft}
+
+            \subsection*{Build and Runtime}
+                \begin{listing}[H]
+                    \caption{Build: \texttt{tsconfig.build.json}}\label{lst:configschema-build}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{json}{\detokenize{code/BachelorThesis_ConfigSchema/tsconfig.build.json}}
+                \end{listing}
 
             % \vspace{0.5\baselineskip}
             % \noindent\textit{Relevance:} rationale for including this code
