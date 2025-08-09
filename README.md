@@ -90,3 +90,11 @@ zsh ./scripts/convert_svgs.sh
 ```
 
 </details>
+
+## Linting
+
+Add this to VSCode user settings (JSON) to avoid false positives for duplicate labels
+
+```json
+"latex-workshop.check.duplicatedLabels.enabled": false
+```
