@@ -47,6 +47,9 @@
 \usepackage[newfloat]{minted}
 \usepackage[varqu,scaled=0.95]{zi4}
 
+% set up captions
+\captionsetup{hypcap=false}
+
 % set up minted
 \SetupFloatingEnvironment{listing}{name=Listing}
 
@@ -1994,15 +1997,17 @@
                 \end{listing}
 
                 % Pages and libs
-                \captionof{listing}{Root page: \texttt{src/app/page.tsx}}\label{lst:tenantfe-page}
-                \inputminted[
-                    fontsize=\small,
-                    linenos,
-                    breaklines,
-                    breakanywhere,
-                    tabsize=2,
-                    frame=lines
-                ]{tsx}{\detokenize{code/BachelorThesis_TenantFE/tenant_fe/src/app/page.tsx}}
+                \begin{flushleft}
+                    \captionof{listing}{Root page: \texttt{src/app/page.tsx}}\label{lst:tenantfe-page}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{tsx}{\detokenize{code/BachelorThesis_TenantFE/tenant_fe/src/app/page.tsx}}
+                \end{flushleft}
 
                 \begin{listing}[H]
                     \caption{Config provider: \texttt{src/lib/ConfigProvider.tsx}}\label{lst:tenantfe-configprovider}
@@ -2029,15 +2034,17 @@
                 \end{listing}
 
             \subsection*{Build and Runtime}
-                \captionof{listing}{Dockerfile}\label{lst:tenantfe-dockerfile}
-                \inputminted[
-                    fontsize=\small,
-                    linenos,
-                    breaklines,
-                    breakanywhere,
-                    tabsize=2,
-                    frame=lines
-                ]{docker}{\detokenize{code/BachelorThesis_TenantFE/Dockerfile}}
+                \begin{flushleft}
+                    \captionof{listing}{Dockerfile}\label{lst:tenantfe-dockerfile}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{docker}{\detokenize{code/BachelorThesis_TenantFE/Dockerfile}}
+                \end{flushleft}
 
             % \vspace{0.5\baselineskip}
             % \noindent\textit{Relevance:} rationale for including this code
@@ -2124,13 +2131,15 @@
         % Appendix G: Infra
         \section{Infra (Scripts and Manifests)}\label{app:infra}
 
-            \VerbatimInput[
-                breaklines=true,
-                breakanywhere=true,
-                obeytabs=true, showtabs=false, showspaces=false,
-                formatcom=\ttfamily\small
-            ]{\detokenize{trees/BachelorThesis_Infra.trimmed.tree}}
-            \captionof{figure}{Infra directory tree (trimmed)}\label{fig:infra-tree}
+            \begin{flushleft}
+                \VerbatimInput[
+                    breaklines=true,
+                    breakanywhere=true,
+                    obeytabs=true, showtabs=false, showspaces=false,
+                    formatcom=\ttfamily\small
+                ]{\detokenize{trees/BachelorThesis_Infra.trimmed.tree}}
+                \captionof{figure}{Infra directory tree (trimmed)}\label{fig:infra-tree}
+            \end{flushleft}
 
             % \vspace{0.5\baselineskip}
             % \noindent\textit{Relevance:} rationale for including this code
