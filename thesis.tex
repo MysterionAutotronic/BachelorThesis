@@ -49,6 +49,17 @@
 
 % drop unicode chars from source files
 \DeclareUnicodeCharacter{1F680}{\texttt{<unicode-rocket>}}
+\DeclareUnicodeCharacter{274C}{\texttt{<unicode-cancel>}}
+\DeclareUnicodeCharacter{1F9E0}{\texttt{<unicode-brain>}}
+\DeclareUnicodeCharacter{1F9FE}{\texttt{<unicode-robot>}}
+\DeclareUnicodeCharacter{1F6A7}{\texttt{<unicode-construction>}}
+\DeclareUnicodeCharacter{1F50D}{\texttt{<unicode-magnifying-glass>}}
+\DeclareUnicodeCharacter{1F3D7}{\texttt{<unicode-building>}}
+\DeclareUnicodeCharacter{FE0F}{}
+\DeclareUnicodeCharacter{2705}{\texttt{<unicode-check>}}
+\DeclareUnicodeCharacter{1F4C4}{\texttt{<unicode-page>}}
+\DeclareUnicodeCharacter{1F9EA}{\texttt{<unicode-test-tube>}}
+\DeclareUnicodeCharacter{1F9F9}{\texttt{<unicode-broom>}}
 
 % set up captions
 \captionsetup{hypcap=false}
@@ -1938,7 +1949,9 @@
         \section{Repository Overview}\label{app:repos-overview}
             \noindent\emph{Note.} The following template and artifacts repositories are included for
             completeness.
-            They have no dedicated appendix sections.
+            They have no dedicated appendix sections. \\
+            Furthermore all unicode characters in code listings have been replaced with
+            \texttt{<unicode-meaning>} to avoid encoding issues in the \gls{pdf}.
 
             \begin{longtable}{@{}l l P{7.5cm}@{}}
                 \toprule
@@ -2381,10 +2394,91 @@
                 \end{flushleft}
 
             \subsection*{Layout}
+                \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.22\textwidth} X >{\raggedright\arraybackslash}p{0.34\textwidth}@{}}
+                    \toprule
+                    \textbf{Path} & \textbf{Purpose} & \textbf{Highlights} \\
+                    \midrule
+                    \texttt{\detokenize{config/}} &
+                    Configuration sample &
+                    \texttt{\detokenize{config.example.json}} \\
+                    \addlinespace
+                    \texttt{\detokenize{k8s/}} &
+                    All Kubernetes and KCP artifacts (CRDs, RBAC, workspaces, deployments, ingress) &
+                    Subfolders by concern: \texttt{\detokenize{cluster/}}, \texttt{\detokenize{deployments/}}, \texttt{\detokenize{rbac/}}, \texttt{\detokenize{apibindings/}}, \texttt{\detokenize{kcp-crds/}}, \texttt{\detokenize{workspaces/}}, \texttt{\detokenize{ingress/}} \\
+                    \addlinespace
+                    \texttt{\detokenize{scripts/}} &
+                    Automation: setup, build, cluster+workspace creation, TMC bootstrap, utilities &
+                    Split into \texttt{\detokenize{build/}} and task-specific scripts \\
+                    \bottomrule
+                \end{tabularx}
 
-            \subsection*{End to End Workflow}
+            \subsection*{Simplified End to End Workflow}
+                \begin{enumerate}
+                    \item \textbf{Bootstrap tools} (kubectl, krew, plugins, kind, etc.): \\
+                            \texttt{\detokenize{scripts/install-deps.sh}}, \\
+                            \texttt{\detokenize{scripts/clone-repos.sh}}, \\
+                            \texttt{\detokenize{scripts/setup-kcp.sh}}, \\
+                            \texttt{\detokenize{scripts/update-krew.sh}}, \\
+                            \texttt{\detokenize{scripts/setup-krew-plugins.sh}}, \\
+                            \texttt{\detokenize{scripts/path.sh}}, \\
+                            \texttt{\detokenize{scripts/setup-tmc.sh}}, \\
+                            \texttt{\detokenize{scripts/path.sh}}.
+                    \item \textbf{Start TMC-KCP (KCP)}: \\
+                            \texttt{\detokenize{scripts/start-tmc-kcp.sh}}, \\
+                            (\texttt{\detokenize{scripts/start-kcp.sh}}).
+                    \item \textbf{Create workspaces (creates clusters in the process)}: \\
+                            \texttt{\detokenize{scripts/create-dashboard-workspace.sh}}, \\
+                            \texttt{\detokenize{scripts/create-tenant-x-workspace.sh}}.
+                \end{enumerate}
 
             \subsection*{Build and Images}
+                \begin{listing}[H]
+                    \caption{Build dashboardBE: \texttt{/scripts/build/dashboardBE.sh}}\label{lst:build-dashboardBE}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/build/dashboardBE.sh}}
+                \end{listing}
+
+                \begin{flushleft}
+                    \captionof{listing}{Build dashboardFE:\@\texttt{/scripts/build/dashboardFE.sh}}\label{lst:build-dashboardFE}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/build/dashboardFE.sh}}
+                \end{flushleft}
+
+                \begin{listing}[H]
+                    \caption{Build tenantBE:\@\texttt{/scripts/build/tenantBE.sh}}\label{lst:build-tenantBE}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/build/tenantBE.sh}}
+                \end{listing}
+
+                \begin{flushleft}
+                    \captionof{listing}{Build tenantFE:\@\texttt{/scripts/build/tenantFE.sh}}\label{lst:build-tenantFE}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/build/tenantFE.sh}}
+                \end{flushleft}
 
             \subsection*{Cluster and Manifests}
 
