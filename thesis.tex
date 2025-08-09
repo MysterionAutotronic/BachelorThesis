@@ -1960,6 +1960,8 @@
                 \bottomrule
             \end{longtable}
 
+        \clearpage
+
         % Appendix B: TenantFE
         \section{TenantFE (Selected Code)}\label{app:tenantfe}
             \subsection*{Directory Structure}
@@ -2052,7 +2054,7 @@
             % \vspace{0.5\baselineskip}
             % \noindent\textit{Relevance:} rationale for including this code
 
-        \cleardoublepage
+        \clearpage
 
         % Appendix C: TenantBE
         \section{TenantBE (Selected Code)}\label{app:tenantbe}
@@ -2096,7 +2098,7 @@
             % \vspace{0.5\baselineskip}
             % \noindent\textit{Relevance:} rationale for including this code
 
-        \cleardoublepage
+        \clearpage
 
         % Appendix D: Config Schema
         \section{ConfigSchema}\label{app:configschema}
@@ -2153,7 +2155,7 @@
             % \vspace{0.5\baselineskip}
             % \noindent\textit{Relevance:} rationale for including this code
 
-        \cleardoublepage
+        \clearpage
 
         % Appendix E: DashboardFE
         \section{DashboardFE (Selected Code)}\label{app:dashboardfe}
@@ -2306,6 +2308,8 @@
             % \vspace{0.5\baselineskip}
             % \noindent\textit{Relevance:} rationale for including this code
 
+        \clearpage
+
         % Appendix F: DashboardBE
         \section{DashboardBE (Selected Code)}\label{app:dashboardbe}
 
@@ -2360,29 +2364,58 @@
             
             % \vspace{0.5\baselineskip}
             % \noindent\textit{Relevance:} rationale for including this code
+        
+        \clearpage
 
         % Appendix G: Infra
         \section{Infra (Scripts and Manifests)}\label{app:infra}
+            \subsection*{Directory Structure}
+                \begin{flushleft}
+                    \VerbatimInput[
+                        breaklines=true,
+                        breakanywhere=true,
+                        obeytabs=true, showtabs=false, showspaces=false,
+                        formatcom=\ttfamily\small
+                    ]{\detokenize{trees/BachelorThesis_Infra.trimmed.tree}}
+                    \captionof{figure}{Infra directory tree (trimmed)}\label{fig:infra-tree}
+                \end{flushleft}
 
-            \begin{flushleft}
-                \VerbatimInput[
-                    breaklines=true,
-                    breakanywhere=true,
-                    obeytabs=true, showtabs=false, showspaces=false,
-                    formatcom=\ttfamily\small
-                ]{\detokenize{trees/BachelorThesis_Infra.trimmed.tree}}
-                \captionof{figure}{Infra directory tree (trimmed)}\label{fig:infra-tree}
-            \end{flushleft}
+            \subsection*{Layout}
+
+            \subsection*{End to End Workflow}
+
+            \subsection*{Build and Images}
+
+            \subsection*{Cluster and Manifests}
+
+            \subsection*{Script Catalog (quick reference)}
+
+            \subsection*{Common Operations}
+                \subsubsection*{Workspaces}
+
+                \subsubsection*{RBAC}
+
+                \subsubsection*{API Binding}
+
+                \subsubsection*{API Resources}
+
+                \subsubsection*{Debug Pod}
+
+                \subsubsection*{Context}
+
+                \subsection*{TMC}
+
+            \subsection*{Deployment Flow (at a glance)}
 
             % \vspace{0.5\baselineskip}
             % \noindent\textit{Relevance:} rationale for including this code
 
-        \cleardoublepage
+        \clearpage
 
         % Appendix H: Documentation Excerpts
         \section{Documentation Excerpts}\label{app:docs}
 
-        \cleardoublepage
+        \clearpage
 
         % Appendix I: Diverse Screenshots
         \section{Slack Channel Screenshots}\label{app:slack}
