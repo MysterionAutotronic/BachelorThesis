@@ -2604,6 +2604,19 @@
                     ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/CRDs/create-tenant-x-CRD.sh}}
                 \end{flushleft}
 
+            \subsection*{Role Binding}
+                \begin{listing}[H]
+                    \caption{TMC Role Binding: \texttt{/k8s/roleBinding/tmc-role-binding}}\label{lst:tmc-role-binding}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{bash}{\detokenize{code/BachelorThesis_Infra/k8s/roleBinding/tmc-role-binding.yaml}}
+                \end{listing}
+
             \subsection*{Ingress}
                 \begin{flushleft}
                     \captionof{listing}{Dashboard Ingress: \texttt{/k8s/ingress/dashboard-ingress.yaml}}\label{lst:dashboard-ingress}
@@ -2617,22 +2630,45 @@
                     ]{yaml}{\detokenize{code/BachelorThesis_Infra/k8s/ingress/dashboard-ingress.yaml}}
                 \end{flushleft}
 
+            \subsection*{Helpers}
+                \begin{listing}[H]
+                    \caption{Add to Hosts Script: \texttt{/scripts/add-to-hosts.sh}}\label{lst:add-to-hosts}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/add-to-hosts.sh}}
+                \end{listing}
+
+                \begin{listing}[H]
+                    \caption{Cleanup Hosts Script: \texttt{/scripts/cleanup-hosts.sh}}\label{lst:cleanup-hosts}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/cleanup-hosts.sh}}
+                \end{listing}
+
+                \begin{listing}[H]
+                    \caption{Restore kind context script: \texttt{/scripts/restore-kind-context}}\label{lst:restore-kind-context}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/restore-kind-context.sh}}
+                \end{listing}
+
             \subsection*{Script Catalog (quick reference)}
 
-            \subsection*{Common Operations}
-                \subsubsection*{Workspaces}
-
-                \subsubsection*{RBAC}
-
-                \subsubsection*{API Binding}
-
-                \subsubsection*{API Resources}
-
-                \subsubsection*{Debug Pod}
-
-                \subsubsection*{Context}
-
-                \subsection*{TMC}
 
             \subsection*{Deployment Flow (at a glance)}
 
