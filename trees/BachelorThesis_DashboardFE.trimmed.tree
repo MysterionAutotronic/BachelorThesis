@@ -1,23 +1,22 @@
 ./code/BachelorThesis_DashboardFE//
 ├── dashboard_fe/
 │   ├── public/
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── api/
-│   │   │   │   └── config/
-│   │   │   │       └── route.ts
-│   │   │   ├── dashboard/
-│   │   │   │   └── page.tsx
-│   │   │   ├── layout.tsx
-│   │   │   ├── login/
-│   │   │   │   ├── actions.ts
-│   │   │   │   └── page.tsx
-│   │   │   └── page.tsx
-│   │   ├── components/
-│   │   │   ├── ConfigForm.tsx
-│   │   │   ├── DashboardButton.tsx
-│   │   │   └── LoginForm.tsx
-│   │   └── lib/
-│   │       └── auth.ts
-│   └── tsconfig.json
+│   └──src/
+│       ├── app/
+│       │   ├── api/
+│       │   │   └── config/
+│       │   │       └── route.ts
+│       │   ├── dashboard/
+│       │   │   └── page.tsx
+│       │   ├── layout.tsx
+│       │   ├── login/
+│       │   │   ├── actions.ts
+│       │   │   └── page.tsx
+│       │   └── page.tsx
+│       ├── components/
+│       │   ├── ConfigForm.tsx
+│       │   ├── DashboardButton.tsx
+│       │   └── LoginForm.tsx
+│       └── lib/
+│           └── auth.ts
 └── Dockerfile
