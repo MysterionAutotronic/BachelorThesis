@@ -1,5 +1,4 @@
 ./code/BachelorThesis_TenantBE//
 ├── Dockerfile
-├── src/
-│   └── server.ts
-└── tsconfig.json
+└── src/
+    └── server.ts

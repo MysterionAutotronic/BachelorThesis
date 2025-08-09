@@ -47,6 +47,9 @@
 \usepackage[newfloat]{minted}
 \usepackage[varqu,scaled=0.95]{zi4}
 
+% drop unicode chars from source files
+\DeclareUnicodeCharacter{1F680}{\texttt{<unicode-rocket>}}
+
 % set up captions
 \captionsetup{hypcap=false}
 
@@ -2065,8 +2068,30 @@
             \end{figure}
 
             \subsection*{Key Files}
+                \begin{flushleft}
+                    \captionof{listing}{Server: \texttt{src/server.ts}}\label{lst:tenantbe-server}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{ts}{\detokenize{code/BachelorThesis_TenantBE/src/server.ts}}
+                \end{flushleft}
 
             \subsection*{Build and Runtime}
+                \begin{flushleft}
+                    \captionof{listing}{Dockerfile}\label{lst:tenantbe-dockerfile}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{docker}{\detokenize{code/BachelorThesis_TenantBE/Dockerfile}}
+                \end{flushleft}
 
             % \vspace{0.5\baselineskip}
             % \noindent\textit{Relevance:} rationale for including this code
