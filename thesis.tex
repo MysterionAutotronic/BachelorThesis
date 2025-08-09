@@ -2480,7 +2480,142 @@
                     ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/build/tenantFE.sh}}
                 \end{flushleft}
 
-            \subsection*{Cluster and Manifests}
+            \subsection*{Clusters}
+                \begin{listing}[H]
+                    \caption{Dashboard Cluster Manifest: \texttt{/k8s/cluster/kind-config.yaml}}\label{lst:dashboard-cluster}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{yaml}{\detokenize{code/BachelorThesis_Infra/k8s/cluster/kind-config.yaml}}
+                \end{listing}
+
+                \begin{listing}[H]
+                    \caption{Create Tenant Cluster Script: \texttt{/scripts/create-tenant-x-cluster.sh}}\label{lst:create-tenant-cluster}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/create-tenant-x-cluster.sh}}
+                \end{listing}
+
+            \subsection*{Deployment Manifests}
+                \begin{listing}[H]
+                    \caption{dashboardBE Manifest: \texttt{/k8s/deployments/dashboard-be.yaml}}\label{lst:dashboardBE-manifest}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{yaml}{\detokenize{code/BachelorThesis_Infra/k8s/deployments/dashboard-be.yaml}}
+                \end{listing}
+
+                \begin{flushleft}
+                    \captionof{listing}{dashboardFE Manifest: \texttt{/k8s/deployments/dashboard-fe.yaml}}\label{lst:dashboardFE-manifest}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{yaml}{\detokenize{code/BachelorThesis_Infra/k8s/deployments/dashboard-fe.yaml}}
+                \end{flushleft}
+
+                \begin{listing}[H]
+                    \caption{tenantBE Manifest: \texttt{/k8s/deployments/tenant-be.yaml}}\label{lst:tenantBE-manifest}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{yaml}{\detokenize{code/BachelorThesis_Infra/k8s/deployments/tenant-be.yaml}}
+                \end{listing}
+
+                \begin{flushleft}
+                    \captionof{listing}{tenantFE Manifest: \texttt{/k8s/deployments/tenant-fe.yaml}}\label{lst:tenantFE-manifest}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{yaml}{\detokenize{code/BachelorThesis_Infra/k8s/deployments/tenant-fe.yaml}}
+                \end{flushleft}
+
+                \begin{listing}[H]
+                    \caption{Debug Pod Manifest: \texttt{/k8s/deployments/debug.yaml}}\label{lst:debug-pod-manifest}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{yaml}{\detokenize{code/BachelorThesis_Infra/k8s/deployments/debug.yaml}}
+                \end{listing}
+
+            \subsection*{Workspaces}
+                \begin{flushleft}
+                    \captionof{listing}{Create Dashboard Workspace: \texttt{/scripts/create-dashboard-workspace.sh}}\label{lst:create-dashboard-workspace}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/create-dashboard-workspace.sh}}
+                \end{flushleft}
+
+                \begin{flushleft}
+                    \captionof{listing}{Create Tenant Workspace: \texttt{/scripts/create-tenant-x-workspace.sh}}\label{lst:create-tenant-workspace}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/create-tenant-x-workspace.sh}}
+                \end{flushleft}
+
+            \subsection*{CRDs}
+                \begin{flushleft}
+                    \captionof{listing}{Create Tenant CRD Script: \texttt{/scripts/CRDs/create-tenant-x-CRD.sh}}\label{lst:create-tenant-crd}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/CRDs/create-tenant-x-CRD.sh}}
+                \end{flushleft}
+
+            \subsection*{Ingress}
+                \begin{flushleft}
+                    \captionof{listing}{Dashboard Ingress: \texttt{/k8s/ingress/dashboard-ingress.yaml}}\label{lst:dashboard-ingress}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{yaml}{\detokenize{code/BachelorThesis_Infra/k8s/ingress/dashboard-ingress.yaml}}
+                \end{flushleft}
 
             \subsection*{Script Catalog (quick reference)}
 
