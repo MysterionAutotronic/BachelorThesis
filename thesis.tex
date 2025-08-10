@@ -47,6 +47,17 @@
 \usepackage[newfloat]{minted}
 \usepackage[varqu,scaled=0.95]{zi4}
 
+% summary macro for appendix
+\newcommand{\codesummary}[3]{%
+    \vspace{0.4\baselineskip}%
+    \noindent\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X@{}}
+    Why  & #1\\
+    What & #2\\
+    Role & #3\\
+    \end{tabularx}%
+    \vspace{0.2\baselineskip}%
+}
+
 % drop unicode chars from source files
 \DeclareUnicodeCharacter{1F680}{\texttt{<unicode-rocket>}}
 \DeclareUnicodeCharacter{274C}{\texttt{<unicode-cancel>}}
@@ -59,6 +70,7 @@
 \DeclareUnicodeCharacter{1F4C4}{\texttt{<unicode-page>}}
 \DeclareUnicodeCharacter{1F9EA}{\texttt{<unicode-test-tube>}}
 \DeclareUnicodeCharacter{1F9F9}{\texttt{<unicode-broom>}}
+\DeclareUnicodeCharacter{2795}{\texttt{<unicode-plus>}}
 \DeclareUnicodeCharacter{FE0F}{}
 
 % set up captions
@@ -1952,7 +1964,7 @@
             They have no dedicated appendix sections. \\
             Furthermore all unicode characters in code listings have been replaced with
             \texttt{<unicode-meaning>} to avoid encoding issues in the \gls{pdf}.
-
+            \\
             \begin{longtable}{@{}l l P{7.5cm}@{}}
                 \toprule
                 Repository & Appendix & Scope \\
@@ -2001,6 +2013,10 @@
                         frame=lines
                     ]{typescript}{\detokenize{code/BachelorThesis_TenantFE/tenant_fe/src/app/api/config/route.ts}}
                 \end{listing}
+                \codesummary
+                    {Work around browser \gls{cors} by calling the service server-side.}
+                    {Forwards a \texttt{GET} to \texttt{\detokenize{CONFIG_ENDPOINT}} read from environment variable.}
+                    {\gls{cors}-bridging proxy route.}
 
                 \begin{listing}[H]
                     \caption{API route: \texttt{src/app/api/crash/route.ts}}\label{lst:tenantfe-crash-route}
@@ -2013,6 +2029,10 @@
                         frame=lines
                     ]{typescript}{\detokenize{code/BachelorThesis_TenantFE/tenant_fe/src/app/api/crash/route.ts}}
                 \end{listing}
+                \codesummary
+                    {Work around browser \gls{cors} by calling the service server-side.}
+                    {Forwards a \texttt{GET} to \texttt{\detokenize{CRASH_ENDPOINT}} read from environment variable.}
+                    {\gls{cors}-bridging proxy route.}
 
                 % Pages and libs
                 \begin{flushleft}
@@ -2026,6 +2046,10 @@
                         frame=lines
                     ]{tsx}{\detokenize{code/BachelorThesis_TenantFE/tenant_fe/src/app/page.tsx}}
                 \end{flushleft}
+                \codesummary
+                    {Tenant landing page driven by runtime config. Includes a safe crash trigger for testing.}
+                    {Client component reads config via \texttt{useConfig} hook, formats the country with \texttt{Intl.DisplayNames}, conditionally lists products, renders address/about, and adds a footer button that calls \texttt{/crash} and alerts on success/failure.}
+                    {Presentation layer for the tenant frontend.}
 
                 \begin{listing}[H]
                     \caption{Config provider: \texttt{src/lib/ConfigProvider.tsx}}\label{lst:tenantfe-configprovider}
@@ -2038,6 +2062,10 @@
                         frame=lines
                     ]{tsx}{\detokenize{code/BachelorThesis_TenantFE/tenant_fe/src/lib/ConfigProvider.tsx}}
                 \end{listing}
+                \codesummary
+                    {Single source of truth for tenant runtime config. Consumed by root page.}
+                    {Defines a React context for \texttt{Config}, exposes \texttt{useConfig()} that throws if used outside \texttt{<ConfigProvider>}, and provides \texttt{cfg} to descendants.}
+                    {Configuration layer for the tenant frontend. Bridges the schema package to the \gls{ui} tree via React Context.}
             
                 \begin{listing}[H]
                     \caption{Layout: \texttt{src/app/layout.tsx}}\label{lst:tenantfe-layout}
@@ -2050,6 +2078,12 @@
                         frame=lines
                     ]{tsx}{\detokenize{code/BachelorThesis_TenantFE/tenant_fe/src/app/layout.tsx}}
                 \end{listing}
+                \codesummary
+                    {Ensure every page uses validated, fresh tenant config at runtime --- no stale build-time values.}
+                    {Sets \texttt{dynamic='force-dynamic'}, fetches \texttt{/config} (revalidating every 10 minutes), validates via \texttt{ConfigSchema}, wraps children in \texttt{<ConfigProvider>}, and defines page \texttt{metadata}.}
+                    {App composition root that bridges the config proxy to the \gls{ui} via React Context.}
+
+        \clearpage
 
             \subsection*{Build and Runtime}
                 \begin{flushleft}
@@ -2063,9 +2097,10 @@
                         frame=lines
                     ]{docker}{\detokenize{code/BachelorThesis_TenantFE/Dockerfile}}
                 \end{flushleft}
-
-            % \vspace{0.5\baselineskip}
-            % \noindent\textit{Relevance:} rationale for including this code
+                \codesummary
+                    {Reproducible, minimal image for the tenant \gls{ui}. Reduced attack surface and env-specific endpoints baked at build time.}
+                    {Multi-stage build (\texttt{deps}, \texttt{builder}, \texttt{runner}). Installs deps from a lockfile, sets \texttt{\detokenize{CONFIG_ENDPOINT}}/\texttt{\detokenize{CRASH_ENDPOINT}} via build args, builds Next.js standalone, copies \texttt{.next/standalone} and \texttt{.next/static}, runs as non-root \texttt{nextjs} on port 3000 via \texttt{server.js}.}
+                    {Container artifact of the Tenant \gls{fe}. Deployed in the tenant Cluster.}
 
         \clearpage
 
@@ -2082,6 +2117,8 @@
                 \caption{TenantBE directory tree (trimmed)}\label{fig:tenantbe-tree}
             \end{figure}
 
+        \clearpage
+
             \subsection*{Key Files}
                 \begin{flushleft}
                     \captionof{listing}{Server: \texttt{src/server.ts}}\label{lst:tenantbe-server}
@@ -2094,6 +2131,12 @@
                         frame=lines
                     ]{ts}{\detokenize{code/BachelorThesis_TenantBE/src/server.ts}}
                 \end{flushleft}
+                \codesummary
+                    {Stable config source for the Tenant \gls{ui} plus a controlled crash hook to test failure handling and orchestration.}
+                    {Express app with \gls{json} parsing.\@\texttt{GET /config} reads \texttt{data/config.json}, parses and caches it via \texttt{node-cache} (TTL 24h).\@\texttt{GET /crash} exits the process. Listens on \texttt{PORT} (default 3000).}
+                    {Tenant backend microservice exposing a config \gls{api} and a chaos hook. Consumed by the \gls{fe} through its server-side proxy. Managed by the platform for restarts.}
+
+        \clearpage
 
             \subsection*{Build and Runtime}
                 \begin{flushleft}
@@ -2107,9 +2150,10 @@
                         frame=lines
                     ]{docker}{\detokenize{code/BachelorThesis_TenantBE/Dockerfile}}
                 \end{flushleft}
-
-            % \vspace{0.5\baselineskip}
-            % \noindent\textit{Relevance:} rationale for including this code
+                \codesummary
+                    {Reproducible, minimal container build for the tenant \gls{be} with configurable config injection.}
+                    {Two-stage Node 20 Alpine image: installs prod deps + TypeScript, compiles \gls{ts} to \gls{js}, copies artifacts. Embeds config via \texttt{ARG CONFIG\_PATH} (ends up at \texttt{/app/config.json}), runs \texttt{node dist/server.js} on port 3000.}
+                    {Deployable image for the Tenant backend \gls{api}. Enables tenant-specific configuration at build time and clean separation of build/runtime layers.}
 
         \clearpage
 
@@ -2127,6 +2171,8 @@
                     \caption{ConfigSchema directory tree (trimmed)}\label{fig:configschema-tree}
                 \end{figure}
 
+        \clearpage
+
             \subsection*{Key Files}
                 \begin{flushleft}
                     \captionof{listing}{Index: \texttt{src/index.ts}}\label{lst:configschema-index}
@@ -2139,6 +2185,12 @@
                         frame=lines
                     ]{ts}{\detokenize{code/BachelorThesis_ConfigSchema/src/index.ts}}
                 \end{flushleft}
+                \codesummary
+                    {Single source of truth for tenant config. Prevents malformed data from reaching \gls{ui} or \gls{api}.}
+                    {Defines \texttt{zod} schema and enforces formats. Exports inferred \gls{ts} types.}
+                    {Shared contract used for runtime validation of tenant configuration. Ensures all components agree on the structure and types of \texttt{config.json}.}
+
+        \clearpage
 
                 \begin{flushleft}
                     \captionof{listing}{Index test: \texttt{src/index.test.ts}}\label{lst:configschema-index-test}
@@ -2151,6 +2203,12 @@
                         frame=lines
                     ]{ts}{\detokenize{code/BachelorThesis_ConfigSchema/tests/index.test.ts}}
                 \end{flushleft}
+                \codesummary
+                    {Test to verify the schema is valid and matches the expected structure.}
+                    {Vitest suite for \texttt{ConfigSchema}: accepts a valid sample, rejects bad ZIP code, empty \texttt{products}, and missing \texttt{companyName}. Asserts zod error paths.}
+                    {\gls{ci} guardrail for \gls{fe}/\gls{be} compatibility, keeps the schema stable across services.}
+
+        \clearpage
 
             \subsection*{Build and Runtime}
                 \begin{listing}[H]
@@ -2164,9 +2222,10 @@
                         frame=lines
                     ]{json}{\detokenize{code/BachelorThesis_ConfigSchema/tsconfig.build.json}}
                 \end{listing}
-
-            % \vspace{0.5\baselineskip}
-            % \noindent\textit{Relevance:} rationale for including this code
+                \codesummary
+                    {Publishable package includes usable types for consumers.}
+                    {\gls{ts} build config that emits only \texttt{.d.ts} from \texttt{src} (Node module resolution, synthetic default imports).}
+                    {Enables \gls{fe}/\gls{be} to import the shared schema’s types via \gls{npm} without compiling \gls{ts}.}
 
         \clearpage
 
@@ -2184,6 +2243,8 @@
                     \caption{DashboardFE directory tree (trimmed)}\label{fig:dashboardfe-tree}
                 \end{figure}
 
+        \clearpage
+
             \subsection*{Key Files}
                 \begin{flushleft}
                     \captionof{listing}{API route: \texttt{src/app/api/config}}\label{lst:dashboardfe-api-config}
@@ -2196,6 +2257,12 @@
                         frame=lines
                     ]{ts}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/app/api/config/route.ts}}
                 \end{flushleft}
+                \codesummary
+                    {Server-side CORS bypass and security boundary for config changes.}
+                    {Proxies a POST to \texttt{\detokenize{CONFIG_ENDPOINT}} with body and \texttt{user} header. Preserves status/\texttt{content-type}, parses \gls{json} when applicable, and sets \texttt{Cache-Control: no-store}.}
+                    {\gls{cors}-bridging proxy route.}
+
+        \clearpage
 
                 \begin{listing}[H]
                     \caption{Root page: \texttt{src/app/page.tsx}}\label{lst:dashboardfe-root-page}
@@ -2208,6 +2275,10 @@
                         frame=lines
                     ]{tsx}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/app/page.tsx}}
                 \end{listing}
+                \codesummary
+                    {Redirects to the login page if no user is authenticated.}
+                    {Fetches the session server-side; if absent calls \texttt{redirect('/login')}, otherwise renders a welcome and \texttt{DashboardButton}.}% chktex 36
+                    {Entry controller for the dashboard \gls{fe}, gating access and routing authenticated users.}
 
                 \begin{listing}[H]
                     \caption{Layout: \texttt{src/app/layout.tsx}}\label{lst:dashboardfe-layout}
@@ -2220,6 +2291,12 @@
                         frame=lines
                     ]{tsx}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/app/layout.tsx}}
                 \end{listing}
+                    \codesummary
+                        {Serves as root \gls{dom} container for the application.}
+                        {Sets metadata and renders children.}
+                        {Framework-level layout.}
+
+        \clearpage
 
                 \begin{listing}[H]
                     \caption{Dashboard page: \texttt{src/app/dashboard/page.tsx}}\label{lst:dashboardfe-dashboard-page}
@@ -2232,6 +2309,10 @@
                         frame=lines
                     ]{tsx}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/app/dashboard/page.tsx}}
                 \end{listing}
+                \codesummary
+                    {Renders the \texttt{ConfigForm} for authenticated users.}
+                    {Checks session on the server, redirects unauthenticated users to \texttt{/login} and renders \texttt{ConfigForm} for the current \texttt{session.user}.}
+                    {Auth wrapper component for the \texttt{ConfigForm}.}
 
                 \begin{listing}[H]
                     \caption{Login page: \texttt{src/app/login/page.tsx}}\label{lst:dashboardfe-login-page}
@@ -2244,6 +2325,10 @@
                         frame=lines
                     ]{tsx}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/app/login/page.tsx}}
                 \end{listing}
+                \codesummary
+                    {Provides the entry point for authentication in the dashboard \gls{fe}.}
+                    {Renders the \texttt{LoginForm} component inside a centered layout.}
+                    {\gls{ui} endpoint for the auth flow. Separates page shell from the actual login logic handled by \texttt{LoginForm} and the auth layer.}
 
                 \begin{listing}[H]
                     \caption{Login action: \texttt{src/app/login/actions.ts}}\label{lst:dashboardfe-login-action}
@@ -2256,6 +2341,12 @@
                         frame=lines
                     ]{ts}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/app/login/actions.ts}}
                 \end{listing}
+                \codesummary
+                    {Implements the actual login step by creating a session cookie.}
+                    {Reads \texttt{username} from form data. If missing, returns an error. Otherwise sets an \gls{http}-only \texttt{user} cookie (24h) and redirects to \texttt{/}.}
+                    {Auth server action invoked by \texttt{LoginForm}. Bootstraps the session state used across the dashboard \gls{fe}.}
+
+        \clearpage
 
                 \begin{flushleft}
                     \captionof{listing}{Config form component: \texttt{src/components/ConfigForm.tsx}}\label{lst:dashboardfe-config-form}
@@ -2268,6 +2359,10 @@
                         frame=lines
                     ]{tsx}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/components/ConfigForm.tsx}}
                 \end{flushleft}
+                \codesummary
+                    {Core \gls{ui} component for authoring tenant configuration. Validates on the client side to prevent bad data and reduce backend failures.}
+                    {Manages form state, adds product fields dynamically, cleans + validates with \texttt{ConfigSchema}, then POSTs the config (with \texttt{user} header) to \texttt{/api/config}. Shows saving/success/error status.}
+                    {Dashboard \gls{fe} form component. Feeds validated tenant config to the backend through the proxy route, bridging admin input to persisted configuration.}
 
                 \begin{listing}[H]
                     \caption{Dashboard button component: \texttt{src/components/DashboardButton.tsx}}\label{lst:dashboardfe-dashboard-button}
@@ -2280,6 +2375,10 @@
                         frame=lines
                     ]{tsx}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/components/DashboardButton.tsx}}
                 \end{listing}
+                \codesummary
+                    {Button navigating to the dashboard page.}
+                    {Navigates to \texttt{/dashboard} via Next.js \texttt{useRouter()}.}% chktex 36
+                    {Entry point for the form.}
 
                 \begin{listing}[H]
                     \caption{Login form component: \texttt{src/components/LoginForm.tsx}}\label{lst:dashboardfe-login-form}
@@ -2292,6 +2391,12 @@
                         frame=lines
                     ]{tsx}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/components/LoginForm.tsx}}
                 \end{listing}
+                \codesummary
+                    {Entry point for signing in.}
+                    {Client form builds \texttt{FormData} and calls server action \texttt{login} via \texttt{useTransition}}
+                    {Authentication \gls{ui}.}
+
+        \clearpage
 
                 \begin{listing}[H]
                     \caption{Auth lib: \texttt{src/lib/auth.ts}}\label{lst:dashboardfe-auth-lib}
@@ -2304,6 +2409,12 @@
                         frame=lines
                     ]{ts}{\detokenize{code/BachelorThesis_DashboardFE/dashboard_fe/src/lib/auth.ts}}
                 \end{listing}
+                \codesummary
+                    {Single source of truth for auth state on the server.}
+                    {\texttt{getSession()} reads the \texttt{user} cookie via \texttt{cookies()} and returns a session or \texttt{null}.\@\texttt{logout()} deletes the cookie.}% chktex 36
+                    {Authentication helper in the dashboard \gls{fe}. Enables server components to enforce login.}
+
+        \clearpage
 
             \subsection*{Build and Runtime}
                 \begin{flushleft}
@@ -2317,9 +2428,10 @@
                         frame=lines
                     ]{docker}{\detokenize{code/BachelorThesis_DashboardFE/Dockerfile}}
                 \end{flushleft}
-
-            % \vspace{0.5\baselineskip}
-            % \noindent\textit{Relevance:} rationale for including this code
+                \codesummary
+                    {Containerized build for the dashboard \gls{fe} with minimal attack surface and environment-specific endpoints baked at build time.}
+                    {Multi-stage build: installs deps, builds Next.js with \texttt{\detokenize{CONFIG_ENDPOINT}} via \texttt{ARG}/\texttt{ENV}, copies \texttt{.next/standalone} and static assets, runs as non-root on port~3000.}
+                    {Deployment artifact for the Dashboard Frontend.}
 
         \clearpage
 
@@ -2412,7 +2524,7 @@
                     \bottomrule
                 \end{tabularx}
 
-            \subsection*{Simplified End to End Workflow}
+            \subsection*{Simplified Deployment Workflow}
                 \begin{enumerate}
                     \item \textbf{Bootstrap tools} (kubectl, krew, plugins, kind, etc.): \\
                             \texttt{\detokenize{scripts/install-deps.sh}}, \\
@@ -2429,6 +2541,8 @@
                     \item \textbf{Create workspaces (creates clusters in the process)}: \\
                             \texttt{\detokenize{scripts/create-dashboard-workspace.sh}}, \\
                             \texttt{\detokenize{scripts/create-tenant-x-workspace.sh}}.
+                    \item \textbf{Create CRDs}: \\
+                            \texttt{\detokenize{scripts/CRDs/create-tenant-x-CRD.sh}}.
                 \end{enumerate}
 
             \subsection*{Build and Images}
@@ -2668,9 +2782,6 @@
                 \end{listing}
 
             \subsection*{Script Catalog (quick reference)}
-
-
-            \subsection*{Deployment Flow (at a glance)}
 
             % \vspace{0.5\baselineskip}
             % \noindent\textit{Relevance:} rationale for including this code
