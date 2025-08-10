@@ -2516,6 +2516,8 @@
                     \captionof{figure}{Infra directory tree (trimmed)}\label{fig:infra-tree}
                 \end{flushleft}
 
+        \clearpage
+
             \subsection*{Layout}
                 \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.22\textwidth} X >{\raggedright\arraybackslash}p{0.34\textwidth}@{}}
                     \toprule
@@ -2534,6 +2536,8 @@
                     Split into \texttt{\detokenize{build/}} and task-specific scripts \\
                     \bottomrule
                 \end{tabularx}
+
+        \clearpage
 
             \subsection*{Simplified Deployment Workflow}
                 \begin{enumerate}
@@ -2556,6 +2560,8 @@
                             \texttt{\detokenize{scripts/CRDs/create-tenant-x-CRD.sh}}.
                 \end{enumerate}
 
+        \clearpage
+
             \subsection*{Build and Images}
                 \begin{listing}[H]
                     \caption{Build dashboardBE: \texttt{/scripts/build/dashboardBE.sh}}\label{lst:build-dashboardBE}
@@ -2568,6 +2574,12 @@
                         frame=lines
                     ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/build/dashboardBE.sh}}
                 \end{listing}
+                \codesummary
+                    {One-command, reproducible container build for the dashboard \gls{be}}
+                    {Bash script building the dashboard \gls{be} image.}
+                    {Build artifact producer. Generates the image consumed by the Kubernetes deployment.}
+
+        \clearpage
 
                 \begin{flushleft}
                     \captionof{listing}{Build dashboardFE:\@\texttt{/scripts/build/dashboardFE.sh}}\label{lst:build-dashboardFE}
@@ -2580,9 +2592,15 @@
                         frame=lines
                     ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/build/dashboardFE.sh}}
                 \end{flushleft}
+                \codesummary
+                    {Parameterized, reproducible build for the Dashboard Frontend. Binds the \gls{fe} to the correct backend at build time.}
+                    {Bash script that requires and \gls{api} \gls{url} as build argument. Builds the \gls{fe}.}
+                    {Produces the frontend build artifact for the dashboard application.}
 
-                \begin{listing}[H]
-                    \caption{Build tenantBE:\@\texttt{/scripts/build/tenantBE.sh}}\label{lst:build-tenantBE}
+        \clearpage
+
+                \begin{flushleft}
+                    \captionof{listing}{Build tenantBE:\@\texttt{/scripts/build/tenantBE.sh}}\label{lst:build-tenantBE}
                     \inputminted[
                         fontsize=\small,
                         linenos,
@@ -2591,7 +2609,13 @@
                         tabsize=2,
                         frame=lines
                     ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/build/tenantBE.sh}}
-                \end{listing}
+                \end{flushleft}
+                \codesummary
+                    {Reproducible tenant backend build with a known config.}
+                    {Copies \texttt{config.example.json} into the build context as \texttt{temp.config.json}, builds the image, then deletes the temp file. Builds the tenant \gls{be} image.}
+                    {Infra build script for the tenant backend. Takes \texttt{TENANT\_ID} as argument. Produces the container consumed by the cluster with the config baked in.}
+
+        \clearpage
 
                 \begin{flushleft}
                     \captionof{listing}{Build tenantFE:\@\texttt{/scripts/build/tenantFE.sh}}\label{lst:build-tenantFE}
@@ -2604,6 +2628,12 @@
                         frame=lines
                     ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/build/tenantFE.sh}}
                 \end{flushleft}
+                \codesummary
+                    {Produces a per-tenant Frontend image with the correct backend endpoints baked in.}
+                    {Takes \texttt{TENANT\_ID} and \texttt{TENANT\_BE\_URL} as arguments, builds the tenant \gls{fe} image with the correct backend endpoint.}
+                    {Creates the deployable \gls{fe} artifact bound to its tenant’s backend service.}
+
+        \clearpage
 
             \subsection*{Clusters}
                 \begin{listing}[H]
@@ -2617,6 +2647,12 @@
                         frame=lines
                     ]{yaml}{\detokenize{code/BachelorThesis_Infra/k8s/cluster/kind-config.yaml}}
                 \end{listing}
+                \codesummary
+                    {Manifest for the dashboard cluster.}
+                    {Maps container ports.}
+                    {Runtime for the dashboard stack.}
+
+        \clearpage
 
                 \begin{listing}[H]
                     \caption{Create Tenant Cluster Script: \texttt{/scripts/create-tenant-x-cluster.sh}}\label{lst:create-tenant-cluster}
@@ -2629,6 +2665,10 @@
                         frame=lines
                     ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/create-tenant-x-cluster.sh}}
                 \end{listing}
+                \codesummary
+                    {Create an isolated per-tenant cluster with the provided manifest and the \texttt{TENANT\_ID} as argument.}
+                    {Maps container ports. Makes the manifest dynamic.}
+                    {Runtime for the tenant stack.}
 
             \subsection*{Deployment Manifests}
                 \begin{listing}[H]
