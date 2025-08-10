@@ -1928,7 +1928,7 @@
             built-in metric is \enquote{good enough} and avoids adding too much complexity out of
             the thesis scope.
 
-            \cleardoublepage
+            \clearpage
 
         \subsection[Monitoring and Logging]{Monitoring and Logging (Prometheus, Grafana)}\label{subsec:monitoring}
 
@@ -2541,7 +2541,7 @@
 
             \subsection*{Simplified Deployment Workflow}
                 \begin{enumerate}
-                    \item \textbf{Bootstrap tools} (kubectl, krew, plugins, kind, etc.): \\
+                    \item \textbf{Bootstrap tools} (kubectl, krew, plugins, \gls{kind}, etc.): \\
                             \texttt{\detokenize{scripts/install-deps.sh}}, \\
                             \texttt{\detokenize{scripts/clone-repos.sh}}, \\
                             \texttt{\detokenize{scripts/setup-kcp.sh}}, \\
@@ -2773,8 +2773,8 @@
                 \end{flushleft}
                 \codesummary
                     {One-shot bootstrap for the dashboard control plane, so anyone can reproduce the full setup quickly and consistently.}
-                    {Exports plugin paths, creates \gls{kcp} workspaces (:root, dashboard, tenants), spins up a kind cluster, builds/loads \gls{fe} + \gls{be} images, applies deployments / services, grants \gls{rbac}, generates+applies the \gls{tmc} syncer, binds compute, and applies standard APIBindings.}
-                    {Provisioning glue between control plane (\gls{kcp} workspaces) and data plane (kind). It installs and wires the dashboard stack that operators use to manage tenant configs.}
+                    {Exports plugin paths, creates \gls{kcp} workspaces (:root, dashboard, tenants), spins up a \gls{kind} cluster, builds/loads \gls{fe} + \gls{be} images, applies deployments / services, grants \gls{rbac}, generates+applies the \gls{tmc} syncer, binds compute, and applies standard APIBindings.}
+                    {Provisioning glue between control plane (\gls{kcp} workspaces) and data plane (\gls{kind}). It installs and wires the dashboard stack that operators use to manage tenant configs.}
 
                 \begin{flushleft}
                     \captionof{listing}{Create Tenant Workspace: \texttt{/scripts/create-tenant-x-workspace.sh}}\label{lst:create-tenant-workspace}
@@ -2865,7 +2865,7 @@
                 \codesummary
                     {Enable local name resolution for vanity domains during development without setting up external \gls{dns}.}
                     {Appends \texttt{IP HOSTNAME} pairs to \texttt{/etc/hosts} if missing, handling multiple hosts and skipping duplicates (idempotent).}
-                    {Local networking shim so dashboard and \gls{api} hostnames resolve to the kind node / ingress \gls{ip} on the developer machine.}
+                    {Local networking shim so dashboard and \gls{api} hostnames resolve to the \gls{kind} node / ingress \gls{ip} on the developer machine.}
 
         \clearpage
 
@@ -2886,7 +2886,7 @@
                     {Cleanup utility to restore the machine's default name resolution outside the dev environment.}
 
                 \begin{listing}[H]
-                    \caption{Restore kind context script: \texttt{/scripts/restore-kind-context}}\label{lst:restore-kind-context}
+                    \caption{Restore \gls{kind} context script: \texttt{/scripts/restore-kind-context}}\label{lst:restore-kind-context}
                     \inputminted[
                         fontsize=\small,
                         linenos,
@@ -2898,7 +2898,7 @@
                 \end{listing}
                 \codesummary
                     {Restore \texttt{kubectl} access to the dev clusters after context loss.}
-                    {Runs \texttt{kind export kubeconfig} for \texttt{dashboard} and \texttt{tenant-1}, merging credentials into the active kubeconfig.}
+                    {Runs \texttt{\gls{kind} export kubeconfig} for \texttt{dashboard} and \texttt{tenant-1}, merging credentials into the active kubeconfig.}
                     {Local ops helper to rehydrate control-plane and tenant cluster contexts.}
 
         \clearpage
