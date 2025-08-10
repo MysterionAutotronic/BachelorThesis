@@ -2449,6 +2449,8 @@
                 \caption{DashboardBE directory tree (trimmed)}\label{fig:dashboardbe-tree}
             \end{figure}
 
+        \clearpage
+
             \subsection*{Key Files}
                 \begin{flushleft}
                     \captionof{listing}{Server: \texttt{src/server.ts}}\label{lst:dashboardbe-server}
@@ -2461,6 +2463,10 @@
                         frame=lines
                     ]{ts}{\detokenize{code/BachelorThesis_DashboardBE/src/server.ts}}
                 \end{flushleft}
+                \codesummary
+                    {Central write path for tenant config. Validates and persists admin edits safely.}
+                    {Express app with \gls{cors} policy for the dashboard \gls{fe}.\@\texttt{POST /config} reads \texttt{user} header, validates body via \texttt{ConfigSchema}, ensures \texttt{data/<user>/} exists, writes \texttt{config.json}, returns 200/4xx/5xx, listens on \texttt{PORT}.}
+                    {Dashboard backend service. Persists tenant configuration to make it available to the \gls{crd}.}
 
                 \begin{listing}[H]
                     \caption{Redis: \texttt{src/lib/redis.ts}}\label{lst:dashboardbe-redis}
@@ -2473,6 +2479,10 @@
                         frame=lines
                     ]{ts}{\detokenize{code/BachelorThesis_DashboardBE/src/redis.ts}}
                 \end{listing}
+                \codesummary
+                    {Fast, central lookup of tenant -> tenant cluster \gls{ip} for routing and ops.}
+                    {Initializes an \texttt{ioredis} client (env \texttt{REDIS\_HOST}/\texttt{REDIS\_PORT}, defaults to \texttt{redis:6379}). Stores per-user \glspl{ip} in hash \texttt{users} as \gls{json} via \texttt{setUserIp}/\texttt{getUserIp}.}
+                    {Infrastructure state cache used by frontend to provide the \gls{ip}.}
 
             \subsection*{Build and Runtime}
                 \begin{listing}[H]
@@ -2486,9 +2496,10 @@
                         frame=lines
                     ]{docker}{\detokenize{code/BachelorThesis_DashboardBE/Dockerfile}}
                 \end{listing}
-            
-            % \vspace{0.5\baselineskip}
-            % \noindent\textit{Relevance:} rationale for including this code
+                \codesummary
+                    {Reproducible build and slim runtime image for the Dashboard backend.}
+                    {Two-stage Docker build on \texttt{node:20-alpine}: runs \texttt{npm ci}, compiles \gls{ts} via \texttt{npx tsc}, copies \texttt{dist} and \texttt{node\_modules} into a minimal runtime, sets \texttt{NODE\_ENV=production}, \texttt{PORT=8080}, and starts \texttt{node dist/server.js}.}
+                    {Deployment artifact for the Dashboard backend.}
         
         \clearpage
 
