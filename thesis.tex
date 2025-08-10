@@ -2682,6 +2682,12 @@
                         frame=lines
                     ]{yaml}{\detokenize{code/BachelorThesis_Infra/k8s/deployments/dashboard-be.yaml}}
                 \end{listing}
+                \codesummary
+                    {Deploys and exposes the dashboard backend.}
+                    {Creates a \texttt{Deployment} running \texttt{dashboard-be:latest} with \texttt{imagePullPolicy: Never} and a \texttt{Service} (NodePort) exposing port 80 -> targetPort 8080.}
+                    {Integrates the dashboard backend into the cluster.}
+
+        \clearpage
 
                 \begin{flushleft}
                     \captionof{listing}{dashboardFE Manifest: \texttt{/k8s/deployments/dashboard-fe.yaml}}\label{lst:dashboardFE-manifest}
@@ -2694,6 +2700,10 @@
                         frame=lines
                     ]{yaml}{\detokenize{code/BachelorThesis_Infra/k8s/deployments/dashboard-fe.yaml}}
                 \end{flushleft}
+                \codesummary
+                    {Deploys and exposes the dashboard frontend.}
+                    {Creates a \texttt{Deployment} of the Next.js app on port 3000 and a NodePort \texttt{Service} (80 -> 3000); sets \texttt{CONFIG\_ENDPOINT} to \texttt{http://dashboard-be.default.svc.cluster.local/config}.}
+                    {Integrates the dashboard frontend into the cluster.}
 
                 \begin{listing}[H]
                     \caption{tenantBE Manifest: \texttt{/k8s/deployments/tenant-be.yaml}}\label{lst:tenantBE-manifest}
@@ -2706,6 +2716,12 @@
                         frame=lines
                     ]{yaml}{\detokenize{code/BachelorThesis_Infra/k8s/deployments/tenant-be.yaml}}
                 \end{listing}
+                \codesummary
+                    {Deploys and exposes the tenant backend.}
+                    {Deploys \texttt{tenant-be} on port 8080 and publishes it via a NodePort \texttt{Service} (80 -> 8080).}
+                    {Integrates the tenant backend into the cluster.}
+
+        \clearpage
 
                 \begin{flushleft}
                     \captionof{listing}{tenantFE Manifest: \texttt{/k8s/deployments/tenant-fe.yaml}}\label{lst:tenantFE-manifest}
@@ -2718,6 +2734,12 @@
                         frame=lines
                     ]{yaml}{\detokenize{code/BachelorThesis_Infra/k8s/deployments/tenant-fe.yaml}}
                 \end{flushleft}
+                \codesummary
+                    {Deploys and exposes the tenant frontend.}
+                    {Deploys \texttt{tenant-fe} on port 3000 and publishes it via a NodePort \texttt{Service} (80 -> 3000). Injects backend \glspl{url} via \texttt{NEXT\_PUBLIC\_CONFIG\_ENDPOINT} and \texttt{NEXT\_PUBLIC\_CRASH\_ENDPOINT} at runtime.}
+                    {Integrates the tenant frontend into the cluster.}
+
+        \clearpage
 
                 \begin{listing}[H]
                     \caption{Debug Pod Manifest: \texttt{/k8s/deployments/debug.yaml}}\label{lst:debug-pod-manifest}
@@ -2730,6 +2752,12 @@
                         frame=lines
                     ]{yaml}{\detokenize{code/BachelorThesis_Infra/k8s/deployments/debug.yaml}}
                 \end{listing}
+                \codesummary
+                    {On-cluster troubleshooting without bundling tools into app images.}
+                    {Starts a throwaway Netshoot Pod that sleeps forever with TTY+stdin.}
+                    {Operational helper to debug network/DNS/service reachability inside the cluster.}
+
+        \clearpage
 
             \subsection*{Workspaces}
                 \begin{flushleft}
@@ -2743,6 +2771,10 @@
                         frame=lines
                     ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/create-dashboard-workspace.sh}}
                 \end{flushleft}
+                \codesummary
+                    {One-shot bootstrap for the dashboard control plane, so anyone can reproduce the full setup quickly and consistently.}
+                    {Exports plugin paths, creates \gls{kcp} workspaces (:root, dashboard, tenants), spins up a kind cluster, builds/loads \gls{fe} + \gls{be} images, applies deployments / services, grants \gls{rbac}, generates+applies the \gls{tmc} syncer, binds compute, and applies standard APIBindings.}
+                    {Provisioning glue between control plane (\gls{kcp} workspaces) and data plane (kind). It installs and wires the dashboard stack that operators use to manage tenant configs.}
 
                 \begin{flushleft}
                     \captionof{listing}{Create Tenant Workspace: \texttt{/scripts/create-tenant-x-workspace.sh}}\label{lst:create-tenant-workspace}
@@ -2755,6 +2787,12 @@
                         frame=lines
                     ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/create-tenant-x-workspace.sh}}
                 \end{flushleft}
+                \codesummary
+                    {One-command, repeatable provisioning of a new tenant so onboarding is fast and consistent.}
+                    {Validates the tenant id, creates a \gls{kcp} workspace under\@:root:tenants, spins up a per-tenant kind cluster, builds and loads \gls{fe} / \gls{be} images, applies deployments, creates the tenant-specific \gls{crd}, and assigns \gls{rbac}.}
+                    {Tenant bootstrap orchestrator. Wires the control plane to the tenant's runtime cluster and installs the per-tenant app stack in isolation.}
+
+        \clearpage
 
             \subsection*{CRDs}
                 \begin{flushleft}
@@ -2768,6 +2806,11 @@
                         frame=lines
                     ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/CRDs/create-tenant-x-CRD.sh}}
                 \end{flushleft}
+                \codesummary
+                    {Enforce a typed, cluster-native contract for tenant configuration and make it consumable across workspaces in \gls{kcp}.}
+                    {Generates a namespaced \gls{crd} \texttt{TenantConfig} (schema mirrors the \gls{npm} \texttt{ConfigSchema}) and an \texttt{APIExport}. Writes both \gls{yaml} files under \texttt{k8s/CRDs/tenant-\textit{ID}-*.yaml}.}
+                    {Defines the source of truth for per-tenant config and publishes it via \gls{kcp} so other workspaces can bind and validate it.}
+        \clearpage
 
             \subsection*{Role Binding}
                 \begin{listing}[H]
@@ -2779,8 +2822,14 @@
                         breakanywhere,
                         tabsize=2,
                         frame=lines
-                    ]{bash}{\detokenize{code/BachelorThesis_Infra/k8s/roleBinding/tmc-role-binding.yaml}}
+                    ]{yaml}{\detokenize{code/BachelorThesis_Infra/k8s/roleBinding/tmc-role-binding.yaml}}
                 \end{listing}
+                \codesummary
+                    {Authorize the \gls{kcp} syncer to operate in the runtime cluster so compute binding can actually apply resources.}
+                    {Creates namespace \texttt{tmc-system}, ServiceAccount \texttt{kcp-syncer}, a broad \texttt{ClusterRole} over all resources, and binds that role.}
+                    {Gives the sync target \gls{rbac} to mirror \gls{k8s} objects between workspace and cluster (wildcard perms for prototype).}
+
+        \clearpage     
 
             \subsection*{Ingress}
                 \begin{flushleft}
@@ -2794,6 +2843,12 @@
                         frame=lines
                     ]{yaml}{\detokenize{code/BachelorThesis_Infra/k8s/ingress/dashboard-ingress.yaml}}
                 \end{flushleft}
+                \codesummary
+                    {Expose the dashboard UI and API via friendly local hostnames, mirroring production routing.}
+                    {Defines two \gls{k8s} Ingresses: \texttt{dashboard-fe-ingress} routes \texttt{dashboard.local} to Service \texttt{dashboard-fe}:80, \texttt{dashboard-be-ingress} routes \texttt{api.dashboard.local} to Service \texttt{dashboard-be}:80. Requires \texttt{ingress-nginx}.}
+                    {Provides stable edge entrypoints and decouples external \gls{dns} from in-cluster Service details.}
+
+        \clearpage
 
             \subsection*{Helpers}
                 \begin{listing}[H]
@@ -2807,6 +2862,12 @@
                         frame=lines
                     ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/add-to-hosts.sh}}
                 \end{listing}
+                \codesummary
+                    {Enable local name resolution for vanity domains during development without setting up external \gls{dns}.}
+                    {Appends \texttt{IP HOSTNAME} pairs to \texttt{/etc/hosts} if missing, handling multiple hosts and skipping duplicates (idempotent).}
+                    {Local networking shim so dashboard and \gls{api} hostnames resolve to the kind node / ingress \gls{ip} on the developer machine.}
+
+        \clearpage
 
                 \begin{listing}[H]
                     \caption{Cleanup Hosts Script: \texttt{/scripts/cleanup-hosts.sh}}\label{lst:cleanup-hosts}
@@ -2819,6 +2880,10 @@
                         frame=lines
                     ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/cleanup-hosts.sh}}
                 \end{listing}
+                \codesummary
+                    {Revert local \gls{dns} overrides to avoid stale / incorrect mappings after development.}
+                    {Deletes any \texttt{/etc/hosts} lines tagged with \texttt{\# added-by-script} using \texttt{sed}.}
+                    {Cleanup utility to restore the machine's default name resolution outside the dev environment.}
 
                 \begin{listing}[H]
                     \caption{Restore kind context script: \texttt{/scripts/restore-kind-context}}\label{lst:restore-kind-context}
@@ -2831,11 +2896,10 @@
                         frame=lines
                     ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/restore-kind-context.sh}}
                 \end{listing}
-
-            \subsection*{Script Catalog (quick reference)}
-
-            % \vspace{0.5\baselineskip}
-            % \noindent\textit{Relevance:} rationale for including this code
+                \codesummary
+                    {Restore \texttt{kubectl} access to the dev clusters after context loss.}
+                    {Runs \texttt{kind export kubeconfig} for \texttt{dashboard} and \texttt{tenant-1}, merging credentials into the active kubeconfig.}
+                    {Local ops helper to rehydrate control-plane and tenant cluster contexts.}
 
         \clearpage
 
