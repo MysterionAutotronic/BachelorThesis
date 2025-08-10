@@ -2528,11 +2528,11 @@
                     \texttt{\detokenize{config.example.json}} \\
                     \addlinespace
                     \texttt{\detokenize{k8s/}} &
-                    All Kubernetes and KCP artifacts (CRDs, RBAC, workspaces, deployments, ingress) &
+                    All Kubernetes and \gls{kcp} artifacts (\glspl{crd}, \gls{rbac}, workspaces, deployments, ingress) &
                     Subfolders by concern: \texttt{\detokenize{cluster/}}, \texttt{\detokenize{deployments/}}, \texttt{\detokenize{rbac/}}, \texttt{\detokenize{apibindings/}}, \texttt{\detokenize{kcp-crds/}}, \texttt{\detokenize{workspaces/}}, \texttt{\detokenize{ingress/}} \\
                     \addlinespace
                     \texttt{\detokenize{scripts/}} &
-                    Automation: setup, build, cluster+workspace creation, TMC bootstrap, utilities &
+                    Automation: setup, build, cluster+workspace creation, \gls{tmc} bootstrap, utilities &
                     Split into \texttt{\detokenize{build/}} and task-specific scripts \\
                     \bottomrule
                 \end{tabularx}
@@ -2550,13 +2550,13 @@
                             \texttt{\detokenize{scripts/path.sh}}, \\
                             \texttt{\detokenize{scripts/setup-tmc.sh}}, \\
                             \texttt{\detokenize{scripts/path.sh}}.
-                    \item \textbf{Start TMC-KCP (KCP)}: \\
+                    \item \textbf{Start \gls{tmc}-gls{kcp} (\gls{kcp})}: \\
                             \texttt{\detokenize{scripts/start-tmc-kcp.sh}}, \\
                             (\texttt{\detokenize{scripts/start-kcp.sh}}).
                     \item \textbf{Create workspaces (creates clusters in the process)}: \\
                             \texttt{\detokenize{scripts/create-dashboard-workspace.sh}}, \\
                             \texttt{\detokenize{scripts/create-tenant-x-workspace.sh}}.
-                    \item \textbf{Create CRDs}: \\
+                    \item \textbf{Create \glspl{crd}}: \\
                             \texttt{\detokenize{scripts/CRDs/create-tenant-x-CRD.sh}}.
                 \end{enumerate}
 
