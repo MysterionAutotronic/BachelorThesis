@@ -2055,13 +2055,83 @@
                 available in the tenant workspace.
                 The schema and its unit tests are shown in Appendix~\ref{app:configschema}.
 
+    \clearpage
+
         \subsection{Core Components}\label{subsec:coreComponents}
+            This section describes the four runtime services at a high level and their
+            responsibilities within the architecture.
+            Each of the sections below states the component's role and boundaries, its key
+            dependencies and the contracts it exposes.
+            Cross-cutting topics such as configuration, propagation with \glspl{crd} and
+            APIBindings, \gls{rbac}, networking and port mappings are treated separately
+            in~\ref{subsec:crossCuttingConcerns} and~\ref{subsec:challengesAndBugs}.
 
             \subsubsection{Tenant Frontend}\label{subsubsec:tenantFrontend}
+                The tenant frontend is a small Next.js (App Router) site that renders the tenant's
+                public page from the shared configuration and exposes a deliberate failure trigger
+                for the tenant backend for chaos testing.\\
+                The \texttt{layout.tsx} file fetches the tenant configuration from the tenant
+                backend's \texttt{/config} endpoint and passes it to the page component,
+                revalidating every ten minutes. 
+                It is depicted in~\autoref{lst:tenantfe-layout}.\\
+                The result is stored in a react context so the root page can access it without
+                fetching --- enabling \gls{ssr}.
+                The context provider is depicted in~\autoref{lst:tenantfe-configprovider}.\\
+                The root page uses this context and renders company details, proposition,
+                products etc.\@as shown in~\autoref{lst:tenantfe-page}.\\
+                Using \gls{isr} ensures that changes to the tenant's config become visible within
+                at most ten minutes without a full rebuild, while still serving static \gls{html}
+                between refreshes.\\
+                A \enquote{crash} button issues a request to the tenant \gls{api}'s \texttt{/crash}
+                endpoint to intentionally terminate that service.
+                This allows testing the backends recovery behavior.\\
+                The Dockerfile accepts the endpoint \glspl{url} as build arguments.
+                These are baked into the frontend as environment variables at build time.
+                It is shown under~\autoref{lst:tenantfe-dockerfile}.
 
             \subsubsection{Tenant API}\label{subsubsec:tenantAPI}
+                A minimal Node / Express service that exposes exactly two endpoints and serves as
+                the tenant's backend.\\
+                \texttt{/config} returns the tenant's configuration as a \gls{json} object.\\
+                \texttt{/crash} deliberately terminates the service using
+                \texttt{process.exit(1)} to support failure-injection experiments for evaluation.\\% chktex 36
+                The service reads a single \gls{json} file baked into the image at build time and
+                serves it via \texttt{/config}.
+                The intended design was to watch and fetch the latest config from the \gls{crd}
+                during runtime, so updates would flow through without a rebuild.
+                That integration did not work and is discussed in~\autoref{subsec:challengesAndBugs}.
+                Until then, the backend operates on the immutable file included during the image
+                build.
+                The \texttt{server.ts} is shown under~\autoref{lst:tenantbe-server}.\\
+                The dockerfile accepts a \texttt{CONFIG\_PATH} as build argument and copies the
+                referenced file into the image to make it available for the service.
+                This keeps the container self-contained.
+                The dockerfile is shown under~\autoref{lst:tenantbe-dockerfile}.
 
             \subsubsection{Dashboard Frontend}\label{subsubsec:dashboardFrontend}
+                A small Next.js application that provides a minimal login and a tenant-configuration
+                form.\\
+                The login page accepts a username (no password for simplicity during prototyping)
+                and uses a session cookie to keep track of the username.
+                This is a placeholder for actual authentication and just implemented to allow
+                associating a username with a tenant cluster later on.
+                The authentication logic is provided and handled by the login page, depicted
+                at~\autoref{lst:dashboardfe-login-page}, the login form, depicted
+                at~\autoref{lst:dashboardfe-login-form}, the login action, depicted
+                at~\autoref{lst:dashboardfe-login-action} and the auth lib, depicted
+                at~\autoref{lst:dashboardfe-auth-lib}.\\
+                The root page routes to the login page if no session cookie is present.
+                Otherwise it renders the form to create a new tenant or modify an existing one
+                (not part of the prototype due to issues discussed
+                in~\autoref{subsec:challengesAndBugs}).
+                The form is provided by the \texttt{ConfigForm} component, depicted
+                at~\autoref{lst:dashboardfe-config-form}.
+                It uses the zod schema to safely parse and validate the input and dynamically
+                adds input fields to add more products.
+                On success, the form data is posted to the dashboard backend as \gls{json}.\\
+                The dockerfile accepts the dashboard backend's \texttt{CONFIG\_ENDPOINT} as build
+                argument and sets it as an environment variable in the container.
+                The dockerfile is shown under~\autoref{lst:dashboardfe-dockerfile}.
 
             \subsubsection{Dashboard API}\label{subsubsec:dashboardAPI}
 
@@ -2070,6 +2140,8 @@
         \subsection{Infrastructure and Deployment}\label{subsec:infrastructureAndDeployment}
 
         \subsection{Challenges, Bugs and Fixes}\label{subsec:challengesAndBugs}
+
+            \subsubsection{CORS}\label{subsubsec:challengesCORS}
 
         \subsection{Deviations from Design}\label{subsec:deviationsFromDesign}
 
