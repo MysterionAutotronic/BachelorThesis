@@ -1923,12 +1923,43 @@
             the development process maintainable.
             Furthermore it aims to live inside the \gls{ts} ecosystem, simplifying the development
             process.
-            
-        \clearpage
+
+    \clearpage
 
     \section{Prototypical Implementation}\label{sec:prototype}
 
         \subsection{Purpose and Reading Guide}\label{subsec:purposeAndReadingGuide}
+            This chapter explains how the architecture described in
+            \autoref{subsec:architectureDesign} was turned into a working prototype.
+            It documents what was implemented, how each piece maps back to the design, and why
+            specific trade-offs were made.
+            The \gls{dod} for the prototype was one end-to-end tenant lifecycle as described in
+            the user journey \autoref{subsubsec:userJourney} with functional backends and frontends,
+            container images, \gls{k8s@gls} manifests and automation scripts.
+
+            \paragraph{How to read this chapter.}\label{par:howToReadThisChapter}
+                First, the path from design to code is outlined, followed by a description of the
+                environment to ensure a reproducible build.
+                Subsequent sections cover templates and schemas, the four core services
+                (tenant \gls{fe}/\gls{be}, dashboard \gls{fe}/\gls{be}), and cross-cutting concerns
+                (configuration via \gls{crd} and \gls{api}Binding, security/\gls{rbac}, networking, 
+                resource management).
+                The chapter then turns to infrastructure and deployment, challenges encountered,
+                deviations from the design, and limitations.
+                Where applicable, sections provide links to the appendix sections that contain the
+                corresponding code snippets.
+
+            \paragraph{Where the code lives.}\label{par:whereTheCodeLives}
+                All code artifacts are reproduced in the code appendices: B-G contain the directory
+                structure, key files, and selected code snippets for the core applications, the
+                configuration schema, and the infrastructure.
+                Appendix~A gives a quick map of repositories and their contents.
+                
+            \paragraph{Conventions.}\label{par:conventions}
+                File and directory names appear in \texttt{monospace}.
+                Source snippets are shown as \emph{listings} with line numbers.
+                Long listings may span multiple pages.
+                Figures are used for structure (e.g., directory trees).
 
         \subsection{From Design to Code}\label{subsec:fromDesignToCode}
 
