@@ -2257,7 +2257,74 @@
                 In managed layouts (\gls{eks}, \gls{gke}, \gls{aks}), the intended production
                 layout becomes trivial to enable without host-level changes.
 
+            \subsubsection{End-to-End Port Mapping}\label{subsubsec:e2eportmapping}
+                Accessing services via \texttt{NodePort} surfaced several mismatches across the
+                chain \emph{application $\rightarrow$ container $\rightarrow$ service $\rightarrow$
+                cluster-exposed port}.
+                The application listened on one port, the container image and deployment declared
+                another (\texttt{containerPort}), while the \texttt{Service} used a conflicting
+                \texttt{targetPort}/\texttt{port}, and the public \texttt{nodePort} finally exposed
+                yet another value.
+                The result was traffic black-holing that looked like \gls{cors} or network errors on
+                the surface.
+                Relevant manifests are listed in~\autoref{app:infra}.\\
+                A dedicated \emph{netshoot} pod (\autoref{lst:debug-pod-manifest}) was introduced to
+                probe connectivity from inside the cluster.
+                This quickly distinguished in-cluster routing issues from host access problems and
+                revealed which hop in the mapping was incorrect.\\
+                The mapping was normalized to the working version in~\autoref{app:infra}.
+                The debug container manifest was deliberately kept in the thesis, because it
+                outlines a easy to deploy best practice for debugging network issues in
+                \gls{k8s@gls}.
+
+            \subsubsection{Hostnames}\label{subsubsec:hostnames}
+                Consistent browser access to cluster services is achieved by mapping friendly
+                hostnames (e.g., \texttt{dashboard.local}) to a chosen \gls{ip} via
+                \texttt{/etc/hosts}.
+                Two small idempotent helpers implement this
+                (\autoref{lst:add-to-hosts} and~\autoref{lst:cleanup-hosts}).
+                This approach was aimed at easing local development and testing without having to
+                look up \glspl{ip} or ports permanently.\\
+                Therefore it is deliberately left in the thesis as a reproducible approach, that
+                turned out to be useful for local development.
+
             \subsubsection{KCP-TMC}\label{subsubsec:challengesKCPTMC}
+                The initial plan relied on \emph{gls{kcp}} to provision clusters in workspaces.
+                However a breaking change between \gls{kcp} \texttt{v0.19} and \texttt{v0.20}
+                invalidated that approach.
+                The change was made in 2023, however the breaking change was documented only in
+                the changelogs and the \gls{kcp} slack channel.
+                The stack was therefore pivoted to \emph{\gls{kcp}-gls{tmc}} mid development.
+                \gls{kcp}-\gls{tmc} itself is a plugin meant to provide syncing workspaces with
+                \textit{workloads} --- meaning \gls{k8s@gls} clusters that provide actual
+                computation tied to an older \gls{kcp} version of \texttt{v0.20} and is not actively
+                maintained by the \gls{kcp} team as of now.
+                The \texttt{start-kcp.sh} script in~\autoref{app:infra} that replaced the earlier
+                \texttt{start-kcp.sh} script reflects this pinning.\\
+                Bringing up the \gls{tmc} syncer required explicit \gls{rbac} permissions and
+                role bindings beyond the minimal examples available.
+                The \gls{tmc} documentation is confined to a single quick start guide in the
+                \texttt{README} file of the \texttt{contrib-tmc} repository that does not cover
+                steps required in the prototype.
+                Several iterations of try and error debugging were necessary before finding the
+                right syntax to apply the syncer and bind the cluster to the workspace.
+                However, even with a clean bootstrap, attempts to bind compute via
+                \texttt{kubectl tmc bind compute root:dashboard} as documented
+                in~\autoref{lst:create-dashboard-workspace} failed due to missing \gls{kcp}
+                \glspl{crd}.
+                Trying to apply these \glspl{crd} manually failed due to the resources being
+                protected as documented in~\autoref{app:docs}.\\
+                Because a compute binding could not be established under the pinned
+                \gls{kcp}-\gls{tmc} version, the design that depended on cross-workspace and more
+                importantly cross-cluster configuration via \gls{crd} could not be completed.
+                As an operational workaround, the configuration could be injected into the tenant's
+                \gls{be} image at build time, however this is out of scope for this thesis, which
+                explicitly aims to evaluate such an architecture using \gls{kcp}.\\
+                The implementation of the \gls{crd} that would have been used to inject the
+                configuration into the tenant cluster is shown in~\autoref{lst:create-tenant-crd}.\\
+                A possible workaround would include custom controllers implemented in Go to manage
+                the \gls{crd}, however this would have invalidated most of the implementation and
+                therefore required a complete redesign of the prototype.
 
         \subsection{Deviations from Design}\label{subsec:deviationsFromDesign}
 
