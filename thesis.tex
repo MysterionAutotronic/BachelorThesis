@@ -2213,7 +2213,49 @@
             to inform the evaluation and future work.
 
             \subsubsection{CORS}\label{subsubsec:challengesCORS}
-                
+                Browser backend calls failed with \gls{cors} errors (blocked preflight
+                \texttt{OPTIONS} and mismatched \texttt{Origin}).
+                The underlying cause was a divergence of hosts and ports between frontend
+                \glspl{url} and backend services.
+                Attempts to \enquote{open up} \gls{cors} on the backends and to normalize hosts via
+                ingress (as described in~\autoref{subsubsec:ingress}) still left inconsistent
+                origins during local \gls{kind} testing (multiple ports, per service hostnames),
+                so the browser refused the cross-origin requests.\\
+                The effective workaround was to route traffic through server-side Next.js handlers
+                under \texttt{/api}, so the browser sees a same-origin request and the \gls{fe}
+                service then proxies to the \gls{be}.
+                This avoids the browsers \gls{cors} checks entirely.
+                The proxy preserves method, headers, and body, forwards response status and headers,
+                and reads the backend base \gls{url} from an environment variable set at build and
+                run time.\\
+                The proxy handlers can be found in the appendix
+                under~\autoref{lst:tenantfe-config-route},~\autoref{lst:tenantfe-crash-route}
+                and~\autoref{lst:dashboardfe-api-config}.\\
+                This pattern centralizes auth/cookies and simplifies local development, but it hides
+                the browser's true origin from the backend, so any future direct browser to backend
+                path must reintroduce strict \gls{cors} and a stable host schema via a gateway or
+                ingress and possibly \gls{dns}.
+                Once the cluster ingress is finalized, the \gls{cors} proxy can be removed or
+                kept as a fallback for local development.
+
+            \subsubsection{Ingress}\label{subsubsec:ingress}
+                Declaring an nginx ingress in \gls{k8s@gls} is straightforward
+                (cf.~\autoref{lst:dashboard-ingress}).
+                The difficulty arose only on a Linux developer machine.
+                A typical ingress controller expects to serve on the standard \gls{http} and
+                \gls{https} ports \texttt{80} and \texttt{443}, which competes with existing services
+                and requires elevated privileges and system tweaks.
+                In practice, this turned local setup into \gls{os} plumbing rather than application
+                work, straying from the thesis scope.\\
+                Introducing MetalLB to gain \texttt{LoadBalancer} services on bare metal was
+                discarded due to additional network configuration, \gls{ip} range management and
+                operational overhead not central to the thesis.\\
+                Given these trade-offs, ingress was deferred for the local development.
+                The system instead relies on the server-side proxy pattern described
+                in~\autoref{subsubsec:challengesCORS} for direct component to component calls.
+                This keeps the development path simple and reproducible.
+                In managed layouts (\gls{eks}, \gls{gke}, \gls{aks}), the intended production
+                layout becomes trivial to enable without host-level changes.
 
             \subsubsection{KCP-TMC}\label{subsubsec:challengesKCPTMC}
 
