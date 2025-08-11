@@ -1954,14 +1954,33 @@
                 structure, key files, and selected code snippets for the core applications, the
                 configuration schema, and the infrastructure.
                 Appendix~A gives a quick map of repositories and their contents.
-                
+
             \paragraph{Conventions.}\label{par:conventions}
                 File and directory names appear in \texttt{monospace}.
                 Source snippets are shown as \emph{listings} with line numbers.
                 Long listings may span multiple pages.
                 Figures are used for structure (e.g., directory trees).
 
+    \clearpage
+
         \subsection{From Design to Code}\label{subsec:fromDesignToCode}
+            This subsection traces the concrete path from the architectural design to a working
+            system.
+            The implementation was structured as a sequence of vertical slices that each deliver
+            \gls{e2e} functionality, while continuously aligning with the multi-tenant architecture.
+
+            \paragraph{Repository and scaffold setup}
+                Separate repositories were created for each bounded component: tenant \gls{fe},
+                tenant \gls{be}, dashboard \gls{fe}, dashboard \gls{be}, the configuration schema,
+                and the infrastructure.
+                An overview and links to the repositories are listed in
+                Appendix~\ref{app:repos-overview}.
+                The concrete code is documented in
+                Appendices~\ref{app:tenantfe},~\ref{app:tenantbe},~\ref{app:dashboardfe},~\ref{app:dashboardbe},~\ref{app:configschema}, and~\ref{app:infra}.
+                Each service was initialized with a minimal, runnable skeleton including a
+                dockerfile.
+
+    \clearpage
 
         \subsection{Environment and Reproducibility}\label{subsec:environmentAndReproducibility}
 
