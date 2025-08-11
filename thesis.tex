@@ -2157,12 +2157,53 @@
                 Production hardening is discussed in~\autoref{subsec:limitationsAndRisks}.
 
         \subsection{Cross-cutting Concerns}\label{subsec:crossCuttingConcerns}
+            A single configuration contract (\autoref{app:configschema}) governs both build-time
+            creation and runtime use.
+            In the prototype, the dashboard \gls{api} validates configs and writes a versioned file
+            used as build context for tenant images (\autoref{app:dashboardbe}).
+            The intended runtime path, publishing the same structure as a versioned \gls{crd} and
+            importing it via \emph{APIBinding} during runtime, is defined
+            under~\autoref{lst:create-tenant-crd}.
+            Limitations and the resulting fallback possibilities are discussed
+            in~\autoref{subsec:challengesAndBugs}.\\
+            External access terminates at the dashboard ingress (\autoref{lst:dashboard-ingress})
+            however the ingress controller is not fully implemented in the prototype due to
+            complexities discussed in~\autoref{subsec:challengesAndBugs}.
+            Tenant services are discovered via the dashboard's redis lookup.
+            \gls{cors} is restricted to the dashboard origin due to limitations discussed
+            in~\autoref{subsec:challengesAndBugs}.
+            Traffic and dependencies between tenant and dashboard clusters are avoided by using
+            file-based build injection and \glspl{crd} rather than direct calls across clusters
+            to achieve isolation.\\
+            Validation failures are provided by zod.
+            In the case of an \gls{crd} update being unavailable the system degrades to the last
+            valid configuration.\\
+            All services accept their dependencies via env as build args.
 
         \subsection{Infrastructure and Deployment}\label{subsec:infrastructureAndDeployment}
+            The whole infrastructure is scripted to produce a repeatable demo environment following
+            the \texttt{README} file in the \textit{Infra} repository.
+            Most util scripts are idempotent and can be run multiple times without side effects.
+            The entry point is the \texttt{create-dashboard-workspace.sh} script
+            (depicted under~\autoref{lst:create-dashboard-workspace}) creating a \gls{kcp}-\gls{tmc}
+            workspace, the dashboard cluster and the deployments for the dashboard \gls{fe} and
+            \gls{be}.
+            The rationale for using \gls{tmc} is discussed in~\autoref{subsubsec:challengesKCPTMC}.
+            All scripts and manifests are listed in~\autoref{app:infra}.\\
+            Tooling and cluster prerequisites are prepared by multiple scripts in the \textit{Infra}
+            repository ensuring a reproducible environment.\\
+            The layout is described in~\autoref{subsec:infra-layout} and the simplified deployment
+            workflow is shown in~\autoref{subsec:infra-workflow}.\\
+            Service images are built using parametrized scripts as well to ease the process of
+            building and deploying the services.\\
+            On success the dashboard cluster is ready and the frontend is available at
+            \texttt{dashboard.local:8080}.
 
         \subsection{Challenges, Bugs and Fixes}\label{subsec:challengesAndBugs}
 
             \subsubsection{CORS}\label{subsubsec:challengesCORS}
+
+            \subsubsection{KCP-TMC}\label{subsubsec:challengesKCPTMC}
 
         \subsection{Deviations from Design}\label{subsec:deviationsFromDesign}
 
@@ -2756,7 +2797,7 @@
 
         \clearpage
 
-            \subsection*{Layout}
+            \subsection*{Layout}\label{subsec:infra-layout}
                 \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.22\textwidth} X >{\raggedright\arraybackslash}p{0.34\textwidth}@{}}
                     \toprule
                     \textbf{Path} & \textbf{Purpose} & \textbf{Highlights} \\
@@ -2766,7 +2807,7 @@
                     \texttt{\detokenize{config.example.json}} \\
                     \addlinespace
                     \texttt{\detokenize{k8s/}} &
-                    All Kubernetes and \gls{kcp} artifacts (\glspl{crd}, \gls{rbac}, workspaces, deployments, ingress) &
+                    All \gls{k8s@gls} and \gls{kcp} artifacts (\glspl{crd}, \gls{rbac}, workspaces, deployments, ingress) &
                     Subfolders by concern: \texttt{\detokenize{cluster/}}, \texttt{\detokenize{deployments/}}, \texttt{\detokenize{rbac/}}, \texttt{\detokenize{apibindings/}}, \texttt{\detokenize{kcp-crds/}}, \texttt{\detokenize{workspaces/}}, \texttt{\detokenize{ingress/}} \\
                     \addlinespace
                     \texttt{\detokenize{scripts/}} &
@@ -2777,7 +2818,7 @@
 
         \clearpage
 
-            \subsection*{Simplified Deployment Workflow}
+            \subsection*{Simplified Deployment Workflow}\label{subsec:infra-workflow}
                 \begin{enumerate}
                     \item \textbf{Bootstrap tools} (kubectl, krew, plugins, \gls{kind}, etc.): \\
                             \texttt{\detokenize{scripts/install-deps.sh}}, \\
