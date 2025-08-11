@@ -1980,17 +1980,80 @@
                 Each service was initialized with a minimal, runnable skeleton including a
                 dockerfile.
 
+        \subsection{Environment and Reproducibility}\label{subsec:environmentAndReproducibility}
+            The prototype is packaged to be rebuilt and executed from a clean developer machine with
+            minimal manual steps.
+            The \textit{Infra} repository (Appendix~\ref{app:infra}) serves as the orchestrator:
+            it vendors \gls{k8s@gls} manifests, pins tool and image versions, and provides
+            idempotent scripts for bootstrapping, building, and deploying all services.
+
+            \paragraph{Baseline toolchain}
+                A container-first setup is used to maximize reproducibility.
+                Services are build into \gls{docker} images with explicit base-image tags.
+                Clusters are provisioned using \textit{kind}.
+                Deployment is performed via checked in manifests.
+                Required \gls{cli} tools are installed and partly pinned by helper scripts.
+
+            \paragraph{Determinism safeguards}
+                Reproducibility is reinforced by:
+                \begin{enumerate}[label={[\arabic*]:},
+                    ref=Challenge~\arabic*,
+                    leftmargin=*,
+                    itemsep=0.6\baselineskip]
+
+                    \item\label{chal:pinned}
+                        \textit{Tags and versions}.
+                        Explicit image tags and pinned tool versions.
+                        
+                    \item\label{chal:manifests}
+                        \textit{Manifests}.
+                        Declarative manifests committed to \gls{vcs}.
+
+                    \item\label{chal:scripting}
+                        \textit{Scripting}.
+                        Shell scripts that automate the build and deployment process.
+                        Most are idempotent and can be run multiple times without side effects.
+
+                \end{enumerate}
+
     \clearpage
 
-        \subsection{Environment and Reproducibility}\label{subsec:environmentAndReproducibility}
-
         \subsection{Templates and Schemas}\label{subsec:templatesAndSchemas}
+            This section introduces the code templates used to standardize the \gls{fe} and \gls{be}
+            repos in terms of project configuration.
+            The goal is to minimize boilerplate decisions.
+            Furthermore it introduces the configuration schema used to validate the tenant
+            configuration and provide the data type across services.
 
             \subsubsection{Frontend Template}\label{subsubsec:frontendTemplate}
+                The frontend template provides a Next.js / TypeScript boilerplate including an
+                \texttt{.editorconfig}, a \texttt{tsconfig.json}.
+                Furthermore it includes code quality tooling configuration for ESLint and Prettier
+                as well as a boilerplate multi-stage Dockerfile.
+                Both frontends, the tenant \gls{fe} and the dashboard \gls{fe}, are based on this
+                template repository.\\
+                Due to its minor relevance for the thesis, the template repository contents are not
+                reproduced in the appendix.
 
             \subsubsection{Backend Template}\label{subsubsec:backendTemplate}
+                The backend template offers a TypeScript / Node (Express) baseline with the same
+                tooling and conventions as the frontend to reduce cognitive switching and friction.
+                It includes a \texttt{tsconfig.json}, a \texttt{.editorconfig}, ESLint and Prettier,
+                and a boilerplate multi-stage Dockerfile.\\
+                Due to the again minor relevance for the thesis, the template repository contents
+                are not reproduced in the appendix.
 
             \subsubsection{Configuration Schema}\label{subsubsec:configSchema}
+                A central \texttt{zod} schema is used to validate and version the tenant
+                configuration.
+                It can be imported by all services to ensure consistent data types and validation.
+                The schema enables runtime validation with distinct error messages at service 
+                boundaries as well as a TypeScript type definition for type safety.
+                It was published as a \texttt{npm} package to allow for easy imports and
+                maintainability across all core services.\\
+                The same structure underlies the versioned \gls{crd} used to make the configuration
+                available in the tenant workspace.
+                The schema and its unit tests are shown in Appendix~\ref{app:configschema}.
 
         \subsection{Core Components}\label{subsec:coreComponents}
 
