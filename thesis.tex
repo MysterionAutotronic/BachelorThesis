@@ -2200,8 +2200,20 @@
             \texttt{dashboard.local:8080}.
 
         \subsection{Challenges, Bugs and Fixes}\label{subsec:challengesAndBugs}
+            The prototype spans several layers (Next.js/Express services, container builds,
+            \gls{k8s@gls} on \gls{kind}, \gls{kcp}-\gls{tmc} workspaces, and configuration via
+            \gls{crd} and \gls{api}Binding).
+            Along this path a mix of non-obvious defaults, complexities, version drift and
+            underspecified behaviors surfaced.
+            This section documents the most consequential issues, why they occurred, how they were
+            detected, and the remedies or workaround applied.
+            Items are grouped by theme and point to the relevant code in the appendix where
+            applicable.
+            Where problems remain partially resolved, the residual risks and alternatives are stated
+            to inform the evaluation and future work.
 
             \subsubsection{CORS}\label{subsubsec:challengesCORS}
+                
 
             \subsubsection{KCP-TMC}\label{subsubsec:challengesKCPTMC}
 
