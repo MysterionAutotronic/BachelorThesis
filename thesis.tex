@@ -2134,6 +2134,27 @@
                 The dockerfile is shown under~\autoref{lst:dashboardfe-dockerfile}.
 
             \subsubsection{Dashboard API}\label{subsubsec:dashboardAPI}
+                A lightweight Node / Express service that accepts tenant configurations, validates
+                them against the zod schema, and was supposed to coordinate lifecycle events for
+                the tenant cluster (creation and \gls{crd} updates).\\
+                The service exposes a single \texttt{/config} endpoint that accepts a \gls{json}
+                payload in a \texttt{POST} request and validates it against the zod schema.
+                It reads the tenant username from the session cookie in the request header.
+                Furthermore it persists the validated configuration as a file under
+                \texttt{data/\$\{user\}/config.json} to allow for later retrieval and usage in the
+                tenant lifecycle.
+                The \texttt{server.ts} is shown under~\autoref{lst:dashboardbe-server}.\\
+                The service also maintains a redis cache to associate usernames with tenant cluster
+                \glspl{ip}.
+                The redis logic is shown under~\autoref{lst:dashboardbe-redis}.\\
+                The dockerfile does not need any build arguments in this case.
+                It is shown under~\autoref{lst:dashboardbe-dockerfile}.\\
+                The integration with the tenant lifecycle could not be implemented due to issues
+                discussed in~\autoref{subsec:challengesAndBugs}.\\
+                The service is stateless aside from the ephemeral file drop and the redis lookup
+                table.
+                Authentication is deliberately minimal to avoid out-of-scope complexity.
+                Production hardening is discussed in~\autoref{subsec:limitationsAndRisks}.
 
         \subsection{Cross-cutting Concerns}\label{subsec:crossCuttingConcerns}
 
