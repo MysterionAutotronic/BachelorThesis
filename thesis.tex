@@ -2526,12 +2526,77 @@
             full automation as deferred work.
 
         \subsection{Evaluation Criteria (Reframed)}\label{subsec:evaluationCriteria}
+            This section defines the qualitative criteria used to judge the prototype in lieu
+            of full \gls{slo}/metric instrumentation.
+            Each criterion maps to the scenarios defined in~\autoref{subsec:evalMethod}.
 
             \subsubsection{Functional Correctness}\label{subsubsec:functionalCorrectness}
+                Functional behavior is judged against the scenario set 
+                n~\autoref{subsec:evalMethod} without explicitly reciting the preconditions, steps
+                and expected outcomes.
+                \begin{enumerate}[label={[\arabic*]:},
+                    ref=Challenge~\arabic*,
+                    leftmargin=*,
+                    itemsep=0.6\baselineskip]
+
+                    \item\label{chal:fcdashboardSubmission}
+                        \textit{Dashboard submission}.
+                        The dashboard path behaves as specified. Well formed configurations are
+                        accepted with \texttt{2xx} responses and written to the dashboard \gls{be}
+                        data directory.
+                        Malformed configurations are rejected by the frontend
+                        (see~\autoref{fig:dashboardfe-form-validation-failure}) as well as by the
+                        backend (see~\autoref{fig:dashboardbe-bad-request}).
+
+                    \item\label{chal:fctenantRendering}
+                        \textit{Tenant rendering (manual cluster)}.
+                        The tenant is correctly rendered by the tenant \gls{fe} based on the
+                        configuration baked into the tenant \gls{be}.
+                        The tenant \gls{fe} correctly fetches the configuration from the backend
+                        and renders the company details, products and proposition
+                        (see~\autoref{appsub:tenantfe}).
+                        Updates to the tenant configuration can not be reflected due to the missing
+                        \gls{crd} integration.
+
+                    \item\label{chal:fcCRD}
+                        \textit{\gls{crd} creation}.
+                        The \gls{crd} creation is not successful due to the issues discussed
+                        in~\autoref{subsec:challengesAndBugs}.
+                        The tenant \gls{be} does not read the configuration from the \gls{crd} and
+                        therefore does not reflect updates to the configuration.
+                        The tenant \gls{fe} does not reflect updates to the configuration either.
+            \end{enumerate}
                 
             \subsubsection{Reproducibility}\label{subsubsec:evalReproducibility}
-            
+                Reproducibility is judged by whether a third party can recreate the working paths
+                from clean sources and obtain the same outcomes as in
+                \autoref{chal:dashboardSubmission} and \autoref{chal:tenantRendering}.
+                The infrastructure repository provides shell scripts that install dependencies, set
+                up \gls{kcp}-\gls{tmc}, create workspaces/clusters, deploy services, and standardize
+                local hostnames via \texttt{add-to-hosts.sh}/\texttt{cleanup-hosts.sh}
+                (Appendix~\autoref{app:infra}).
+                Most scripts are idempotent and can be rerun safely.
+                Dockerfiles pin build-time arguments and embed the tenant config to minimize drift
+                (cf.\ Sections~\autoref{subsec:environmentAndReproducibility},~\autoref{subsec:templatesAndSchemas}).
+                Under these conditions, two outcomes are reproducible.
+                First a dashboard submission persists a validated configuration in the backend's
+                \texttt{data/} directory and second a manually created tenant stack renders that
+                configuration via \texttt{GET /config}.
+                Note that due to lack of automation the tenant stack might need some manual
+                tinkering outside the provided \texttt{create-tenant-x-cluster.sh} script found
+                in~\autoref{lst:create-tenant-cluster}.\\
+                The remaining gaps are mostly due to the problems discussed
+                in~\autoref{subsec:challengesAndBugs}.
+                The local ingress on the developer machine also reduces portability due to the
+                \texttt{/etc/hosts} entries as discussed in~\autoref{subsubsec:hostnames}.
+                The flaky setup is mitigated by node ports and static host mappings but still
+                requires manual attention. Overall the prototype is \emph{mostly reproducible}.
+                The provided scripts reliably produce the dashboard cluster and and most of the
+                tenant stack, while \gls{crd}-based propagation and automated tenant provisioning
+                remain dysfunctional.
+
             \subsubsection{Isolation}\label{subsubsec:evalIsolation}
+                
 
             \subsubsection{Operability}\label{subsubsec:evalOperability}
 
@@ -3585,12 +3650,30 @@
                     \caption{Form-success}\label{fig:dashboardfe-form-200}
                 \end{figure}
 
+                \begin{figure}[h!]
+                    \centering
+                    \includegraphics[width=\textwidth]{screenshots/eval/dashboardfe/dashboardfe-form-with-malformed-inputs.png}
+                    \caption{Form with malformed inputs}\label{fig:dashboardfe-form-with-malformed-inputs}
+                \end{figure}
+
+                \begin{figure}[h!]
+                    \centering
+                    \includegraphics[width=\textwidth]{screenshots/eval/dashboardfe/dashboardfe-validation-failure.png}
+                    \caption{Form-validation failure}\label{fig:dashboardfe-form-validation-failure}
+                \end{figure}
+
             \FloatBarrier
             \subsection{Dashboard BE}\label{appsub:dashboardbe}
                 \begin{figure}[h!]
                     \centering
                     \includegraphics[width=\textwidth]{screenshots/eval/dashboardbe/dashboardbe-config.png}
                     \caption{Config}\label{fig:dashboardbe-config}
+                \end{figure}
+
+                \begin{figure}[h!]
+                    \centering
+                    \includegraphics[width=\textwidth]{screenshots/eval/dashboardbe/dashboardbe-bad-request.png}
+                    \caption{Dashboard BE Bad Request (curl)}\label{fig:dashboardbe-bad-request}
                 \end{figure}
 
         \clearpage
