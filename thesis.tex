@@ -2573,8 +2573,8 @@
                 \autoref{chal:dashboardSubmission} and \autoref{chal:tenantRendering}.
                 The infrastructure repository provides shell scripts that install dependencies, set
                 up \gls{kcp}-\gls{tmc}, create workspaces/clusters, deploy services, and standardize
-                local hostnames via \texttt{add-to-hosts.sh}/\texttt{cleanup-hosts.sh}
-                (Appendix~\autoref{app:infra}).
+                local hostnames via \texttt{add-to-hosts.sh} and \texttt{cleanup-hosts.sh}
+                (\autoref{app:infra}).
                 Most scripts are idempotent and can be rerun safely.
                 Dockerfiles pin build-time arguments and embed the tenant config to minimize drift
                 (cf.\ Sections~\autoref{subsec:environmentAndReproducibility},~\autoref{subsec:templatesAndSchemas}).
@@ -2596,7 +2596,7 @@
                 remain dysfunctional.
 
             \subsubsection{Isolation}\label{subsubsec:evalIsolation}
-                
+
 
             \subsubsection{Operability}\label{subsubsec:evalOperability}
 
