@@ -2241,7 +2241,7 @@
 
             \subsubsection{Ingress}\label{subsubsec:ingress}
                 Declaring an nginx ingress in \gls{k8s@gls} is straightforward
-                (cf.~\autoref{lst:dashboard-ingress}).
+                (cf.~\autoref{lst:dashboard-ingress} and~\autoref{lst:tenant-ingress}).
                 The difficulty arose only on a Linux developer machine.
                 A typical ingress controller expects to serve on the standard \gls{http} and
                 \gls{https} ports \texttt{80} and \texttt{443}, which competes with existing services
@@ -2251,9 +2251,12 @@
                 Introducing MetalLB to gain \texttt{LoadBalancer} services on bare metal was
                 discarded due to additional network configuration, \gls{ip} range management and
                 operational overhead not central to the thesis.\\
-                Given these trade-offs, ingress was deferred for the local development.
+                Given these trade-offs, an ingress on standard ports was deferred for the local
+                development.
                 The system instead relies on the server-side proxy pattern described
                 in~\autoref{subsubsec:challengesCORS} for direct component to component calls.
+                The browser still uses the ingress to access the frontends combined with custom
+                hostnames in \texttt{/etc/hosts}.
                 This keeps the development path simple and reproducible.
                 In managed layouts (\gls{eks}, \gls{gke}, \gls{aks}), the intended production
                 layout becomes trivial to enable without host-level changes.
