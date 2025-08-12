@@ -47,6 +47,13 @@
 \usepackage[newfloat]{minted}
 \usepackage[varqu,scaled=0.95]{zi4}
 \usepackage{placeins}
+\usepackage{makecell}
+
+% fix broken table
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+\renewcommand\theadfont{\normalsize\bfseries}
 
 % summary macro for appendix
 \newcommand{\codesummary}[3]{%
@@ -735,8 +742,6 @@
         \subsection{Kubernetes Control Plane (KCP)}\label{subsec:kcp}
             \gls{kcp} is \enquote{An open source horizontally scalable control plane for
             \gls{k8s@gls}-like APIs} \parencite{kcpio}.
-            % nguyen 2022
-            % KCP docs
 
             \subsubsection{Workspaces}\label{subsubsec:workspaces}
                 \gls{kcp} introduces the concept of \textit{workspaces} to implement
@@ -1663,19 +1668,17 @@
                 pod's view of configuration fresh and fault-tolerant over time.
 
             \subsubsection{Workspace Topology and Multi-Tenancy model}\label{subsubsec:workspaceTopology}
-
-                % TODO: fix spacings
                 \begin{table}[H]\label{tab:layersOverview}
                     \centering
-                    \renewcommand{\arraystretch}{1.5}
-                    \begin{tabular}{lcp{4cm}P{8cm}}
-                        \toprule
+                    \renewcommand{\arraystretch}{1.25}
+                    \setlength{\tabcolsep}{6pt}
+                    \begin{tabularx}{\textwidth}{@{} l C{3cm} Y R{2.2cm} @{}}
                         Layer & \gls{kcp} construct & Example resources & Provisioned Amount \\
                         \midrule
                         Parent (control) & Workspace (\texttt{root}) & \texttt{dashboard}, \texttt{dashboard-api} Deployments & 1 (static) \\
-                        Tenant (data) & Workspace (\texttt{root:<tenant-id>}) & \texttt{frontend}, \texttt{tenant-api} Deployments, \texttt{\gls{db}} StatefulSet & 1 per tenant \\
+                        Tenant (data) & Workspace (\texttt{root:<tenant-id>}) & \texttt{frontend}, \texttt{tenant-api} Deployments, \texttt{\gls{db}}~StatefulSet & 1 per tenant \\
                         \bottomrule
-                    \end{tabular}
+                    \end{tabularx}
                     \caption{Overview of architectural layers}
                 \end{table}
 
