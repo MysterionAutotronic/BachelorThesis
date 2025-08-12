@@ -3000,7 +3000,7 @@
         Local networking constraints (node ports, ingress on privileged ports) further limited an
         \gls{e2e} path on a developer machine.\\
         A major factor in these outcomes was substrate volatility:
-        \textbf{kcp is still an alpha-stage project} and underwent breaking shifts
+        \textbf{\gls{kcp} is still an alpha-stage project} and underwent breaking shifts
         (e.g., from v0.19 to v0.20) with sparse, fast-moving documentation.
         The switch to \texttt{\gls{kcp}-\gls{tmc}} (itself based on an older \gls{kcp} and lightly
         maintained) introduced additional friction, \gls{rbac} for the syncer, compute binding
@@ -3046,6 +3046,51 @@
             apply in edge-case scenarios.
 
         \subsection{Future Outlook}\label{subsec:outlook}
+            The short-term priority is to harden the prototype, reconnect the missing paths, and add
+            observability so that a metric-based evaluation becomes feasible.
+            The immediate focus should be to close the loop from dashboard to tenant: replace the
+            broken \gls{crd} path with a pragmatic delivery channel (for example, a Git-backed
+            configuration repository with a \gls{ci} trigger, or object storage with a webhook) so
+            that a submitted configuration deterministically builds a tenant image and deploys to a
+            target cluster.
+            The external interface should remain stable so that a later swap to \gls{crd} plus
+            APIBinding is possible without impacting clients.
+            Networking should be standardized for local development by adopting node port with nginx
+            ingress or, if required, adding MetalLB with a fixed address pool.
+            A single source of truth for ports should be defined and encoded in manifests and
+            scripts.
+            Observability should be introduced via Prometheus, Grafana and synthetic probes.
+            Frontends and backends should expose \gls{red} metrics, with logs shipped to Loki and
+            traces emitted through OpenTelemetry to enable the deferred \gls{slo} evaluation.
+            Given past issues, the server-side proxy from frontend to backend should remain the
+            default while \gls{cors} policies for a future ingress-only model are documented.
+            Reproducibility should be strengthened by adding smoke tests to \gls{ci}.\\
+            Mid-term, configuration should be treated explicitly \enquote{as an \gls{api}}.
+            A renewed attempt at \enquote{config as \gls{crd}} should be made only behind a narrow
+            adapter so that the rest of the system remains decoupled.
+            Where \gls{kcp} is not required, the platform can emulate \enquote{workspaces} with
+            mature primitives (namespaces, ResourceQuota, NetworkPolicy, and hierarchical namespace
+            controller), provision clusters via Cluster \gls{api} or Crossplane, and manage rollout
+            using Argo CD or Flux.
+            Multi-tenant hardening should introduce pod security admission, per-tenant quotas and
+            limits, and network isolation, together with tenancy \gls{e2e} tests.
+            Operational readiness should be improved with concise runbooks for build failures,
+            rollout rollback, configuration drift, and cluster replacement.\\
+            Longer-term, \gls{kcp} and \gls{kcp}-\gls{tmc} should be re-evaluated periodically.
+            Adoption gates should include stable and documented APIExports for the required
+            resources, clear \gls{rbac} patterns for syncers, and a credible migration plan from the
+            baseline adapter.
+            With instrumentation in place, scalability can be addressed by introducing \gls{hpa},
+            \gls{vpa} or \gls{keda} and queue-based autoscaling where applicable, validating
+            behavior under controlled load and revisiting \glspl{slo} accordingly.
+            As functionality expands (for example, ratings or service catalogs requiring
+            persistence), the data plane should incorporate a managed database with backup/restore
+            and multi-tenant isolation patterns.\\
+            Across all horizons, the migration posture should keep \gls{kcp}-specific logic behind
+            adapters and maintain two modes: a baseline mode (namespaces + GitOps) that works today
+            and a \gls{kcp} mode that can be enabled as risks decrease.
+            This limits lock-in, preserves near-term progress, and keeps the architecture aligned
+            with an evolving ecosystem.
 
     \cleardoublepage
     \printbibliography[
