@@ -2341,6 +2341,7 @@
                         in~\autoref{subsubsec:challengesKCPTMC}.\\
                         As a result, cross-workspace \gls{crd}-based configuration sharing was not
                         implemented.
+
                     \item\label{chal:proxy}
                         \textit{Proxy}.
                         The intended ingress controller was not implemented due to the
@@ -2348,6 +2349,7 @@
                         Instead, a server-side proxy was used to bridge \gls{cors} and
                         cross-origin calls.
                         This preserves semantics while changing the hop pattern.
+
                     \item\label{chal:deferredFeatures}
                         \textit{Deferred features}.
                         Ancillary capabilities like CitusDB review storage or autoscaling with
@@ -2355,6 +2357,7 @@
                         reach a stable baseline to build on.
                         Where relevant fixed replicas were used as a placeholder as seen
                         in~\autoref{app:infra}.
+
             \end{enumerate}
             These changes are reflected in the implementation and evaluation, and are explicitly
             accounted for in~\autoref{subsec:limitationsAndRisks}.
@@ -2373,12 +2376,14 @@
                         realized with \emph{gls{kcp}-gls{tmc}}.
                         Configuration propagation via \gls{crd} is therefore no part of the running
                         system (see~\autoref{subsubsec:challengesKCPTMC}).
+
                     \item\label{chal:localExposureModel}
                         \textit{Local exposure model}.
                         Services are exposed via \texttt{NodePort} \texttt{/etc/hosts} entries
                         instead of a proper ingress/\gls{tls} setup
                         (see~\autoref{subsubsec:ingress}).
                         The result is a brittle developer setup without \gls{https}.
+
                     \item\label{chal:corsWorkaround}
                         \textit{\gls{cors} workaround}.
                         Browser $\rightarrow$ \gls{be} calls are proxied through Next.js
@@ -2386,6 +2391,7 @@
                         (see~\autoref{subsubsec:challengesCORS}).
                         This way the \gls{fe} server becomes a choke point and the additional hop
                         adds latency and operational coupling.
+
                     \item\label{chal:configFreshness}
                         \textit{Configuration freshness}.
                         The tenant \gls{be} reads a file baked at build time and runtime updates are
@@ -2393,6 +2399,7 @@
                         \gls{fe} revalidation is periodic.
                         This risks stale configuration and a rebuild and redeploy are required to
                         propagate changes.
+
                     \item\label{chal:securityRisks}
                         \textit{Security}.
                         The prototype login omits passwords and tokens to avoid additional
@@ -2401,27 +2408,32 @@
                         there is no \gls{tls} termination.
                         This setup is not suitable for production use due to attack surface via
                         \texttt{NodePort}.
+
                     \item\label{chal:availabilityAndScaling}
                         \textit{Availability and scaling}.
                         The prototype uses single-replica deployments and has no scaling mechanism
                         or readiness/liveness hardening beyond defaults.
                         This limited fault tolerance and unpredictable throughput make it unsuitable
                         for production.
+
                     \item\label{chal:observability}
                         \textit{Observability}.
                         The prototype does not implement centralized logging, metrics, or tracing.
                         Debugging relies on manual inspection and local logs.
                         This limits operational insights and complicates incident response.
+
                     \item\label{chal:stateAndPersistence}
                         \textit{State and persistence}.
                         The redis lookup for tenant cluster \glspl{ip} is a simple, non-hardened
                         cache.
                         This risks data loss across restarts.
+
                     \item\label{chal:testing}
                         \textit{Testing}.
                         Automated tests are limited to basic unit tests for the zod schema.
                         Integration tests and \gls{e2e} tests are not implemented.
                         This may cause regressions across service boundaries to go undetected.
+
                     \item\label{chal:versionPinning}
                         \textit{Version pinning and ecosystem}.
                         The stack depends on specific tool versions and \gls{kcp}-\gls{tmc} is not
@@ -2479,6 +2491,17 @@
                         submit a tenant configuration via the form.\\
                         \emph{Expected:} \texttt{2xx} response code and a config file written to
                         the dashboard \gls{be} containers \texttt{data} directory.\\
+                        \emph{Evidence:} Evidence for the successful submission is found
+                        in~\autoref{appsub:dashboardfe} and~\autoref{appsub:dashboardbe}.\\
+                        \emph{Verdict:} Pass.
+
+                    \item\label{chal:tenantRendering}
+                        \textit{Tenant rendering (manual cluster)}.
+                        \emph{Preconditions:} A tenant cluster created manually via scripts.
+                        The config file needs to be baked into the tenant \gls{be} image.
+                        The tenant \gls{fe} needs to be deployed with the backend endpoint
+                        configured.\\
+                        \emph{Steps:} Open the tenant \gls{fe} at \texttt{}
 
             \end{enumerate}
         
