@@ -54,3 +54,7 @@ code/*
 # Pygments
 *.pygtex
 *.pygstyle
+
+# Unanonymized screenshots
+screenshots/slack/*.png
+!*.anonymized.png
