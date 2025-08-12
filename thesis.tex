@@ -716,6 +716,19 @@
                 \parencites[p.~651]{nguyen2022}[p.~2]{jian2023}[p.~158]{kim2021}.
 
             \subsubsection{Relevance to SaaS and this Thesis}
+                The preceding concepts ground the requirements of modern \gls{saas}: rapid change,
+                frictionless onboarding, and a single, provider-owned control plane that scales
+                efficiently across many tenants.
+                Multi-tenancy increases utilization and reduces cost but raises hard problems around
+                isolation, fair scheduling, and performance guarantees that any viable platform must
+                address.
+                \gls{kcp} is relevant here because its workspace abstraction and control-plane
+                virtualization promise isolation, extensibility, and shard-level scaling without
+                abandoning Kubernetes semantics.
+                Within this thesis, these fundamentals motivate a prototype that favors
+                reproducibility and operability over completeness.
+                The remainder of the document applies these ideas in design and implementation, then
+                assesses what is feasible today and where limits appear in practice.
 
         \newpage
 
