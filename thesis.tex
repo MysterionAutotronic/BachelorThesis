@@ -304,13 +304,112 @@
             code, then evaluates what is feasible today and where additional engineering or
             ecosystem maturity is required.
 
-        \subsection{Objectives and Scope}\label{subsec:objectives}
+        \subsection{Objectives and Scope}\label{subsec:objectivesAndScope}
+            The work targets a \emph{prototype} that demonstrates key concepts of a highly scalable
+            and highly available \gls{saas} platform on \gls{kcp}.
+            The objective is to translate the architectural design into running code, exercise the
+            core tenant lifecycle paths, and surface constraints and failure modes observed in
+            practice.
+            \subsubsection{Objectives}\label{subsubsec:objectives}
+                \begin{enumerate}[label={[\arabic*]:},
+                        ref=Challenge~\arabic*,
+                        leftmargin=*,
+                        itemsep=0.6\baselineskip]
+
+                        \item\label{chal:objectiveMinimal}
+                            \textit{Minimal but coherent system}.
+                            Implement a minimal but coherent system consisting of dashboard \gls{fe} and
+                            \gls{be}, and tenant \gls{fe} and \gls{be}, including configuration flow
+                            from dashboard input to tenant rendering.
+
+                        \item\label{chal:objectiveSchema}
+                            \textit{Coherent schema}.
+                            Express tenant configuration as a shared, validated schema
+                            (TypeScript \texttt{zod}) and, where feasible, as a versioned \gls{crd}
+                            intended for cross-workspace sharing via \emph{APIBinding}.
+
+                        \item\label{chal:objectiveReproducible}
+                            \textit{Reproducible setup}.
+                            Provide a reproducible local setup via scripts and manifests
+                            (clusters, deployments, ingress and networking substitutes, and debug
+                            tools).
+
+                        \item\label{chal:objectiveIsolation}
+                            \textit{Workspace-oriented isolation}.
+                            Demonstrate workspace-oriented isolation using \gls{kcp} concepts to the
+                            extent possible on a local developer machine.
+
+                        \item\label{chal:objectiveEval}
+                            \textit{Evaluation}.
+                            Evaluate qualitatively against reframed criteria (functional correctness,
+                            reproducibility, isolation, operability, change management), documenting
+                            evidence and gaps.
+                \end{enumerate}
+
+            \subsubsection{Scope}\label{subsubsec:scope}
+                The scope is explicitly confined to a prototype suitable for demonstrating concepts,
+                not a production system.
+                Engineering is limited to single-region, developer-workstation deployments.
+                Observability is minimalistic.
+                Security hardening, multi-\gls{az} failover, automated \gls{hpa} and \gls{slo}
+                enforcement, and comprehensive \gls{rbac} policies are out of scope.
+                Quantitative \gls{slo} and \gls{kpi} measurements with Prometheus and Grafana are
+                deferred.
+                Evaluation is scenario-based.
+                Given \gls{kcp}'s alpha status and evolving documentation, the prototype accepts
+                partial substitutions (e.g., \gls{kcp}-\gls{tmc} sync path) where necessary to
+                expose behavior and limitations rather than to deliver feature completeness.
+
+            \subsubsection{Non-goals}\label{subsubsec:nongoals}
+                \gls{e2e} tenant provisioning without operator intervention, multi-tenant billing,
+                persistent data replication across clusters, advanced traffic management,
+                and performance benchmarking at target loads are non-goals for this iteration.\\
+                Success is defined by a working demonstration of the core config $\rightarrow$
+                render path, reproducible setup from scripts, clear documentation of challenges
+                (e.g., \gls{cors}, ingress on local hosts, node port mapping, \gls{kcp}-\gls{tmc},
+                \gls{rbac} and APIBinding issues), and an evidence-based account of what would be
+                required to progress toward production.
 
         \subsection{Structure of the Thesis}\label{subsec:structure}
+            The thesis proceeds from foundations to design, implementation, and qualitative
+            evaluation, closing with conclusions and supporting appendices.\\
+            \textbf{\hyperref[sec:introduction]{Section~\ref*{sec:introduction}}} introduces the
+            problem context, objectives, scope, and reading guide.\\
+            \textbf{\hyperref[sec:fundamentals]{Section~\ref*{sec:fundamentals}}} consolidates
+            fundamentals: \gls{k8s@gls} and multi-tenancy, the specific capabilities of Kubernetes
+            Control Plane (\gls{kcp}) --- workspaces, \gls{api}, sharding, and \gls{ha} --- and
+            their relevance to \gls{saas}.\\
+            \textbf{\hyperref[sec:related]{Section~\ref*{sec:related}}} surveys related work on
+            deployment strategies, scaling, cloud multi-tenancy, and prior art on \gls{kcp}.\\
+            \textbf{\hyperref[sec:concept]{Section~\ref*{sec:concept}}} develops the conceptual
+            design: scenario and user journey, requirements, architecture on \gls{kcp} (including
+            config injection and workspace topology), deployment strategies, and technology
+            choices.\\
+            \textbf{\hyperref[sec:prototype]{Section~\ref*{sec:prototype}}} details the prototypical
+            implementation: environment and reproducibility, templates and the shared \texttt{zod}
+            configuration schema, the four core services (Tenant \gls{fe}/\gls{be}, Dashboard
+            \gls{fe}/\gls{be}), cross-cutting concerns (configuration, security/\gls{rbac},
+            networking, resources), infrastructure and deployment scripts, and finally challenges,
+            deviations, and limitations.\\
+            \textbf{\hyperref[sec:evaluation]{Section~\ref*{sec:evaluation}}} presents the
+            evaluation: a scenario-based method, reframed criteria (functional correctness,
+            reproducibility, isolation, operability, change management), requirements coverage,
+            lessons learned, threats to validity, and deferred metrics.\\
+            \textbf{\hyperref[sec:conclusion]{Section~\ref*{sec:conclusion}}} concludes with a
+            summary, a reflective conclusion, and an outlook.\\
+            The appendices provide implementation evidence and artifacts.\\
+            \textbf{\autoref{app:repos-overview}} maps repositories and where code resides.\\
+            \textbf{\hyperref[app:tenantfe]{Appendices~\ref*{app:tenantfe}-\ref*{app:infra}}}
+            contain selected code and build/runtime excerpts for TenantFE, TenantBE, ConfigSchema,
+            DashboardFE, DashboardBE, and Infra.\\
+            \textbf{\autoref{app:docs}} includes documentation excerpts.\\
+            \textbf{\autoref{app:slack}} captures Slack discussion snapshots.\\
+            \textbf{\autoref{app:eval}} contains evaluation screenshots and logs referenced
+            in~\autoref{sec:evaluation}.
 
     \clearpage
 
-    \section{Fundamentals}
+    \section{Fundamentals}\label{sec:fundamentals}
 
         \subsection{Kubernetes and Multi-Tenancy}\label{subsec:k8sAndMultiTenancy}
 
