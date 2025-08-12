@@ -46,6 +46,7 @@
 \usepackage{capt-of}
 \usepackage[newfloat]{minted}
 \usepackage[varqu,scaled=0.95]{zi4}
+\usepackage{placeins}
 
 % summary macro for appendix
 \newcommand{\codesummary}[3]{%
@@ -2454,6 +2455,32 @@
             lessons that inform future iterations.
 
         \subsection{Method (Scenario-based)}\label{subsec:evalMethod}
+            Given incomplete \gls{e2e} automation, the evaluation adopts a concise, scenario-based
+            method that exercises the working paths and documents known gaps.
+            Each scenario defines preconditions, steps, expected outcomes, and a pass/partial/fail
+            verdict, with minimal artifacts (screenshots, command logs, and code references)
+            captured in the appendices.
+            For each scenario, the preconditions are set, the steps are defined and executed,
+            expected outcomes are stated and a pass/partial/fail verdict is given with minimal
+            artifacts in~\autoref{app:eval}.
+            The artifacts are cited in the evaluation below, but the full details are deferred to
+            the appendix to keep the main text concise.\\
+            \begin{enumerate}[label={[\arabic*]:},
+                    ref=Challenge~\arabic*,
+                    leftmargin=*,
+                    itemsep=0.6\baselineskip]
+
+                    \item\label{chal:dashboardSubmission}
+                        \textit{Dashboard submission}.
+                        \emph{Preconditions:} dashboard cluster is running, dashboard \gls{fe} and
+                        \gls{be} are deployed, and the dashboard \gls{fe} is accessible at
+                        \texttt{dashboard.local:8080}.\\
+                        \emph{Steps:} open the dashboard \gls{fe}, authenticate with a username,
+                        submit a tenant configuration via the form.\\
+                        \emph{Expected:} \texttt{2xx} response code and a config file written to
+                        the dashboard \gls{be} containers \texttt{data} directory.\\
+
+            \end{enumerate}
         
         \subsection{Evaluation Criteria (Reframed)}\label{subsec:evaluationCriteria}
 
@@ -3455,4 +3482,53 @@
         \section{Slack Channel Screenshots}\label{app:slack}
 
             \noindent\textit{Note:} User names and sensitive data are redacted to comply with privacy requirements.
+
+        \clearpage
+        
+        % Appendix J: Evaluation
+        \section{Evaluation}\label{app:eval}
+            \subsection*{Dashboard FE}\label{appsub:dashboardfe}
+                \begin{figure}[h!]
+                    \centering
+                    \includegraphics[width=\textwidth]{screenshots/eval/dashboardfe/dashboardfe-login-page.png}
+                    \caption{Login page}\label{fig:dashboardfe-login-page}
+                \end{figure}
+
+                \begin{figure}[h!]
+                    \centering
+                    \includegraphics[width=\textwidth]{screenshots/eval/dashboardfe/dashboardfe-login-page-with-username.png}
+                    \caption{Login page with username}\label{fig:dashboardfe-login-page-with-username}
+                \end{figure}
+
+                \begin{figure}[h!]
+                    \centering
+                    \includegraphics[width=\textwidth]{screenshots/eval/dashboardfe/dashboardfe-welcome-page.png}
+                    \caption{Welcome page}\label{fig:dashboardfe-welcome-page}
+                \end{figure}
+
+                \begin{figure}[h!]
+                    \centering
+                    \includegraphics[width=\textwidth]{screenshots/eval/dashboardfe/dashboardfe-form.png}
+                    \caption{Form}\label{fig:dashboardfe-form}
+                \end{figure}
+
+                \begin{figure}[h!]
+                    \centering
+                    \includegraphics[width=\textwidth]{screenshots/eval/dashboardfe/dashboardfe-form-with-inputs.png}
+                    \caption{Form with inputs}\label{fig:dashboardfe-form-with-inputs}
+                \end{figure}
+
+                \begin{figure}[h!]
+                    \centering
+                    \includegraphics[width=\textwidth]{screenshots/eval/dashboardfe/dashboardfe-form-200.png}
+                    \caption{Form-success}\label{fig:dashboardfe-form-200}
+                \end{figure}
+
+            \FloatBarrier
+            \subsection*{Dashboard BE}\label{appsub:dashboardbe}
+                \begin{figure}[h!]
+                    \centering
+                    \includegraphics[width=\textwidth]{screenshots/eval/dashboardbe/dashboardbe-config.png}
+                    \caption{Config}\label{fig:dashboardbe-config}
+                \end{figure}
 \end{document}
