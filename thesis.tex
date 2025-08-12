@@ -265,12 +265,50 @@
     \pagenumbering{arabic}
 
     \section{Introduction}\label{sec:introduction}
+        This thesis examines the conception, implementation, and evaluation of a highly scalable and
+        highly available \gls{saas} platform built on \gls{kcp}.
+        The prototype explores control-plane virtualization to provision and operate per-tenant
+        application stacks while maintaining strong isolation and shared platform services.
+        The focus is on translating architectural goals, such as elastic scale, fault tolerance, and
+        tenant isolation into concrete design and code on top of \gls{kcp} and \gls{k8s@gls}.\\
+        Within this frame, the study evaluates what levels of scalability, availability,
+        reproducibility, and change management are attainable today with \gls{kcp}-based workflows,
+        and where practical limits emerge in a realistic developer setup.
+        The next subsections motivate the problem and context (\autoref{subsec:problem}), define
+        objectives and scope (\autoref{subsec:objectives}), and outline the thesis structure leading
+        through design, implementation, evaluation, and conclusions (\autoref{subsec:structure}).
 
         \subsection{Problem Statement and Motivation}\label{subsec:problem}
+            Modern \gls{saas} platforms depend on multi-tenancy to reach viable unit economics and
+            elastic scale, yet shared infrastructure introduces nontrivial risks around security,
+            fairness, and performance isolation.
+            As outlined in \autoref{subsubsec:mtImportance}, multi-tenancy improves utilization and
+            operational efficiency, but amplifies concerns such as residual-data exposure,
+            limited tenant control and observability, scheduling fairness, and weak performance
+            isolation, together with a pressing need for automation at scale
+            (\autoref{subsubsec:challenges}).
+            The practical question is not whether to adopt multi-tenancy, but how to do so safely,
+            repeatably, and cost-effectively in contemporary cloud-native stacks.\\
+            This thesis addresses the problem of designing, implementing, and evaluating a
+            Kubernetes-based \gls{saas} platform that targets high scalability and high availability
+            while preserving strong tenant isolation.
+            The motivation is to explore whether control-plane virtualization --- specifically
+            \gls{kcp} --- can provide the isolation, extensibility, and automation hooks that modern
+            \gls{saas} demands, and to surface the operational realities and maturity gaps of this
+            approach under realistic development conditions.
+            \gls{kcp} appears promising because it offers workspace-level isolation, a
+            \gls{k8s@gls}-compatible \gls{api} surface, and built-in sharding
+            (\autoref{subsubsec:kcpApproach}), potentially aligning architectural goals with
+            familiar tooling and workflows.
+            The remainder of the thesis translates these drivers into concrete architecture and
+            code, then evaluates what is feasible today and where additional engineering or
+            ecosystem maturity is required.
 
         \subsection{Objectives and Scope}\label{subsec:objectives}
 
         \subsection{Structure of the Thesis}\label{subsec:structure}
+
+    \clearpage
 
     \section{Fundamentals}
 
