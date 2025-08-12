@@ -229,8 +229,41 @@
 
     \section*{Abstract}\label{abstract}
     \markboth{Abstract}{Abstract}
+        This thesis presents a practical, reproducible approach to building and operating a
+        lightweight, Kubernetes-based multi-tenant web stack from local development to cluster
+        networking and control-plane virtualization.
+        Two cluster types (\enquote{dashboard} and \enquote{tenant}) are implemented to surface the
+        integration points between containerized Next.js front ends, Node/Express back ends, and
+        core Kubernetes primitives (Deployments, Services, Ingress) on top of kind.
+        Per-tenant clusters are created with deterministic host-to-node port mappings, while
+        ingress-nginx and host entries provide name-based routing.
+        KCP/TMC is incorporated conceptually for placement and synchronization by way of
+        SyncTargets, Locations, Placements, and APIBinding of exported Kubernetes APIs into target
+        workspaces.
+        Evaluation follows scenario-driven criteria focused on functional correctness,
+        reproducibility, isolation, and operability.
+        The prototype delivers front ends and configuration APIs reachable under predictable
+        hostnames and ports, with a clear separation of server- and client-side networking concerns:
+        server code consumes an internal absolute endpoint, and client code targets a stable proxy
+        implemented as a Next.js route handler with explicit cache control.
+        Reproducibility is ensured by idempotent scripts, pinned tool and image versions, and
+        consistent cluster templates.
+        Shared front- and back-end templates and a central configuration schema enable uniform
+        behavior across tenants and align with a CRD-oriented design.\\
+        The work contributes a concise troubleshooting playbook that addresses recurring issues in
+        such stacks.
+        Full utilization of KCP/TMC within the running prototype proved infeasible under the given
+        constraints.
+        The limitations and trade-offs are analyzed to inform future integration.
+        Scope is intentionally limited to a developer-grade environment rather than production
+        hardening or quantitative SLOs.\\
+        Overall, the thesis documents an architecture, reproducible workflow, and operational
+        guidance that reduce friction when building multi-tenant web systems on Kubernetes, and
+        outlines a path for future work: completing the KCP/TMC binding pipeline, standardizing
+        ingress and TLS, adding telemetry for metric-based evaluation, and extending tests to
+        multi-node and higher-scale scenarios.
 
-    \newpage
+    \clearpage
 
     % Glossary
     \printglossary[type=\acronymtype, title={Acronyms}]
