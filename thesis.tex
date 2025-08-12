@@ -2596,27 +2596,378 @@
                 remain dysfunctional.
 
             \subsubsection{Isolation}\label{subsubsec:evalIsolation}
-
+                Isolation is considered along three axes: failure, data, and (rough) performance
+                isolation.
+                The intended design allocates a dedicated workspace and cluster per tenant.
+                In the prototype this is approximated by manual per-tenant clusters plus a separate
+                dashboard cluster (\autoref{app:infra}) and dedicated workspaces.
+                This topology already yields strong blast-radius reduction: crashing the tenant
+                backend via \texttt{/crash} affects only that tenant’s pods and does not impact the
+                dashboard stack or other clusters by definition.\\
+                \textbf{Data isolation} is simplified by avoiding shared state across tenants: the
+                tenant backend serves a baked config file, and the dashboard backend writes configs
+                to its own container-local \texttt{data/} directory (\autoref{appsub:dashboardbe}).
+                No shared database is present, so there is no cross-tenant read path.
+                Planned \gls{crd} / APIBinding–based distribution would reintroduce a shared
+                control-plane surface.
+                Correct scoping and read-only access would be required to preserve isolation.\\
+                \textbf{Network isolation} is acceptable for a local prototype: clusters are
+                distinct, node ports plus static host mappings expose only the necessary services,
+                and there is a dedicated ingress for every cluster.
+                However, within a cluster no \texttt{NetworkPolicy} is enforced, and pod security
+                or admission hardening is not configured.
+                Thus, isolation relies primarily on “separate clusters” rather than defense-in-depth
+                controls in this prototype.\\
+                \textbf{Performance isolation} is only partial.
+                Without \texttt{requests} or \texttt{limits}, quotas, or \gls{hpa}, pods can contend
+                for node resources.
+                Multiple local clusters still share the same host.
+                In a managed environment, per-tenant clusters would be scheduled to separate
+                nodes or pools to improve this dimension.\\
+                Failure and data isolation meet prototype goals.
+                Network and performance isolation are incomplete and would require
+                \texttt{NetworkPolicy}, pod security and admission, resource quotas or limits, and
+                autoscaling to reach production expectations.
 
             \subsubsection{Operability}\label{subsubsec:evalOperability}
+                Operability is assessed along day-2 tasks: deploy, observe, troubleshoot, and change
+                safely.
+                Deployment is largely script-driven and idempotent (\autoref{app:infra}), which
+                reduces setup friction, but several steps remain manual (e.g., tenant cluster
+                creation and image rebuilds).
+                In particular, configuration changes require rebuilding the tenant backend image
+                because runtime distribution via \gls{crd}/APIBinding is not functional.
+                This in turn limits agility.\\
+                Observability is minimal. Services log to stdout/stderr and are inspected via
+                \texttt{kubectl logs}.
+                There is no central log aggregation, metrics, or tracing, and no liveness or
+                readiness probes are defined for the \gls{http} endpoints
+                (\texttt{/config}, \texttt{/crash}).
+                As a result, failure detection relies on manual checks rather than automated health
+                signals.\\
+                Troubleshooting workflows are workable but manual. The \texttt{netshoot} debug pod
+                is effective for diagnosing node port and service wiring issues
+                (see~\autoref{subsubsec:e2eportmapping}).
+                Host modification scripts standardize access from the browser.
+                \gls{cors} issues were mitigated by proxying through Next.js server routes, which
+                simplifies local operations but couples the FE to BE routing
+                (\autoref{subsubsec:challengesCORS}).\\
+                Security practices and \gls{rbac} are permissive for development: components run
+                under broad privileges, and there is no secret management beyond environment
+                variables.
+                This is acceptable for a prototype but increases operational risk in production
+                settings.\\
+                Basic operability is achieved (repeatable deploys, workable debugging), but
+                automated health, centralized observability, robust \gls{rbac} and secrets, and
+                runtime config rollout are missing.
+                These gaps elevate operational toil and slow incident response.
 
             \subsubsection{Change Management}\label{subsubsec:evalChangeManagement}
+                Change management is evaluated in terms of validation, versioning, propagation,
+                safety, and rollback.
+                Validation is strong: tenant configurations are checked at submission in the
+                dashboard \gls{fe} and re-validated in the dashboard \gls{api} against the shared
+                \texttt{zod} schema (\autoref{subsubsec:configSchema},
+                \autoref{subsubsec:dashboardFrontend}, \autoref{subsubsec:dashboardAPI}).
+                However, runtime propagation is limited because \gls{crd}/APIBinding-based
+                distribution is non-functional in the prototype, the Tenant \gls{be} reads a file
+                baked at image build time.
+                Changes therefore require rebuilding and redeploying the tenant \gls{be} image.
+                The tenant \gls{fe}'s 10-minute revalidation only reflects new data once the
+                \gls{be} serves it, so update latency is dominated by rebuild and redeploy time
+                rather than cache expiry.\\
+                Versioning exists for the schema (TypeScript type tied to \texttt{ConfigSchema}),
+                but there is no persisted history of applied configs, no semantic version carried
+                with each config instance, and no automated downgrade or rollback beyond manually
+                redeploying a previous image.
+                Safety mechanisms are basic.
+                Schema validation prevents malformed updates, and tenant isolation bounds blast
+                radius to a single tenant's components, but there is no staged rollout
+                (e.g., canary), no admission control, and no audit trail.\\
+                Overall the prototype partially meets change-management goals.
+                Validation and isolation are in place, but runtime updates, controlled propagation,
+                auditability, and rollbacks are manual or missing.
+                Enabling \gls{crd}-backed distribution with a reconciler, attaching explicit config
+                versions, and adding staged deploys and history would close the gap in future
+                iterations.
 
         \subsection{Requirements}\label{subsec:evalRequirements}
+            This section assesses the prototype against the requirements defined
+            in~\autoref{subsec:requirements}.
+            Each requirement is judged qualitatively (e.g., met, partially met, not met) with brief
+            justification and references to implementation evidence.
 
             \subsubsection{Functional Requirements}\label{subsubsec:evalFunctionalRequirements}
+                \begin{enumerate}[label={[\arabic*]:},
+                    ref=Challenge~\arabic*,
+                    leftmargin=*,
+                    itemsep=0.6\baselineskip]
+
+                    \item\label{chal:evalF01}
+                        \textit{F-01}.
+                        This requirement is \textbf{partially met}.
+                        Creation of configurations is implemented via the dashboard form.
+                        The dashboard \gls{api} validates the payload against the shared
+                        \texttt{zod} schema and persists it as a \gls{json} file.
+                        However updating via \gls{crd} or deletion are not implemented.
+                        Furthermore logo upload was omitted in the prototype.
+
+                    \item\label{chal:evalF02}
+                        \textit{F-02}.
+                        This requirement is \textbf{partially met}.
+                        The list of services and products is carried as the \texttt{products} array
+                        inside the same config object.
+                        As above, updates to the configuration are not reflected in the tenant
+                        \gls{fe} or \gls{be}.
+
+                    \item\label{chal:evalF03}
+                        \textit{F-03}.
+                        This requirement is \textbf{not met}.
+                        No ratings domain (\gls{api}, storage, \gls{ui}) was implemented.
+                        This was deferred to focus on core provisioning and configuration paths.
+
+                    \item\label{chal:evalF04}
+                        \textit{F-04}.
+                        This requirement is \textbf{met} on a manual path.
+                        The tenant frontend fetches \texttt{/config} from the tenant backend and
+                        renders the company profile, products, and proposition.
+                        \gls{isr} revalidates roughly every ten minutes.
+                        A deliberate failure path is exposed via the \texttt{/crash} endpoint for
+                        chaos testing.
+                        This holds when the tenant cluster is created manually.
+
+                    \item\label{chal:evalF05}
+                        \textit{F-05}.
+                        This requirement is \textbf{not met}.
+                        Automated \gls{e2e} provisioning from the dashboard could not be realized
+                        due to the pivot from \gls{kcp} to \gls{kcp}-\gls{tmc} and ensuing syncer,
+                        \gls{rbac} and APIBinding issues as discussed
+                        in~\autoref{subsubsec:challengesKCPTMC}.
+                        Only manual scripts and clusters were used during evaluation.
+
+                    \item\label{chal:evalF06}
+                        \textit{F-06}.
+                        This requirement is \textbf{met}.
+                        The dashboard \gls{api} validates the config, writes it to disk, and the
+                        tenant backend image is built with that file baked in.
+                        The backend serves it via \texttt{/config}.
+                        The planned \gls{crd}-based shared store was not operational, so runtime
+                        edits require rebuild and redeploy.
+
+                    \item\label{chal:evalF07}
+                        \textit{F-07}.
+                        This requirement is \textbf{not met}.
+                        The tenant backend currently reads the baked \gls{json} file and does not
+                        maintain an in-memory cache with \gls{ttl} nor a file-fallback strategy.
+                        In short: the \enquote{happy path} for submitting a config and rendering it
+                        in a manually provisioned tenant is demonstrated.
+                        Automated provisioning, ratings, and runtime config management and caching
+                        remain open.
+            \end{enumerate}
                 
             \subsubsection{Non-functional Requirements}\label{subsubsec:evalNonFunctionalRequirements}
+                \begin{enumerate}[label={[\arabic*]:},
+                    ref=Challenge~\arabic*,
+                    leftmargin=*,
+                    itemsep=0.6\baselineskip]
+
+                    \item\label{chal:evalNF01}
+                        \textit{NF-01}.
+                        This requirement was \textbf{not evaluated}.
+                        The prototype runs on a local \gls{kind} cluster without Prometheus, Grafana
+                        or external uptime probes, so monthly availability and \enquote{0 failed GET
+                        during workspace moves and pod restarts} cannot be measured.
+                        Ad-hoc tests show the tenant page serves correctly when the tenant cluster
+                        is up.
+                        However, the absence of automated rollout and health checks mean the stated
+                        \gls{slo} cannot be asserted.
+                        Meeting this target would require basic liveness and readiness gates,
+                        rolling updates, and external probing plus time-window aggregation
+                        (see~\autoref{subsec:evalPlannedMetrics}).
+
+                    \item\label{chal:evalNF02}
+                        \textit{NF-02}.
+                        This requirement was \textbf{not evaluated}.
+                        As with NF-01, no continuous probing or log-based \gls{sli} exists.
+                        The dashboard is a single instance without redundancy or auto-healing, so
+                        even short local outages would count against the \gls{slo}.
+                        To substantiate this requirement, the system would need at least replicated
+                        dashboard pods, persistent state for submitted configs, and an availability
+                        \gls{sli} derived from probe success ratio over the month
+                        (see~\autoref{subsec:evalPlannedMetrics}).
+
+                    \item\label{chal:evalNF03}
+                        \textit{NF-03}.
+                        This requirement was \textbf{not evaluated}.
+                        No load testing was performed.
+                        Only spot checks via browser dev tools are feasible within the time window.
+                        The target performance is ambitious for a single-node \gls{kind} cluster.
+                        The \gls{isr} and revalidation model reduces backend reads, which helps
+                        latency under load, but without \gls{cdn} or edge caching, autoscaling, and
+                        measured \glspl{sli}, the requirement cannot be claimed.
+                        Future validation would need a load generator, request and latency
+                        histograms, and resource scaling with \gls{hpa}, \gls{vpa} or \gls{keda} to
+                        sustain 200 req/s while keeping p95 under the budget.
+                \end{enumerate}
 
         \subsection{Results and Evidence}\label{subsec:evalResultsAndEvidence}
+            This section aggregates the outcomes of the scenario-based evaluation without reprinting
+            artifacts.
+            Detailed logs and screenshots are indexed in~\autoref{app:eval}.\\
+            \subsubsection{Summary}\label{subsubsec:evalSummary}
+            The dashboard accepts and validates tenant configurations and persists them
+            (Scenario~\ref{chal:dashboardSubmission}, \emph{Pass}).
+            A manually provisioned tenant renders the submitted data \gls{e2e}
+            (Scenario~\ref{chal:tenantRendering}, \emph{Pass}).
+            Automated \gls{crd}-based propagation and binding to tenant workspaces remain
+            non-functional (Scenario~\ref{chal:evalCRD}, \emph{Fail}),
+            which blocks the fully automated path from submission to deployed tenant.\\
+            \textbf{Evidence map.}
 
         \subsection{Lessons Learned}\label{subsec:evalLessonsLearned}
+            Several design and implementation insights emerged during the prototype and are listed
+            below.
+
+            \begin{enumerate}[label={[\arabic*]:},
+                ref=Challenge~\arabic*,
+                leftmargin=*,
+                itemsep=0.6\baselineskip]
+
+                \item\label{chal:evalLessonsCORS}
+                    \textit{Solve browser-to-backend early}.
+                    Direct browser calls repeatedly failed due to \gls{cors}.
+                    Moving requests behind server-side proxy routes in Next.js (\texttt{/api/\dots})
+                    eliminated policy mismatches and simplified endpoint management
+                    (see~\autoref{subsubsec:challengesCORS}).
+
+                \item\label{chal:evalLessonsIngress}
+                    \textit{Local ingress is fragile on developer machines}.
+                    Nginx Ingress is trivial to declare in \gls{k8s} but awkward locally due to
+                    privileged ports and host networking.
+                    For developer workflows, \texttt{NodePort} + host mapping proved as a workaround
+                    (see~\autoref{subsubsec:challengesIngress},~\autoref{subsubsec:challengesHosts}).
+
+                \item\label{Make port paths explicit}
+                    \textit{Make port paths explicit}.
+                    Mismatches across app $\rightarrow$ container $\rightarrow$ service
+                    $\rightarrow$ cluster ports were the root cause of several days of debugging.
+                    A dedicated debug pod (\texttt{netshoot}) should be part of the baseline
+                    toolchain (see~\autoref{subsubsec:challengesNodePorts}).
+
+                \item\label{chal:evalLessonsSchemaFirst}
+                    \textit{Schema-first helps across services}.
+                    The shared \texttt{zod} schema provided one contract for validation and types,
+                    reducing drift and clarifying failure modes at service boundaries.
+
+                \item\label{chal:evalLessonsDecoupleConfig}
+                    \textit{Decouple \enquote{config as data} from control plane coupling}.
+                    Version-and-share via a \gls{crd} remains attractive, but binding across
+                    workspaces with \gls{kcp}-\gls{tmc} was brittle on the available versions.
+                    Keeping build-time injection and runtime contracts independent avoided a hard
+                    blocker for the base functionality (see~\autoref{subsubsec:challengesKCPTMC}).
+
+                \item\label{chal:evalLessonsIdempotentScripts}
+                    \textit{Idempotent scripts pay off}.
+                    Infrastructure scripts written to be repeatable and environment-aware shortened
+                    recovery time and supported the evaluation's reproducibility goals.
+                
+                \item\label{chal:evalLessonsObservabilityFirst}
+                    \textit{Observability first is not optional}.
+                    Lack of metrics and traces slowed diagnosis.
+                    Basic Prometheus counters and request tracing hooks should be part of the
+                    initial scaffolding, not deferred work.
+
+                \item\label{chal:evalLessonsDocumentation}
+                    \textit{Documentation is crucial}.
+                    \gls{kcp} provides a intriguing approach, but its complexity necessitates
+                    thorough documentation, that is not provided in all necessary forms.
+                    Because of its alpha status breaking changes are introduced and easily available
+                    resources often did not reflect the current state of the project.
+                    The combination of hard-to-grasp concepts and missing reference code and
+                    architectures made the project harder to implement than it needed to be.
+            \end{enumerate}
+
         
         \subsection{Threats to Validity}\label{subsec:evalThreatsToValidity}
+            The following factors limit generalizability:
+            \begin{enumerate}[label={[\arabic*]:},
+                ref=Challenge~\arabic*,
+                leftmargin=*,
+                itemsep=0.6\baselineskip]
+
+                \item\label{chal:evalValidityEnvironmentBias}
+                    \textit{Environment bias}.
+                    Evaluation was conducted on a single-machine with local clusters.
+                    results may not transfer to managed clouds with load balancers, \gls{dns} and
+                    storage classes.
+
+                \item\label{chal:evalValidityPrototypeBias}
+                    \textit{Manual steps}.
+                    Several scenarios required manual provisioning.
+                    Hidden assumptions or side effects may affect outcomes despite the scripts'
+                    intent to be idempotent.
+
+                \item\label{chal:evalValidityIncompleteInstrumentation}
+                    \textit{Incomplete instrumentation}.
+                    Absence of runtime metrics and tracing reduces confidence in negative findings
+                    (e.g., \enquote{no error} vs.\ \enquote{no observed error}).
+
+                \item\label{chal:evalValidityControlPlaneDrifts}
+                    \textit{Control plane drifts}.
+                    The prototype relies on specific \gls{kcp}-\gls{tmc} versions and plugins.
+                    Behavior will inevitably change with newer releases.
+
+                \item\label{chal:evalValiditySingleImplementationPath}
+                    \textit{Single implementation path}.
+                    Templates and services reflect one tech stack (TypeScript + Next.js + Express).
+                    Alternative stacks may surface different constraints.
+            \end{enumerate}
 
         \subsection{Planned Metrics (Deferred)}\label{subsec:evalPlannedMetrics}
+            The following metrics were originally planned, but deferred due to time and tooling
+            gaps:
+            \begin{enumerate}[label={[\arabic*]:},
+                ref=Challenge~\arabic*,
+                leftmargin=*,
+                itemsep=0.6\baselineskip]
+
+                \item\label{chal:plannedAvailability}
+                    \textit{Availability and error budget}.
+                    Uptime for public tenant pages (NF-01) and dashboard (NF-02) as well as error
+                    budget burn based on \texttt{5xx}/\texttt{4xx} rates from synthetic probes.
+
+                \item\label{chal:plannedLatency}
+                    \textit{Latency and throughput}.
+                    p50/p95/p99 for key endpoints (\texttt{/config}, tenant page render) under load.
+                    Target p95 $\leq$ 600ms at 200req/s (NF-03).
+
+                \item\label{chal:plannedProvisioningTime}
+                    \textit{Provisioning time}.
+                    \gls{e2e} time from submission to tenant \gls{url} readiness (F-05),
+                    including \gls{crd} propagation lag and image build and pull time.
+
+                \item\label{chal:plannedResourceEfficiency}
+                    \textit{Resource efficiency}.
+                    \gls{cpu} and memory per service at idle and under burst and cache hit ratio for
+                    configuration (F-07).
+
+                \item\label{chal:plannedTooling}
+                    \textit{Intended tooling}.
+                    Service-level Prometheus metrics (\gls{http}, \gls{gc}, cache), Grafana
+                    dashboards, Gatling load tests, blackbox-exporter probes, and basic
+                    OpenTelemetry traces.
+            \end{enumerate}
 
         \subsection{Summary and Link to Conclusion}\label{subsec:evalSummaryAndLinkToConclusion}
+            The evaluation confirms that configuration submission, validation, persistence, and
+            tenant rendering work as intended when the tenant stack is provisioned manually.
+            The automated path via \gls{crd} creation and cross-workspace binding remained
+            non-functional, and observability was insufficient for quantitative assessment.
+            These findings frame the priorities for the next iteration, stabilizing the
+            control-plane integration, reinstating automated provisioning, and adding first-class
+            telemetry, which are discussed in the Conclusion and Outlook.
+
+    \clearpage
 
     \section{Conclusion and Outlook}\label{sec:conclusion}
 
