@@ -2501,10 +2501,27 @@
                         The config file needs to be baked into the tenant \gls{be} image.
                         The tenant \gls{fe} needs to be deployed with the backend endpoint
                         configured.\\
-                        \emph{Steps:} Open the tenant \gls{fe} at \texttt{}
+                        \emph{Steps:} Open the tenant \gls{fe} at \texttt{tenant.local:8001}.
+                        Verify that the shown details match the backend config.\\
+                        \emph{Expected:} The tenant \gls{fe} renders the company details, products,
+                        and proposition from the config file.\\
+                        \emph{Evidence:} Evidence for the successful rendering is found
+                        under~\autoref{appsub:tenantfe} and~\autoref{appsub:tenantbe}.\\
+                        \emph{Verdict:} Pass.
 
+                    \item\label{chal:evalCRD}
+                        \textit{\gls{crd} creation}.
+                        \emph{Preconditions:} See \textit{Dashboard submission}.\\
+                        \emph{Steps:} See \textit{Dashboard submission}.\\
+                        \emph{Expected:} \gls{crd} is created and bound to the tenant cluster. \\
+                        \emph{Evidence:} As the \gls{crd} creation was not successful, the \gls{crd}
+                        is not automatically created.\\
+                        \emph{Verdict:} Failed.
             \end{enumerate}
-        
+            This method aligns the evaluation with the implemented surface and provides screenshots
+            as evidence for each scenario while acknowledging non-functional instrumentation and
+            full automation as deferred work.
+
         \subsection{Evaluation Criteria (Reframed)}\label{subsec:evaluationCriteria}
 
             \subsubsection{Functional Correctness}\label{subsubsec:functionalCorrectness}
@@ -2582,7 +2599,7 @@
 
         % Appendix B: TenantFE
         \section{TenantFE (Selected Code)}\label{app:tenantfe}
-            \subsection*{Directory Structure}
+            \subsection{Directory Structure}
                 \begin{figure}[H]
                     \centering
                     \VerbatimInput[
@@ -2593,7 +2610,7 @@
                     \caption{TenantFE directory tree (trimmed)}\label{fig:tenantfe-tree}
                 \end{figure}
 
-            \subsection*{Key Files}
+            \subsection{Key Files}
                 % API routes
                 \begin{listing}[H]
                     \caption{API route: \texttt{src/app/api/config/route.ts}}\label{lst:tenantfe-config-route}
@@ -2678,7 +2695,7 @@
 
         \clearpage
 
-            \subsection*{Build and Runtime}
+            \subsection{Build and Runtime}
                 \begin{flushleft}
                     \captionof{listing}{Dockerfile}\label{lst:tenantfe-dockerfile}
                     \inputminted[
@@ -2699,7 +2716,7 @@
 
         % Appendix C: TenantBE
         \section{TenantBE (Selected Code)}\label{app:tenantbe}
-            \subsection*{Directory Structure}
+            \subsection{Directory Structure}
             \begin{figure}[H]
                 \centering
                 \VerbatimInput[
@@ -2712,7 +2729,7 @@
 
         \clearpage
 
-            \subsection*{Key Files}
+            \subsection{Key Files}
                 \begin{flushleft}
                     \captionof{listing}{Server: \texttt{src/server.ts}}\label{lst:tenantbe-server}
                     \inputminted[
@@ -2731,7 +2748,7 @@
 
         \clearpage
 
-            \subsection*{Build and Runtime}
+            \subsection{Build and Runtime}
                 \begin{flushleft}
                     \captionof{listing}{Dockerfile}\label{lst:tenantbe-dockerfile}
                     \inputminted[
@@ -2753,7 +2770,7 @@
         % Appendix D: Config Schema
         \section{ConfigSchema}\label{app:configschema}
 
-            \subsection*{Directory Structure}
+            \subsection{Directory Structure}
                 \begin{figure}[H]
                     \centering
                     \VerbatimInput[
@@ -2766,7 +2783,7 @@
 
         \clearpage
 
-            \subsection*{Key Files}
+            \subsection{Key Files}
                 \begin{flushleft}
                     \captionof{listing}{Index: \texttt{src/index.ts}}\label{lst:configschema-index}
                     \inputminted[
@@ -2803,7 +2820,7 @@
 
         \clearpage
 
-            \subsection*{Build and Runtime}
+            \subsection{Build and Runtime}
                 \begin{listing}[H]
                     \caption{Build: \texttt{tsconfig.build.json}}\label{lst:configschema-build}
                     \inputminted[
@@ -2825,7 +2842,7 @@
         % Appendix E: DashboardFE
         \section{DashboardFE (Selected Code)}\label{app:dashboardfe}
 
-            \subsection*{Directory Structure}
+            \subsection{Directory Structure}
                 \begin{figure}[H]
                     \centering
                     \VerbatimInput[
@@ -2838,7 +2855,7 @@
 
         \clearpage
 
-            \subsection*{Key Files}
+            \subsection{Key Files}
                 \begin{flushleft}
                     \captionof{listing}{API route: \texttt{src/app/api/config}}\label{lst:dashboardfe-api-config}
                     \inputminted[
@@ -3009,7 +3026,7 @@
 
         \clearpage
 
-            \subsection*{Build and Runtime}
+            \subsection{Build and Runtime}
                 \begin{flushleft}
                     \captionof{listing}{Dockerfile}\label{lst:dashboardfe-dockerfile}
                     \inputminted[
@@ -3031,7 +3048,7 @@
         % Appendix F: DashboardBE
         \section{DashboardBE (Selected Code)}\label{app:dashboardbe}
 
-            \subsection*{Directory Structure}
+            \subsection{Directory Structure}
             \begin{figure}[H]
                 \centering
                 \VerbatimInput[
@@ -3044,7 +3061,7 @@
 
         \clearpage
 
-            \subsection*{Key Files}
+            \subsection{Key Files}
                 \begin{flushleft}
                     \captionof{listing}{Server: \texttt{src/server.ts}}\label{lst:dashboardbe-server}
                     \inputminted[
@@ -3077,7 +3094,7 @@
                     {Initializes an \texttt{ioredis} client (env \texttt{REDIS\_HOST}/\texttt{REDIS\_PORT}, defaults to \texttt{redis:6379}). Stores per-user \glspl{ip} in hash \texttt{users} as \gls{json} via \texttt{setUserIp}/\texttt{getUserIp}.}
                     {Infrastructure state cache used by frontend to provide the \gls{ip}.}
 
-            \subsection*{Build and Runtime}
+            \subsection{Build and Runtime}
                 \begin{listing}[H]
                     \caption{Dockerfile}\label{lst:dashboardbe-dockerfile}
                     \inputminted[
@@ -3098,7 +3115,7 @@
 
         % Appendix G: Infra
         \section{Infra (Scripts and Manifests)}\label{app:infra}
-            \subsection*{Directory Structure}
+            \subsection{Directory Structure}
                 \begin{flushleft}
                     \VerbatimInput[
                         breaklines=true,
@@ -3111,7 +3128,7 @@
 
         \clearpage
 
-            \subsection*{Layout}\label{subsec:infra-layout}
+            \subsection{Layout}\label{subsec:infra-layout}
                 \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.22\textwidth} X >{\raggedright\arraybackslash}p{0.34\textwidth}@{}}
                     \toprule
                     \textbf{Path} & \textbf{Purpose} & \textbf{Highlights} \\
@@ -3132,7 +3149,7 @@
 
         \clearpage
 
-            \subsection*{Simplified Deployment Workflow}\label{subsec:infra-workflow}
+            \subsection{Simplified Deployment Workflow}\label{subsec:infra-workflow}
                 \begin{enumerate}
                     \item \textbf{Bootstrap tools} (kubectl, krew, plugins, \gls{kind}, etc.): \\
                             \texttt{\detokenize{scripts/install-deps.sh}}, \\
@@ -3155,7 +3172,7 @@
 
         \clearpage
 
-            \subsection*{Build and Images}
+            \subsection{Build and Images}
                 \begin{listing}[H]
                     \caption{Build dashboardBE: \texttt{/scripts/build/dashboardBE.sh}}\label{lst:build-dashboardBE}
                     \inputminted[
@@ -3228,7 +3245,7 @@
 
         \clearpage
 
-            \subsection*{Clusters}
+            \subsection{Clusters}
                 \begin{listing}[H]
                     \caption{Dashboard Cluster Manifest: \texttt{/k8s/cluster/kind-config.yaml}}\label{lst:dashboard-cluster}
                     \inputminted[
@@ -3263,7 +3280,7 @@
                     {Maps container ports. Makes the manifest dynamic.}
                     {Runtime for the tenant stack.}
 
-            \subsection*{Deployment Manifests}
+            \subsection{Deployment Manifests}
                 \begin{listing}[H]
                     \caption{dashboardBE Manifest: \texttt{/k8s/deployments/dashboard-be.yaml}}\label{lst:dashboardBE-manifest}
                     \inputminted[
@@ -3352,7 +3369,7 @@
 
         \clearpage
 
-            \subsection*{Workspaces}
+            \subsection{Workspaces}
                 \begin{flushleft}
                     \captionof{listing}{Create Dashboard Workspace: \texttt{/scripts/create-dashboard-workspace.sh}}\label{lst:create-dashboard-workspace}
                     \inputminted[
@@ -3387,7 +3404,7 @@
 
         \clearpage
 
-            \subsection*{CRDs}
+            \subsection{CRDs}
                 \begin{flushleft}
                     \captionof{listing}{Create Tenant CRD Script: \texttt{/scripts/CRDs/create-tenant-x-CRD.sh}}\label{lst:create-tenant-crd}
                     \inputminted[
@@ -3405,7 +3422,7 @@
                     {Defines the source of truth for per-tenant config and publishes it via \gls{kcp} so other workspaces can bind and validate it.}
         \clearpage
 
-            \subsection*{Role Binding}
+            \subsection{Role Binding}
                 \begin{listing}[H]
                     \caption{TMC Role Binding: \texttt{/k8s/roleBinding/tmc-role-binding}}\label{lst:tmc-role-binding}
                     \inputminted[
@@ -3424,7 +3441,7 @@
 
         \clearpage     
 
-            \subsection*{Ingress}
+            \subsection{Ingress}
                 \begin{flushleft}
                     \captionof{listing}{Dashboard Ingress: \texttt{/k8s/ingress/dashboard-ingress.yaml}}\label{lst:dashboard-ingress}
                     \inputminted[
@@ -3437,13 +3454,31 @@
                     ]{yaml}{\detokenize{code/BachelorThesis_Infra/k8s/ingress/dashboard-ingress.yaml}}
                 \end{flushleft}
                 \codesummary
-                    {Expose the dashboard UI and API via friendly local hostnames, mirroring production routing.}
+                    {Expose the dashboard \gls{ui} and \gls{api} via friendly local hostnames, mirroring production routing.}
                     {Defines two \gls{k8s} Ingresses: \texttt{dashboard-fe-ingress} routes \texttt{dashboard.local} to Service \texttt{dashboard-fe}:80, \texttt{dashboard-be-ingress} routes \texttt{api.dashboard.local} to Service \texttt{dashboard-be}:80. Requires \texttt{ingress-nginx}.}
                     {Provides stable edge entrypoints and decouples external \gls{dns} from in-cluster Service details.}
 
         \clearpage
 
-            \subsection*{Helpers}
+                \begin{flushleft}
+                    \captionof{listing}{Tenant Ingress: \texttt{/k8s/ingress/tenant-ingress.yaml}}\label{lst:tenant-ingress}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{yaml}{\detokenize{code/BachelorThesis_Infra/k8s/ingress/tenant-ingress.yaml}}
+                \end{flushleft}
+                \codesummary
+                    {Expose the tenant \gls{ui} and \gls{api} via friendly local hostnames, mirroring production routing.}
+                    {Defines two \gls{k8s} Ingresses: \texttt{tenant-fe-ingress} routes \texttt{tenant-\textit{ID}.local} to Service \texttt{tenant-fe}:80, \texttt{tenant-be-ingress} routes \texttt{api.tenant-\textit{ID}.local} to Service \texttt{tenant-be}:80. Requires \texttt{ingress-nginx}.}
+                    {Provides stable edge entrypoints and decouples external \gls{dns} from in-cluster Service details.}
+
+        \clearpage
+
+            \subsection{Helpers}
                 \begin{listing}[H]
                     \caption{Add to Hosts Script: \texttt{/scripts/add-to-hosts.sh}}\label{lst:add-to-hosts}
                     \inputminted[
@@ -3510,7 +3545,7 @@
         
         % Appendix J: Evaluation
         \section{Evaluation}\label{app:eval}
-            \subsection*{Dashboard FE}\label{appsub:dashboardfe}
+            \subsection{Dashboard FE}\label{appsub:dashboardfe}
                 \begin{figure}[h!]
                     \centering
                     \includegraphics[width=\textwidth]{screenshots/eval/dashboardfe/dashboardfe-login-page.png}
@@ -3548,10 +3583,31 @@
                 \end{figure}
 
             \FloatBarrier
-            \subsection*{Dashboard BE}\label{appsub:dashboardbe}
+            \subsection{Dashboard BE}\label{appsub:dashboardbe}
                 \begin{figure}[h!]
                     \centering
                     \includegraphics[width=\textwidth]{screenshots/eval/dashboardbe/dashboardbe-config.png}
                     \caption{Config}\label{fig:dashboardbe-config}
                 \end{figure}
+
+        \clearpage
+
+            \FloatBarrier
+            \subsection{Tenant FE}\label{appsub:tenantfe}
+                \begin{figure}[h!]
+                    \centering
+                    \includegraphics[width=\textwidth]{screenshots/eval/tenantfe/tenantfe.png}
+                    \caption{Tenant FE page}\label{fig:tenantfe-page}
+                \end{figure}
+
+        \clearpage
+
+            \FloatBarrier
+            \subsection{Tenant BE}\label{appsub:tenantbe}
+                \begin{figure}[h!]
+                    \centering
+                    \includegraphics[width=\textwidth]{screenshots/eval/tenantbe/curl.png}
+                    \caption{Tenant BE (curl)}\label{fig:tenantbe-curl}
+                \end{figure}
+                
 \end{document}
