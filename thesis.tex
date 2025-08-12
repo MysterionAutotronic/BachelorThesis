@@ -2885,6 +2885,8 @@
                     resources often did not reflect the current state of the project.
                     The combination of hard-to-grasp concepts and missing reference code and
                     architectures made the project harder to implement than it needed to be.
+                    As an example for a pain point in the \gls{tmc} documentation, the official
+                    quick start guide is provided in~\autoref{app:docs}.
             \end{enumerate}
 
         
@@ -4067,6 +4069,22 @@
 
         % Appendix H: Documentation Excerpts
         \section{Documentation Excerpts}\label{app:docs}
+            \subsection{KCP-TMC Quick Start Guide}
+            \begin{flushleft}
+                    \captionof{listing}{TMC Quick Start Guide}\label{lst:tmc-quick-start}
+                    \inputminted[
+                        fontsize=\small,
+                        linenos,
+                        breaklines,
+                        breakanywhere,
+                        tabsize=2,
+                        frame=lines
+                    ]{bash}{\detokenize{code/other/tmc-readme.sh}}
+                \end{flushleft}
+                \codesummary
+                    {The quick start guide uses a \gls{kuard} demo workload rather than a local cluster, which makes the process of binding a workload to the \gls{tmc} workspace opaque.}
+                    {A minimal path that builds the \gls{tmc}/\gls{kcp} \gls{cli} binaries, starts \gls{tmc}-\gls{kcp}, creates a \gls{tmc} workspace, generates and installs a syncer on a child cluster, binds compute, and deploys the \gls{kuard} demo --- thereby \enquote{making things work} without exposing the full lifecycle of a local cluster.}
+                    {Documents the hidden assumptions and shortcuts that produced misleading \enquote{green} signals, explains why later steps (\gls{rbac}, APIBinding, \glspl{crd}, ingress) surfaced as hard-to-diagnose issues, and frames why the approach is not prescriptive for production.}
 
         \clearpage
 
