@@ -2970,10 +2970,80 @@
     \clearpage
 
     \section{Conclusion and Outlook}\label{sec:conclusion}
+        This chapter synthesizes the implementation and evaluation results, distills the main
+        findings relative to the project goals, and identifies the practical implications of the
+        prototype.
+        The summary recaps what was built and what worked.
+        The personal conclusion reflects on the significance and limitations of those results.
+        And finally, the outlook outlines concrete next steps to mature the system toward a
+        production-ready state.
 
         \subsection{Summary}\label{subsec:summary}
+        The project set out to demonstrate a tenant-aware \gls{saas} foundation on \gls{k8s@gls}
+        with workspace-scoped isolation, a shared configuration model, and \enquote{push-button}
+        tenant provisioning.
+        A partly working prototype was delivered comprising four services (tenant frontend and
+        backend, and dashboard frontend and backend), a shared TypeScript plus \texttt{zod}
+        configuration schema, and a set of (mostly idempotent) scripts and manifests to stand up the
+        local environment.
+        The dashboard accepts and validates tenant configurations, persists them as files, and the
+        tenant stack, when built and deployed manually, renders the same configuration in the public
+        page.
+        Practical issues around browser \gls{cors} were resolved by proxying through server-side
+        Next.js routes, and reproducibility was improved via templates, dockerfiles, and scripted
+        setup.\\
+        Key design promises remain only partially realized.
+        Automatic workspace and cluster creation from the dashboard is not wired \gls{e2e}.
+        The intended CRD-based distribution and versioning of tenant configuration was not made to
+        work reliably, so the tenant backend reads a file baked at image build time,
+        and production-grade observability with metrics and \glspl{slo} was deferred.
+        Local networking constraints (node ports, ingress on privileged ports) further limited an
+        \gls{e2e} path on a developer machine.\\
+        A major factor in these outcomes was substrate volatility:
+        \textbf{kcp is still an alpha-stage project} and underwent breaking shifts
+        (e.g., from v0.19 to v0.20) with sparse, fast-moving documentation.
+        The switch to \texttt{\gls{kcp}-\gls{tmc}} (itself based on an older \gls{kcp} and lightly
+        maintained) introduced additional friction, \gls{rbac} for the syncer, compute binding
+        hurdles, and protected core \glspl{crd} that complicated APIBinding plus APIExport usage.
+        These ecosystem constraints, rather than fundamental flaws in the service design, were the
+        primary blockers.\\
+        Overall, the prototype validates the feasibility of the configuration model and the tenant
+        surface but stops short of automated provisioning and runtime configuration flows.
+        The evaluation and lessons learned identify a clear path to completion once the
+        control-plane substrate is stabilized and the \gls{crd}-based pipeline is made reliable.
 
         \subsection{Personal Conclusion}\label{subsec:personalConclusion}
+            The experience with \gls{kcp} and \gls{kcp}-\gls{tmc} was shaped less by formal
+            documentation and more by community support: the Slack workspace routinely provided the
+            clearest, most actionable guidance, especially around the core concepts behind \gls{kcp}
+            and \gls{tmc} and why it was moved to its own project, where official documentation
+            was fragmentary in terms of comprehensiveness and clear implementation details as well
+            as breaking changes.
+            As a platform idea, the project looks promising: a shared control plane that offers
+            workspaces, APIBinding, APIExport, and syncers could, in theory, standardize
+            multi-tenancy concerns and reduce bespoke glue.\\
+            In practice, however, the stack tended to introduce rather than hide complexity.
+            The concepts and interaction between workspaces, exports, bindings, syncers, the
+            \gls{kcp} core, \gls{tmc} and the newer \gls{mcr} in combination with custom \gls{rbac}
+            and \glspl{crd} created a steep learning curve.
+            It was often especially unclear when to apply which concept, and where the limitations
+            were.
+            Combined with fast-moving releases and no \gls{e2e} examples, the system quickly
+            becomes a black box for anyone who is not a senior \gls{k8s@gls} practitioner or active
+            contributor.
+            Much of the engineering effort went into deciphering substrate behavior rather than
+            delivering tenant features.\\
+            The underlying concept, decoupling \glspl{api} from clusters and composing them per
+            workspace, remains compelling.
+            But given the current maturity, scarce examples, and operational sharp edges, it should
+            be observed rather than adopted as the foundation described in this thesis.
+            A pragmatic near-term path would favor better-known patterns (namespace-level isolation
+            with strict \gls{rbac}, NetworkPolicy, ResourceQuota, GitOps-driven rollout, or
+            established provisioning controllers) while tracking \gls{kcp}'s trajectory.
+            If the ecosystem stabilizes and documentation catches up with the design, the approach
+            may become a viable core for multi-tenant platforms.
+            Until then, it is best treated as an experimental avenue to monitor or a concept to
+            apply in edge-case scenarios.
 
         \subsection{Future Outlook}\label{subsec:outlook}
 
