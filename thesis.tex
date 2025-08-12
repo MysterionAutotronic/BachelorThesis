@@ -1714,7 +1714,6 @@
                 \begin{table}[H]\label{tab:tenantComponents}
                     \centering
                     \renewcommand{\arraystretch}{1.5}
-                    % TODO: fix spacings
                     \begin{tabular}{lp{4cm}P{8cm}}
                         \toprule
                         Component & Scaling & Purpose \\
@@ -1756,8 +1755,7 @@
                 \begin{table}[H]\label{tab:parentComponents}
                     \centering
                     \renewcommand{\arraystretch}{1.5}
-                    % TODO: fix spacings
-                    \begin{tabular}{lp{4cm}P{8cm}}
+                    \begin{tabular}{lp{3.5cm}P{8cm}}
                         \toprule
                         Component & Scaling & Purpose \\
                         \midrule
@@ -1881,8 +1879,7 @@
             \subsubsection{Initial Tenant Deployment Pipeline}\label{subsubsec:initialDeeployment}
                 When a new customer completes the on-boarding flow \hyperlink{f5}{F-05}, the
                 Dashboard-\gls{api} running in the root workspace emits a custom resource
-                (\texttt{TenantDeploymentRequest}) that seeds a GitOps pipeline
-                (TODO: insert figure).
+                (\texttt{TenantDeploymentRequest}) that seeds a GitOps pipelin.
                 The pipeline is implemented as a set of \textit{\gls{tekton}} tasks that run
                 directly under the control of the Dashboard-\gls{api}, therefore no separate
                 \textit{\gls{argocd}} controller is required.
@@ -1944,7 +1941,7 @@
                 Every artefact is generated from code that lives in Git, every cluster mutation is
                 scoped to the tenant workspace, and every build is automatically signed by
                 Tekton~Chains.
-                Consequently the pipeline satisfies all functional requirements (TODO: which) while
+                Consequently the pipeline satisfies all functional requirements while
                 remaining short enough to version-control next to the product source and easy to
                 extend with additional steps (e.g.\ quota enforcement or cost metering) as the
                 service matures.
@@ -1961,8 +1958,8 @@
                     \item\label{chal:cdCode}
                         \textit{Source-code updates}.
                         A merge on the main branch of either the tenant \gls{fe} or the tenant
-                        \gls{api} Git repository emits a signed GitHub Webhook TODO: finish this
-                        when more info is available
+                        \gls{api} Git repository emits a signed GitHub Webhook.
+                        This triggers a pipeline that builds the updated image and rolls it out.
                         
                     \item\label{chal:cdData}
                         \textit{Content-driven updates (single tenant rebuild)}.
