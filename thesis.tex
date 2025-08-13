@@ -565,7 +565,7 @@
 
                 \end{enumerate}
 
-                A secure solution, keeping multi-tenancies advantages while also addressing security
+                A secure solution, keeping multi-tenancy's advantages while also addressing security
                 concerns is desperately needed
                 \parencites[p.~346]{aljahdali2014}[pp.~14576--14577]{senel2023}.
 
@@ -585,7 +585,7 @@
 
                     \item\label{chal:api}
                         \textit{API}.
-                        \gls{kcp} offers an \gls{k8s@gls}-like \gls{api} that enables the use of
+                        \gls{kcp} offers a \gls{k8s@gls}-like \gls{api} that enables the use of
                         standard tools and automation to a degree \see{subsubsec:api}.
                     
                     \item\label{chal:sharding}
@@ -616,7 +616,7 @@
                 \gls{container} orchestration in the tech industry
                 \parencite[pp.~855--858]{damarapati2025}.
                 \\
-                As noted by~\cite[p.~457]{moravcik2022} almost 90\% of organizations used
+                As noted by~\cite[p.~457]{moravcik2022}, almost 90\% of organizations used
                 \gls{k8s@gls} as an orchestrator for managing containers and over 70\% of organizations
                 used it in production by 2021 \parencite{redhatStateOfK8sSecurityReport2021}.
                 The widespread adoption of \gls{k8s@gls} is further underscored by Red Hat's latest
@@ -629,7 +629,7 @@
                 enterprise use caused by \gls{ha@gls}, disaster recovery and security.
                 \\
                 Moreover \gls{k8s@gls} enables faster time-to-market by providing a unified,
-                declarative control plane that abstracts away infrastructure,
+                declarative control-plane that abstracts away infrastructure,
                 guarantees consistent environments from development to production,
                 and automates operational tasks such as scaling, rolling updates,
                 and self-healing—advantages that translate directly into competitive delivery speed,
@@ -638,7 +638,7 @@
                 \\
                 Over the years, Kubernetes --- and the many orchestration solutions inspired by or
                 built on it --- has evolved to handle an increasingly diverse range of workloads,
-                supporting everything from conventional applications in to emerging
+                supporting everything from conventional applications into emerging
                 \textit{edge-native} deployments \parencites[p.~21]{biot2025}[pp.~1--4]{biot2025}.
                 Edge-native deployments are applications intended to run on computing
                 resources located at or near the data source --- the network \textit{edge} ---
@@ -724,7 +724,7 @@
 
             \subsubsection{Relevance to SaaS and this Thesis}
                 The preceding concepts ground the requirements of modern \gls{saas}: rapid change,
-                frictionless onboarding, and a single, provider-owned control plane that scales
+                frictionless onboarding, and a single, provider-owned control-plane that scales
                 efficiently across many tenants.
                 \Gls{multiTenancy} increases utilization and reduces cost but raises hard problems around
                 isolation, fair scheduling, and performance guarantees that any viable platform must
@@ -740,7 +740,7 @@
         \newpage
 
         \subsection{Kubernetes Control Plane (KCP)}\label{subsec:kcp}
-            \gls{kcp} is \enquote{An open source horizontally scalable control plane for
+            \gls{kcp} is \enquote{An open source horizontally scalable control-plane for
             \gls{k8s@gls}-like APIs} \parencite{kcpio}.
 
             \subsubsection{Workspaces}\label{subsubsec:workspaces}
@@ -753,7 +753,7 @@
                 Every workspace is backed by its own logical cluster stored in an isolated
                 \textbf{\gls{etcd} prefix}, so objects in one workspace (including cluster-scoped
                 resources like \textbf{CRDs}) are completely invisible to others, delivering hard
-                \gls{multiTenancy} without spinning up separate control planes
+                \gls{multiTenancy} without spinning up separate control-planes
                 \parencite{kcpWorkspaces}.
                 \\
                 As per the definition by the~\cite{etcd}, \enquote{\textbf{\gls{etcd}} is a strongly
@@ -790,7 +790,7 @@
                 \parencite{kcpWorkspaces}.
                 \\
                 This combination of strong isolation, familiar tooling, and hierarchical
-                organization makes workspaces offer an attractive solution to many of the problems
+                organization makes workspaces an attractive solution to many of the problems
                 commonly faced in multi-tenant environments: each tenant gets the freedom of a full
                 dedicated cluster, yet operators manage only a single shared \gls{kcp} control
                 plane.
@@ -934,7 +934,7 @@
                 constructs or by running two or more replicas behind a global \gls{ip} address.
                 By funnelling cross-shard traffic through this purpose-built cache layer, \gls{kcp}
                 delivers the fail-over semantics described by~\cite{nist800-113}: metadata remains
-                available, and therefore the control plane remains operational, even when individual
+                available, and therefore the control-plane remains operational, even when individual
                 components fail.
 
         \newpage
@@ -1004,7 +1004,7 @@
             separately-operated versions \parencite[pp.~23--24]{awsSaaSArchitectureFundamentals}.
             Furthermore it distances the software provider from unified onboarding, operations, and
             customer insight—so automation alone creates an \gls{msp} setup, whereas true \gls{saas}
-            requires one shared version and a single, provider-owned control plane for every tenant
+            requires one shared version and a single, provider-owned control-plane for every tenant
             \parencite[pp.~23--24]{awsSaaSArchitectureFundamentals}.
             \\
             Ultimately, \gls{saas} depends on automated, repeatable workflows that remove internal
@@ -1093,7 +1093,7 @@
             \cleardoublepage
 
         \subsection{Multi-Tenancy Concepts in the Cloud}\label{subsec:mtConcepts}
-            As already described in \autoref{subsubsec:mtImportance}, a multi-tenant solution is one
+            As described in \autoref{subsubsec:mtImportance}, a multi-tenant solution is one
             that is used by multiple customers or tenants \parencite[p.~57]{azureWhitepaper}.
             As observed by~\cite[p.~137]{azureWhitepaper}, architects can position themselves
             anywhere on a continuum that shares every resource among tenants at one extreme and
@@ -1103,7 +1103,7 @@
             It emphasizes that these models are \textit{not all-or-nothing concepts} and can be
             mixed per service or layer \parencite[p.~19]{awsSaaSArchitectureFundamentals}.
             To operate such mixtures efficiently, \gls{aws} separates a shared
-            \textit{control plane}, covering onboarding, identity, billing and other global
+            \textit{control-plane}, covering onboarding, identity, billing and other global
             services, from an \textit{application plane} that hosts tenant workloads
             \parencite[p.~10]{awsSaaSArchitectureFundamentals}.
             Azure highlights the \textit{Deployment Stamps} pattern, which deploys dedicated
@@ -1120,7 +1120,7 @@
             Kubernetes extension to access their resources.
             The same study distinguishes \textit{multi-tenant team} deployments that mainly share
             cluster namespaces from \textit{multi-tenant customer} deployments that demand full
-            isolation of data and control planes \parencite[p.~651]{nguyen2022}.
+            isolation of data and control-planes \parencite[p.~651]{nguyen2022}.
             Capsule and Kiosk take a lighter \enquote{flat namespace} route.  
             Capsule lets admins \textit{replicate resources across a tenant's namespaces} or copy
             them between tenants, easing day-to-day ops, but the authors caution that the pattern
@@ -1146,10 +1146,10 @@
             \parencite[pp.~144580--144581]{senel2023}.
             At the opposite extreme, \textbf{Arktos} represents a deep-modification approach: it
             injects tenant primitives directly into the \gls{k8s@gls} \gls{api} gateway and
-            partitions, targeting \enquote{a single regional control plane to manage 300 000 nodes
+            partitions, targeting \enquote{a single regional control-plane to manage 300,000 nodes
             that multiple tenants will share} \parencite[p.~144582]{senel2023}.
             These additions complete the design space: hierarchical-namespace frameworks minimize
-            overhead, virtual-cluster frameworks trade moderate cost for a dedicated control plane
+            overhead, virtual-cluster frameworks trade moderate cost for a dedicated control-plane
             per tenant, and tenant-aware forks such as Arktos pursue extreme scale with built-in
             multi-tenancy primitives.
             \\
@@ -1167,7 +1167,7 @@
             \\
             \textcite{nguyen2022} propose \enquote{a design of
             \textit{dynamic resource allocation in \sic Kubernetes multi-tenancy system} to address
-            the missing dynamic resource allocation in the multi-tenant Kubernetes control plane}.
+            the missing dynamic resource allocation in the multi-tenant Kubernetes control-plane}.
             Their architecture adds \enquote{\textit{scheduler/rescheduler}, \gls{prometheus}-driven
             autoscaler, and a \textit{cloud provisioner} that can spin up new clusters based on
             workload changes} \parencite[p.~653]{nguyen2022}.
@@ -1441,7 +1441,7 @@
                     \hypertarget{nf2}{NF-02} & Platform & Dashboard Availability & The owner dashboard shall achieve $\geq$~99.5~\% monthly uptime (so brief maintenance windows are acceptable). \\
                     \hypertarget{nf3}{NF-03} & Tenant & Page Performance & p95 full-page load time shall be $\leq$~600~ms at 200~req/s from one region. \\
                     \hypertarget{nf4}{NF-04} & Tenant & \gls{api} Latency & p95 latency for GET \texttt{/api/config} and GET \texttt{/api/reviews} shall be $\leq$~150~ms under the same load. \\
-                    \hypertarget{nf5}{NF-05} & Platform & Horizontal Scalability & The control plane shall handle at least 2 000 tenant workspaces with etcd IO $\leq$~70~\% and <~100~ms workspace-list latency. \\
+                    \hypertarget{nf5}{NF-05} & Platform & Horizontal Scalability & The control-plane shall handle at least 2 000 tenant workspaces with etcd IO $\leq$~70~\% and <~100~ms workspace-list latency. \\
                     \hypertarget{nf6}{NF-06} & Platform & Cache Consistency & Config cache shall reflect config changes within 15~min after a tenant triggers \enquote{publish} in the dashboard. \\
                     \hypertarget{nf7}{NF-07} & Platform & Tenant Isolation and Security & Data and traffic from one tenant shall not be accessible to another (\gls{rbac}, row-level security, network policies). \\
                     \hypertarget{nf8}{NF-08} & Platform & Data Durability & Reviews and config data shall have an \gls{rpo}~=~0~h (\gls{wal}-based backups) and an \gls{rto}~$\leq$~2~h via cross-region restore. \\
