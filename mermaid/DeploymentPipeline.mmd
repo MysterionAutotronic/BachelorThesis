@@ -1,0 +1,22 @@
+graph TD
+  A["Onboarding complete"] --> B["Dashboard API emits TenantDeploymentRequest"]
+
+  subgraph ROOT["Root workspace / Dashboard"]
+    T1["Workspace bootstrap: create workspace"]
+    T2["Image build: docker buildx with CONFIG_JSON, push FE and API images"]
+    T3["Apply images: render and apply manifests"]
+    T4["Route allocation: create ingress"]
+    T5["Deployment: wait for readiness"]
+    T6["Status callback: POST public URLs and mark tenant active"]
+    B --> T1 --> T2 --> T3 --> T4 --> T5 --> T6
+  end
+
+  subgraph TENANT["Tenant workspace"]
+    W["Workspace created"]
+    R["Ingress or Route present"]
+    S["FE + API + DB running"]
+  end
+
+  T1 --> W
+  T4 --> R
+  T5 --> S

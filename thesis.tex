@@ -1892,6 +1892,7 @@
             of a tenant workspace and the \textbf{continuous update policy} that keeps thousands of
             workspaces on a single, uniform release without interrupting production traffic.
 
+            \FloatBarrier
             \subsubsection{Initial Tenant Deployment Pipeline}\label{subsubsec:initialDeeployment}
                 When a new customer completes the on-boarding flow \hyperlink{f5}{F-05}, the
                 Dashboard-\gls{api} running in the root workspace emits a custom resource
@@ -1900,6 +1901,11 @@
                 directly under the control of the Dashboard-\gls{api}, therefore no separate
                 \textit{\gls{argocd}} controller is required.
 
+                \begin{figure}[tbp]
+                    \centering
+                    \includegraphics[width=\textwidth]{images/pipeline.png}
+                    \caption{Initial tenant deployment pipeline}\label{fig:initial-deployment-pipeline}
+                \end{figure}
 
                 \begin{enumerate}[label={[\arabic*]:},
                     ref=Challenge~\arabic*,
@@ -1947,7 +1953,6 @@
                         Once every component is healthy, a final task POSTs the public \glspl{url}
                         and the image \gls{sha} back to the Dashboard-\gls{api}, which in turn marks
                         the tenant as \enquote{active} for subsequent logins.
-                        
                 \end{enumerate}
 
                 By chaining these \gls{tekton} tasks the platform turns the single
@@ -1961,6 +1966,7 @@
                 extend with additional steps (e.g.\ quota enforcement or cost metering) as the
                 service matures.
 
+            \FloatBarrier
             \subsubsection{Continuous Deployment}\label{subsubsec:continuousDeployment}
                 After the initial hand-off the platform must react to two kinds of change without
                 operator intervention:
