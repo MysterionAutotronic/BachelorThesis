@@ -391,8 +391,8 @@
                 not a production system.
                 Engineering is limited to single-region, developer-workstation deployments.
                 Observability is minimalistic.
-                Security hardening, multi-\gls{az} failover, automated \gls{hpa} and \gls{slo}
-                enforcement, and comprehensive \gls{rbac} policies are out of scope.
+                Security hardening, multi-\gls{az} failover and comprehensive
+                \gls{rbac} policies are out of scope.
                 Quantitative \gls{slo} and \gls{kpi} measurements with \gls{prometheus} and
                 \gls{grafana} are deferred.
                 Evaluation is scenario-based.
@@ -408,7 +408,7 @@
                 render path, reproducible setup from scripts, clear documentation of challenges
                 (e.g., \gls{cors}, \gls{ingress} on local hosts, node port mapping, \gls{kcp}-\gls{tmc},
                 \gls{rbac} and \gls{apibinding} issues), and an evidence-based account of what would be
-                required to progress toward production.
+                required to progress toward production. 
 
         \subsection{Structure of the Thesis}\label{subsec:structure}
             The thesis proceeds from foundations to design, implementation, and qualitative
@@ -632,7 +632,7 @@
                 declarative control-plane that abstracts away infrastructure,
                 guarantees consistent environments from development to production,
                 and automates operational tasks such as scaling, rolling updates,
-                and self-healing—advantages that translate directly into competitive delivery speed,
+                and self-healing --- advantages that translate directly into competitive delivery speed,
                 increasing its appeal to organizations of every size
                 \parencite[pp.~858--859]{damarapati2025}.
                 \\
@@ -714,7 +714,7 @@
                 scheduling, it can lead to resource fragmentation, further exacerbating the issue
                 of \gls{performanceIsolation} \parencite[p.~1]{jian2023}.
                 A common approach in multi-tenant scenarios is to deploy separate clusters for each
-                tenant, which incurs substantial overhead—particularly in environments utilizing
+                tenant, which incurs substantial overhead --- particularly in environments utilizing
                 virtual machines for isolation \parencite[pp.~144574--144575]{senel2023}.
                 In summary, although \gls{k8s@gls} offers essential isolation mechanisms, the
                 complexities of resource sharing and performance consistency in multi-tenant
@@ -833,7 +833,7 @@
                 \texttt{/clusters/<workspace>}, ensuring that automation never leaks objects across
                 workspaces \parencite{kcpAPIsREST}.
                 \gls{api} providers can also access consumer data through a virtual-workspace
-                \gls{url} rooted at \texttt{/services/apiexport/…}, enabling safe cross-workspace
+                \gls{url}, enabling safe cross-workspace
                 reconciliation loops without cluster-wide privileges \parencite{kcpAPIsREST}.
                 Together, built-in \glspl{api}, \glspl{crd}, the \gls{api}Export / \gls{api}Binding
                 model, admission controls and workspace-prefixed \gls{rest} routing give tenants a
@@ -887,8 +887,8 @@
                 Instead of every shard having to maintain and re-establish dozens of peer
                 connections after a failure, each shard needs only a single healthy path to any
                 replica of the cache tier \parencite{kcpShardingCacheServer}.
-                This single-hop topology is easier to debug, cheaper to secure, and—most
-                importantly—continues to deliver the global metadata that controllers require even
+                This single-hop topology is easier to debug, cheaper to secure, and --- most
+                importantly --- continues to deliver the global metadata that controllers require even
                 when one or several shards are offline \parencite{kcpShardingCacheServer}.
                 \\
                 As described in~\cite{kcpShardingCacheServer}, \gls{kcp} uses a write-once /
@@ -962,7 +962,7 @@
                     \item\label{chal:saasOperationalEfficiency}
                         \textit{Operational efficiency}.
                         \gls{saas} companies grow and scale by fostering a culture of
-                        \textbf{operational efficiency} that unifies tooling, enables rapid
+                        operational efficiency that unifies tooling, enables rapid
                         collective deployment across all customer environments, and eliminates
                         one-off customizations.
 
@@ -1003,7 +1003,7 @@
             its management to an \gls{msp} still leaves tenants running potentially different,
             separately-operated versions \parencite[pp.~23--24]{awsSaaSArchitectureFundamentals}.
             Furthermore it distances the software provider from unified onboarding, operations, and
-            customer insight—so automation alone creates an \gls{msp} setup, whereas true \gls{saas}
+            customer insight --- so automation alone creates an \gls{msp} setup, whereas true \gls{saas}
             requires one shared version and a single, provider-owned control-plane for every tenant
             \parencite[pp.~23--24]{awsSaaSArchitectureFundamentals}.
             \\
@@ -1072,7 +1072,7 @@
             To ensure that sufficient capacity exists for these Pod-level changes, the Cluster
             Autoscaler grows or shrinks the underlying node pool by interacting with the cloud
             provider or on-premises infrastructure \parencite{kubernetesAutoscaling}.
-            The documentation also highlights complementary techniques—such as event-driven
+            The documentation also highlights complementary techniques --- such as event-driven
             autoscaling with \gls{keda} and scheduled scaling profiles, that extend Kubernetes
             beyond simple metric-based triggers \parencite{kubernetesAutoscaling}.
             A recent survey by~\cite[p.~1]{senjab2023} categorizes
@@ -1376,7 +1376,7 @@
                         \hypertarget{f7}{F-07} & \textit{Tenant} & Config Caching & The per-tenant \gls{api} shall cache configuration in-memory with a \gls{ttl}~$\geq$~24~hours, falling back to the \gls{json} file on cache miss. \\
                         \bottomrule
                     \end{tabular}
-                    \caption{Functional Requirements}
+                    \caption{Functional requirements}
                 \end{table}
 
                 These requirements cover the complete life-cycle of a tenant environment from
@@ -1436,7 +1436,7 @@
                     \endfoot
 
                     \bottomrule
-                    \caption{Non-Functional Requirements}\label{tab:nfr}
+                    \caption{Non-functional requirements}\label{tab:nfr}
                     \endlastfoot
 
                     \hypertarget{nf1}{NF-01} & Tenant & Public Availability & The public page shall achieve $\geq$~99.95~\% monthly uptime; workspace moves or \gls{api} pod restarts shall cause 0 failed GET requests. \\
@@ -1739,7 +1739,7 @@
                         \gls{db} & StatefulSet & Stores ratings \\
                         \bottomrule
                     \end{tabular}
-                    \caption{Per Tenant Components}\label{tab:tenantComponents}
+                    \caption{Per-tenant components}\label{tab:tenantComponents}
                 \end{table}
 
                 The request flow of the visitor path can be summarized as follows:
@@ -1767,7 +1767,7 @@
                 This ensures, that for all customer interactions on the public website the workload
                 remains local to the tenant workspace, thus improving the traceability.
 
-            \subsubsection{Parent Workspace: Control Plane Components}\label{subsubsec:controlPlaneComponents}
+            \subsubsection{Parent Workspace: Control-plane Components}\label{subsubsec:controlPlaneComponents}
                 
                 \begin{table}[H]\label{tab:parentComponents}
                     \centering
@@ -1780,7 +1780,7 @@
                         Parent \gls{api} & \gls{hpa} & validates input and writes \gls{json} \\
                         \bottomrule
                     \end{tabular}
-                    \caption{Control Plane Components}
+                    \caption{Control-plane components}
                 \end{table}
 
             \subsubsection{Scalability, Isolation and Security}\label{scalabilityIsolationSecurity}
@@ -2295,7 +2295,7 @@
                 This allows testing the backends recovery behavior.\\
                 The dockerfile accepts the endpoint \glspl{url} as build arguments.
                 These are baked into the frontend as environment variables at build time.
-                It is shown under~\autoref{lst:tenantfe-dockerfile}.
+                This is shown under~\autoref{lst:tenantfe-dockerfile}.
 
             \subsubsection{Tenant API}\label{subsubsec:tenantAPI}
                 A minimal \gls{node}/\gls{express} service that exposes exactly two endpoints and serves as
@@ -2356,7 +2356,7 @@
                 \glspl{ip}.
                 The \gls{redis} logic is shown under~\autoref{lst:dashboardbe-redis}.\\
                 The dockerfile does not need any build arguments in this case.
-                It is shown under~\autoref{lst:dashboardbe-dockerfile}.\\
+                This is shown under~\autoref{lst:dashboardbe-dockerfile}.\\
                 The integration with the tenant lifecycle could not be implemented due to issues
                 discussed in~\autoref{subsec:challengesAndBugs}.\\
                 The service is stateless aside from the ephemeral file drop and the \gls{redis} lookup
@@ -2470,7 +2470,7 @@
                 In managed layouts (\gls{eks}, \gls{gke}, \gls{aks}), the intended production
                 layout becomes trivial to enable without host-level changes.
 
-            \subsubsection{End-to-End Port Mapping}\label{subsubsec:e2eportmapping}
+            \subsubsection{End-to-end Port Mapping}\label{subsubsec:e2eportmapping}
                 Accessing services via \texttt{NodePort} surfaced several mismatches across the
                 chain \emph{application $\rightarrow$ container $\rightarrow$ service $\rightarrow$
                 cluster-exposed port}.
@@ -3345,11 +3345,11 @@
                 \ghrepo{BachelorThesis_Infra}        & \appref{app:infra}        & KCP / cluster manifests and automation \\
                 \addlinespace
                 \multicolumn{2}{@{}l}{\textit{Templates:}}\\
-                \ghrepo{BachelorThesis_TemplateFE}   & —                         & Template for frontends (\gls{next}) \\
-                \ghrepo{BachelorThesis_TemplateBE}   & —                         & Template for backends (Express) \\
+                \ghrepo{BachelorThesis_TemplateFE}   & ---                         & Template for frontends (\gls{next}) \\
+                \ghrepo{BachelorThesis_TemplateBE}   & ---                         & Template for backends (Express) \\
                 \addlinespace
                 \multicolumn{2}{@{}l}{\textit{Artifacts:}}\\
-                \ghrepo{BachelorThesis}              & —                         & \LaTeX{} thesis source code \\
+                \ghrepo{BachelorThesis}              & ---                         & \LaTeX{} thesis source code \\
                 \bottomrule
             \end{longtable}
 
@@ -4389,7 +4389,7 @@
                 \begin{figure}[h!]
                     \centering
                     \includegraphics[width=\textwidth]{screenshots/slack/tmc-removal.anonymized.png}
-                    \caption{Removal of TMC Announcement}\label{fig:tmc-removal}
+                    \caption{Removal of TMC announcement}\label{fig:tmc-removal}
                 \end{figure}
 
         \clearpage
@@ -4456,7 +4456,7 @@
                 \begin{figure}[h!]
                     \centering
                     \includegraphics[width=\textwidth]{screenshots/eval/dashboardbe/dashboardbe-bad-request.png}
-                    \caption{Dashboard BE Bad Request (curl)}\label{fig:dashboardbe-bad-request}
+                    \caption{Dashboard BE bad request (curl)}\label{fig:dashboardbe-bad-request}
                 \end{figure}
 
         \clearpage
