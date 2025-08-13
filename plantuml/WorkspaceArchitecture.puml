@@ -28,6 +28,5 @@ package "Root Workspace" {
 }
 
 ' ========== CROSS-WORKSPACE ============
-DAPI ..> TAPI : «REST»\nfetch current config
 DAPI ..> "Tenant Workspace" : «build & deploy»
 @enduml
