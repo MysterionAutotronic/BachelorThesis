@@ -774,7 +774,7 @@
                 \gls{kcp} implements the same \gls{rbac}-based authorization mechanism and cluster
                 role and cluster role binding principles as \gls{k8s@gls} inside workspaces 
                 \parencite{kcpAuthorization}.
-                However unlike \gls{k8s@gls} \gls{kcp} does currently not support \gls{abac}
+                However, unlike \gls{k8s@gls} \gls{kcp} does currently not support \gls{abac}
                 \parencites{kcpAuthorization}{kubernetesABAC}.
                 \gls{kcp} likely supports only \gls{rbac}-based authorization because \gls{abac} is
                 considered overly complex, hard to audit, and increasingly deprecated in favor of
@@ -799,7 +799,7 @@
                 As previously noted, most \gls{k8s@gls} based multi-tenant systems currently require
                 manual intervention by an administrator to deploy new tenants or modify resource
                 allocation.
-                However \gls{kcp}, other than similar frameworks, like Capsule or Kiosk, provides an
+                However, \gls{kcp}, other than similar frameworks, like Capsule or Kiosk, provides an
                 \gls{api} server to the customer, that provides an easy way to access
                 their resources \parencites[p.~651]{nguyen2022}{kcpio}.
                 This in turn enables a degree of automation \parencite[p.~651]{nguyen2022}.
@@ -874,7 +874,7 @@
                 ensure availability during device or component interruptions}.
                 \\
                 \gls{kcp} employs several mechanisms to ensure \gls{ha}.
-                Firstly to achieve this “failover feature” at the control-plane level, \gls{kcp}
+                Firstly to achieve this \enquote{failover feature} at the control-plane level, \gls{kcp}
                 relies heavily on its \textbf{cache-server layer}
                 \parencite{kcpShardingCacheServer}.
                 While individual shards can (and will) go offline, the cache server provides a
@@ -999,7 +999,7 @@
             Once live, automated pipelines let new features roll to every tenant through a single,
             shared process, giving operators a single pane of glass for the whole estate
             \parencite[p.~10]{awsSaaSArchitectureFundamentals}.
-            However merely automating the provisioning of each customer environment and offloading
+            However, merely automating the provisioning of each customer environment and offloading
             its management to an \gls{msp} still leaves tenants running potentially different,
             separately-operated versions \parencite[pp.~23--24]{awsSaaSArchitectureFundamentals}.
             Furthermore it distances the software provider from unified onboarding, operations, and
@@ -1029,7 +1029,7 @@
             latency spikes under heavy load \parencite[p.~1]{rakshit2024}.
             \\
             \textbf{Blue-green deployments} run two identical environments in parallel so traffic
-            can switch to the “green” version only after validation, thereby preserving high
+            can switch to the \enquote{green} version only after validation, thereby preserving high
             availability and cutting the blast radius of faults \parencite[p.~1]{rakshit2024}.
             This parallel setup allows thorough testing before traffic is rerouted, minimizing the
             introduction of new bugs \parencite[p.~1]{rakshit2024}.
@@ -1047,7 +1047,7 @@
             \enquote{a type of blue/green deployment strategy that is more risk-averse}.
             \\
             \textbf{In-place deployments} are generally regarded as the fourth deployment option,
-            however they do not offer zero downtime
+            however, they do not offer zero downtime
             \parencite[p.~34]{awsOverviewDeploymentOptions}.
             \\
             Together, these four patterns make up today's deployment toolkit: the first three
@@ -1121,17 +1121,17 @@
             The same study distinguishes \textit{multi-tenant team} deployments that mainly share
             cluster namespaces from \textit{multi-tenant customer} deployments that demand full
             isolation of data and control planes \parencite[p.~651]{nguyen2022}.
-            Capsule and Kiosk take a lighter “flat namespace” route.  
+            Capsule and Kiosk take a lighter \enquote{flat namespace} route.  
             Capsule lets admins \textit{replicate resources across a tenant's namespaces} or copy
             them between tenants, easing day-to-day ops, but the authors caution that the pattern
-            \enquote{“may not be fully scalable for extensive tenant settings”} and is not designed
+            \enquote{may not be fully scalable for extensive tenant settings} and is not designed
             for edge scenarios \parencite[p.~144581]{senel2023}.
             Kiosk models each tenant as an \textit{account} that may create a \textit{space}:
-            \enquote{“each space is strictly tied to only one namespace”} using templates
+            \enquote{each space is strictly tied to only one namespace} using templates
             \parencite[p.~144581]{senel2023}
-            Yet multi-cluster support is still on the roadmap and the codebase, however according
-            to~\cite{senel2023}, it \enquote{“does not seem to be under active development”}.
-            At the \textit{namespace only} end of the spectrum, the \gls{hnc} constructs
+            Yet multi-cluster support is still on the roadmap and the codebase, however, according
+            to~\cite{senel2023}, it \enquote{does not seem to be under active development}.
+            At the \textit{namespace-only} end of the spectrum, the \gls{hnc} constructs
             \gls{multiTenancy} entirely from nested namespaces and policy inheritance, delivering
             near-zero control-plane overhead at the cost of weaker isolation
             \parencite[p.~144581]{senel2023}.
@@ -1220,7 +1220,7 @@
                     Platform Operator & Maintains themes, monitors capacity, rolls out new platform versions & \Gls{devops} \\
                     \bottomrule
                 \end{tabular}
-                \caption{Actors, their responsibilities, and interaction patterns in the case case study}\label{tab:scenario}
+                \caption{Actors, their responsibilities, and interaction patterns in the case study}\label{tab:scenario}
             \end{table}
             
             This scenario is attractive for evaluating \gls{kcp} because it combines high
@@ -1354,7 +1354,7 @@
                 \textbf{independent of any particular architectural decision}.
                 \\
                 The resulting catalogue of functional requirements is intentionally short.
-                I focuses on \gls{crud} operations for tenant data, delivery of the public page,
+                It focuses on \gls{crud} operations for tenant data, delivery of the public page,
                 and the minimal platform workflow required to provision, store and cache tenant
                 configuration.
 
@@ -1386,7 +1386,7 @@
                 scalability, \gls{ha}, and page-delivery performance, without being distracted by
                 edge functionality that would not exercise \gls{kcp} in a meaningful way.
 
-            \subsubsection{Non Functional Requirements}\label{subsubsec:nfr}
+            \subsubsection{Non-functional Requirements}\label{subsubsec:nfr}
 
                 Where \autoref{subsubsec:fr} captured \textit{what} the prototype must do, the
                 present subsection specifies \textit{how well} it must do it.
@@ -1442,7 +1442,7 @@
                     \hypertarget{nf3}{NF-03} & Tenant & Page Performance & p95 full-page load time shall be $\leq$~600~ms at 200~req/s from one region. \\
                     \hypertarget{nf4}{NF-04} & Tenant & \gls{api} Latency & p95 latency for GET \texttt{/api/config} and GET \texttt{/api/reviews} shall be $\leq$~150~ms under the same load. \\
                     \hypertarget{nf5}{NF-05} & Platform & Horizontal Scalability & The control plane shall handle at least 2 000 tenant workspaces with etcd IO $\leq$~70~\% and <~100~ms workspace-list latency. \\
-                    \hypertarget{nf6}{NF-06} & Platform & Cache Consistency & Config cache shall reflect config changes within 15~min after a tenant triggers “publish” in the dashboard. \\
+                    \hypertarget{nf6}{NF-06} & Platform & Cache Consistency & Config cache shall reflect config changes within 15~min after a tenant triggers \enquote{publish} in the dashboard. \\
                     \hypertarget{nf7}{NF-07} & Platform & Tenant Isolation and Security & Data and traffic from one tenant shall not be accessible to another (\gls{rbac}, row-level security, network policies). \\
                     \hypertarget{nf8}{NF-08} & Platform & Data Durability & Reviews and config data shall have an \gls{rpo}~=~0~h (\gls{wal}-based backups) and an \gls{rto}~$\leq$~2~h via cross-region restore. \\
                     \hypertarget{nf10}{NF-10} & Operator & Maintainability / \gls{ci}/\gls{cd} & A full platform deployment (dashboard + initializer + tenant chart) shall complete via GitOps pipeline in~$\leq$~15~min. \\
@@ -1613,7 +1613,7 @@
                         \textit{Tenant \gls{db}}.
                         Storing the configuration in the tenant database would offer persistence and
                         locality.
-                        However access control for the write operations and reaching out to the
+                        However, access control for the write operations and reaching out to the
                         \gls{db} from the parent workspace are critical pain points.
 
                     \item\label{chal:redis}
@@ -2373,7 +2373,7 @@
             Limitations and the resulting fallback possibilities are discussed
             in~\autoref{subsec:challengesAndBugs}.\\
             External access terminates at the dashboard \gls{ingress} (\autoref{lst:dashboard-ingress})
-            however the \gls{ingress} controller is not fully implemented in the prototype due to
+            however, the \gls{ingress} controller is not fully implemented in the prototype due to
             complexities discussed in~\autoref{subsec:challengesAndBugs}.
             Tenant services are discovered via the dashboard's \gls{redis} lookup.
             \gls{cors} is restricted to the dashboard origin due to limitations discussed
@@ -2499,11 +2499,11 @@
 
             \subsubsection{KCP-TMC}\label{subsubsec:challengesKCPTMC}
                 The initial plan relied on \emph{gls{kcp}} to provision clusters in workspaces.
-                However a breaking change between \gls{kcp} \texttt{v0.19} and \texttt{v0.20}
+                However, a breaking change between \gls{kcp} \texttt{v0.19} and \texttt{v0.20}
                 invalidated that approach.
-                The change was made in 2023, however the breaking change was documented only in
+                The change was made in 2023, however, the breaking change was documented only in
                 the changelogs and the \gls{kcp} slack channel.
-                The stack was therefore pivoted to \emph{\gls{kcp}-gls{tmc}} mid development.
+                The stack was therefore pivoted to \emph{\gls{kcp}-\gls{tmc}} mid development.
                 \gls{kcp}-\gls{tmc} itself is a plugin meant to provide syncing workspaces with
                 \textit{workloads} --- meaning \gls{k8s@gls} clusters that provide actual
                 computation tied to an older \gls{kcp} version of \texttt{v0.20} and is not actively
@@ -2515,7 +2515,7 @@
                 The \gls{tmc} documentation is confined to a single quick start guide in the
                 \texttt{README} file of the \texttt{contrib-tmc} repository that does not cover
                 steps required in the prototype.
-                Several iterations of try and error debugging were necessary before finding the
+                Several iterations of trial-and-error debugging were necessary before finding the
                 right syntax to apply the syncer and bind the cluster to the workspace.
                 However, even with a clean bootstrap, attempts to bind compute via
                 \texttt{kubectl tmc bind compute root:dashboard} as documented
@@ -2527,12 +2527,12 @@
                 \gls{kcp}-\gls{tmc} version, the design that depended on cross-workspace and more
                 importantly cross-cluster configuration via \gls{crd} could not be completed.
                 As an operational workaround, the configuration could be injected into the tenant's
-                \gls{be} image at build time, however this is out of scope for this thesis, which
+                \gls{be} image at build time, however, this is out of scope for this thesis, which
                 explicitly aims to evaluate such an architecture using \gls{kcp}.\\
                 The implementation of the \gls{crd} that would have been used to inject the
                 configuration into the tenant cluster is shown in~\autoref{lst:create-tenant-crd}.\\
                 A possible workaround would include custom controllers implemented in Go to manage
-                the \gls{crd}, however this would have invalidated most of the implementation and
+                the \gls{crd}, however, this would have invalidated most of the implementation and
                 therefore required a complete redesign of the prototype.
 
         \subsection{Deviations from Design}\label{subsec:deviationsFromDesign}
@@ -2545,7 +2545,7 @@
                     \item\label{chal:controlPlane}
                         \textit{Control plane}.
                         The control plane approach pivoted from \emph{gls{kcp}} to
-                        \emph{\gls{kcp}-gls{tmc}} due to constraints discussed
+                        \emph{\gls{kcp}-\gls{tmc}} due to constraints discussed
                         in~\autoref{subsubsec:challengesKCPTMC}.\\
                         As a result, cross-workspace \gls{crd}-based configuration sharing was not
                         implemented.
@@ -2581,7 +2581,7 @@
                     \item\label{chal:controlPlaneImmaturity}
                         \textit{Control plane immaturity}.
                         Stable \texttt{\gls{apiexport}}/\texttt{\gls{apibinding}} across workspaces could not be
-                        realized with \emph{gls{kcp}-gls{tmc}}.
+                        realized with \emph{\gls{kcp}-\gls{tmc}}.
                         Configuration propagation via \gls{crd} is therefore no part of the running
                         system (see~\autoref{subsubsec:challengesKCPTMC}).
 
@@ -2681,8 +2681,8 @@
             verdict, with minimal artifacts (screenshots, command logs, and code references)
             captured in the appendices.
             For each scenario, the preconditions are set, the steps are defined and executed,
-            expected outcomes are stated and a pass/partial/fail verdict is given with minimal
-            artifacts in~\autoref{app:eval}.
+            expected outcomes are stated and a pass/partial/fail verdict is given
+            in~\autoref{app:eval}.
             The artifacts are cited in the evaluation below, but the full details are deferred to
             the appendix to keep the main text concise.\\
             \begin{enumerate}[label={[\arabic*]:},
@@ -2748,7 +2748,7 @@
                         \textit{Dashboard submission}.
                         The dashboard path behaves as specified. Well formed configurations are
                         accepted with \texttt{2xx} responses and written to the dashboard \gls{be}
-                        data directory.
+                        container's data directory.
                         Malformed configurations are rejected by the frontend
                         (see~\autoref{fig:dashboardfe-form-validation-failure}) as well as by the
                         backend (see~\autoref{fig:dashboardbe-bad-request}).
@@ -2821,7 +2821,7 @@
                 and there is a dedicated \gls{ingress} for every cluster.
                 However, within a cluster no \texttt{NetworkPolicy} is enforced, and pod security
                 or admission hardening is not configured.
-                Thus, isolation relies primarily on “separate clusters” rather than defense-in-depth
+                Thus, isolation relies primarily on \enquote{separate clusters} rather than defense-in-depth
                 controls in this prototype.\\
                 \textbf{Performance isolation} is only partial.
                 Without \texttt{requests} or \texttt{limits}, quotas, or \gls{hpa}, pods can contend
@@ -2914,7 +2914,7 @@
                         Creation of configurations is implemented via the dashboard form.
                         The dashboard \gls{api} validates the payload against the shared
                         \texttt{zod} schema and persists it as a \gls{json} file.
-                        However updating via \gls{crd} or deletion are not implemented.
+                        However, updating via \gls{crd} or deletion are not implemented.
                         Furthermore logo upload was omitted in the prototype.
 
                     \item\label{chal:evalF02}
@@ -3086,7 +3086,7 @@
                     \textit{Documentation is crucial}.
                     \gls{kcp} provides an intriguing approach, but its complexity necessitates
                     thorough documentation, that is not provided in all necessary forms.
-                    Because of its alpha status breaking changes are introduced and easily available
+                    Because of its alpha status, breaking changes are introduced and easily available
                     resources often did not reflect the current state of the project.
                     The combination of hard-to-grasp concepts and missing reference code and
                     architectures made the project harder to implement than it needed to be.
@@ -3257,7 +3257,7 @@
             observability so that a metric-based evaluation becomes feasible.
             The immediate focus should be to close the loop from dashboard to tenant: replace the
             broken \gls{crd} path with a pragmatic delivery channel (for example, a Git-backed
-            configuration repository with a \gls{ci} trigger, or object storage with a webhook) so
+            configuration repository with a \gls{ci} trigger, or object storage, with a webhook) so
             that a submitted configuration deterministically builds a tenant image and deploys to a
             target cluster.
             The external interface should remain stable so that a later swap to \gls{crd} plus
@@ -3901,7 +3901,7 @@
                             \texttt{\detokenize{scripts/path.sh}}, \\
                             \texttt{\detokenize{scripts/setup-tmc.sh}}, \\
                             \texttt{\detokenize{scripts/path.sh}}.
-                    \item \textbf{Start \gls{tmc}-gls{kcp} (\gls{kcp})}: \\
+                    \item \textbf{Start \gls{tmc}-\gls{kcp} (\gls{kcp})}: \\
                             \texttt{\detokenize{scripts/start-tmc-kcp.sh}}, \\
                             (\texttt{\detokenize{scripts/start-kcp.sh}}).
                     \item \textbf{Create workspaces (creates clusters in the process)}: \\
