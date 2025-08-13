@@ -171,8 +171,8 @@
             \parbox{10cm}{
                 \LARGE\textbf{Technische Hochschule Ingolstadt}\\
                 \\
-                \Large\textbf{Specialist area Computer Science}\\
-                \Large\textbf{Bachelor's course Computer Science}\\
+                \Large\textbf{Specialist Area Computer Science}\\
+                \Large\textbf{Bachelor's Course Computer Science}\\
             }
         }
 
@@ -225,7 +225,7 @@
         I hereby declare that this thesis is my own work, that I have not presented it elsewhere for
         examination purposes and that I have not used any sources or aids other than those stated.
         I have marked verbatim and indirect quotations as such.\\[1cm]
-        Ingolstadt, 2025-08-01\\[2cm]
+        Ingolstadt, 2025-08-14\\[2cm]
         David Linhardt
 
     \end{titlepage}
@@ -2430,7 +2430,7 @@
                 The effective workaround was to route traffic through server-side Next.js handlers
                 under \texttt{/api}, so the browser sees a same-origin request and the \gls{fe}
                 service then proxies to the \gls{be}.
-                This avoids the browsers \gls{cors} checks entirely.
+                This avoids the browser's \gls{cors} checks entirely.
                 The proxy preserves method, headers, and body, forwards response status and headers,
                 and reads the backend base \gls{url} from an environment variable set at build and
                 run time.\\
@@ -4214,7 +4214,7 @@
                 \end{flushleft}
                 \codesummary
                     {Expose the tenant \gls{ui} and \gls{api} via friendly local hostnames, mirroring production routing.}
-                    {Defines two \gls{k8s} Ingresses: \texttt{tenant-fe-ingress} routes \texttt{tenant-\textit{ID}.local} to Service \texttt{tenant-fe}:80, \texttt{tenant-be-ingress} routes \texttt{api.tenant-\textit{ID}.local} to Service \texttt{tenant-be}:80. Requires \texttt{ingress-nginx}.}
+                    {Defines two \gls{k8s} Ingresses: \texttt{tenant-fe-ingress} routes \texttt{tenant.local} to Service \texttt{tenant-fe}:80, \texttt{tenant-be-ingress} routes \texttt{api.tenant.local} to Service \texttt{tenant-be}:80. Requires \texttt{ingress-nginx}.}
                     {Provides stable edge entrypoints and decouples external \gls{dns} from in-cluster Service details.}
 
         \clearpage
