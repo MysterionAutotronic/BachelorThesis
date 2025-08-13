@@ -401,7 +401,7 @@
                 expose behavior and limitations rather than to deliver feature completeness.
 
             \subsubsection{Non-goals}\label{subsubsec:nongoals}
-                \gls{e2e} tenant provisioning without operator intervention, multi-tenant billing,
+                \Gls{e2e} tenant provisioning without operator intervention, multi-tenant billing,
                 persistent data replication across clusters, advanced traffic management,
                 and performance benchmarking at target loads are non-goals for this iteration.\\
                 Success is defined by a working demonstration of the core config $\rightarrow$
@@ -1233,7 +1233,7 @@
 
             \subsubsection{Representative User Journey}\label{subsubsec:userJourney}
                 To contextualize the conceptual design, this subsection describes a representative
-                end-to-end journey from the perspective of the primary user: the \gls{smb} tenant.
+                \gls{e2e} journey from the perspective of the primary user: the \gls{smb} tenant.
 
                 \begin{enumerate}[label={[\arabic*]:},
                     ref=Challenge~\arabic*,
@@ -1341,7 +1341,7 @@
 
             \subsubsection{Functional Requirements}\label{subsubsec:fr}
 
-                The prototype offers only a handful of end-to-end user journeys
+                The prototype offers only a handful of \gls{e2e} user journeys
                 \see{subsubsec:userJourney}, yet each journey must be supported in a self-service
                 and repeatable way across thousands of tenants.
                 The purpose of this subsection is therefore to distill the actor interactions listed
@@ -2139,7 +2139,7 @@
             \autoref{subsec:architectureDesign} was turned into a working prototype.
             It documents what was implemented, how each piece maps back to the design, and why
             specific trade-offs were made.
-            The \gls{dod} for the prototype was one end-to-end tenant lifecycle as described in
+            The \gls{dod} for the prototype was one \gls{e2e} tenant lifecycle as described in
             the user journey \autoref{subsubsec:userJourney} with functional backends and frontends,
             container images, \gls{k8s@gls} manifests and automation scripts.
 
@@ -3150,7 +3150,7 @@
 
                 \item\label{chal:plannedProvisioningTime}
                     \textit{Provisioning time}.
-                    \gls{e2e} time from submission to tenant \gls{url} readiness (F-05),
+                    \Gls{e2e} time from submission to tenant \gls{url} readiness (F-05),
                     including \gls{crd} propagation lag and image build and pull time.
 
                 \item\label{chal:plannedResourceEfficiency}
