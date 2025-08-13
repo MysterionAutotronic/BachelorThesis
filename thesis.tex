@@ -240,19 +240,19 @@
         lightweight, Kubernetes-based multi-tenant web stack from local development to cluster
         networking and control-plane virtualization.
         Two cluster types (\enquote{dashboard} and \enquote{tenant}) are implemented to surface the
-        integration points between containerized \gls{next} front ends, \gls{node}/\gls{express} back ends, and
-        core \gls{k8s@gls} primitives (deployments, services, \gls{ingress}) on top of kind.
+        integration points between containerized Next.js front ends, Node.js/Express back ends, and
+        core Kubernetes primitives (deployments, services, ingress) on top of kind.
         Per-tenant clusters are created with deterministic host-to-node port mappings, while
-        \gls{ingress}-nginx and host entries provide name-based routing.
+        ingress-nginx and host entries provide name-based routing.
         KCP/TMC is incorporated conceptually for placement and synchronization by way of
-        SyncTargets, Locations, Placements, and \gls{apibinding} of exported Kubernetes APIs into target
+        SyncTargets, Locations, Placements, and APIBinding of exported Kubernetes APIs into target
         workspaces.
         Evaluation follows scenario-driven criteria focused on functional correctness,
         reproducibility, isolation, and operability.
         The prototype delivers front ends and configuration APIs reachable under predictable
         hostnames and ports, with a clear separation of server- and client-side networking concerns:
         server code consumes an internal absolute endpoint, and client code targets a stable proxy
-        implemented as a \gls{next} route handler with explicit cache control.
+        implemented as a Next.js route handler with explicit cache control.
         Reproducibility is ensured by idempotent scripts, pinned tool and image versions, and
         consistent cluster templates.
         Shared front- and back-end templates and a central configuration schema enable uniform
@@ -267,7 +267,7 @@
         Overall, the thesis documents an architecture, reproducible workflow, and operational
         guidance that reduce friction when building multi-tenant web systems on Kubernetes, and
         outlines a path for future work: completing the KCP/TMC binding pipeline, standardizing
-        \gls{ingress} and TLS, adding telemetry for metric-based evaluation, and extending tests to
+        ingress and TLS, adding telemetry for metric-based evaluation, and extending tests to
         multi-node and higher-scale scenarios.
 
     \clearpage
