@@ -1483,15 +1483,19 @@
 
                     \item\label{chal:dependencies}
                         \textit{Dependencies}.
-                        The system minimizes runtime dependencies in favor of static or build-time
-                        mechanisms, e.g.\ injecting the config into the \gls{api} at build time
-                        \see{subsubsec:rationale} to reduce operational complexity and deployment
-                        effort.
+                        Minimize external runtime dependencies by preferring \gls{k8s}-native
+                        mechanisms.
+                        Concretely, configuration is \textbf{seeded at build time} to guarantee a
+                        sane bootstrap and then \textbf{propagated at runtime} via a versioned
+                        \gls{crd} that is exported from the provider workspace and \emph{bound} into
+                        each tenant workspace using \emph{APIBinding}.
+                        This avoids external stores, keeps edits scoped to workspaces, and still
+                        enables live updates.
 
                     \item\label{chal:scalabilitySupport}
                         \textit{Scalability}.
-                        The architecture supports horizontal scaling of both the control plane and
-                        tenant workloads.
+                        The architecture supports horizontal scaling of both the
+                        control plane and tenant workloads.
                         New tenants can be provisioned on demand without impacting existing tenants.
 
                     \item\label{chal:portabilityAndCompliance}
@@ -1527,6 +1531,8 @@
                 \end{figure}
 
             \subsubsection{Rationale for Config Injection Strategy}\label{subsubsec:rationale}
+                To balance isolation, simplicity, and edit propagation, configuration delivery
+                follows a \textbf{hybrid} approach.
                 To enable tenant-specific customization in a secure and maintainable manner, the
                 configuration is injected directly into the \gls{api} container during image build
                 time using the \gls{docker} \texttt{--build-arg} mechanism.
@@ -1534,7 +1540,12 @@
                 tenant's workspace post-deployment, thereby preserving strong workspace isolation.
                 Moreover, it avoids the operational complexity associated with runtime config
                 injection mechanisms and simplifies the tenant lifecycle by keeping all relevant
-                data embedded within the container image.
+                data embedded within the container image.\\
+                To propagate changes during runtime, a custom versioned \gls{crd} is used.
+                The \gls{crd} is created inside the dashboard cluster and bound to the tenant
+                cluster using \gls{kcp}.
+                This allows for runtime updates without redeploying the entire application while
+                preserving strong workspace isolation.
                 \\
                 Several alternative approaches were considered during the design process.
                 Each of them was evaluated based on criteria such as workspace boundary isolation,
@@ -1621,13 +1632,13 @@
                         strict data sovereignty per tenant.
                 \end{enumerate}
 
-                Ultimately, the chosen build-time config injection strategy strikes an effective
-                balance between strong tenant isolation, operational simplicity, and runtime
-                performance.
-                While it requires an image rebuild for every configuration change, this trade-off is
-                acceptable given the infrequent update pattern of tenant configuration and the clear
-                benefits it provides in terms of system architecture and security boundaries.
-                \cleardoublepage
+                Ultimately, the chosen build-time config injection strategy in combination with the
+                \gls{crd} at runtime strikes an effective balance between strong tenant isolation,
+                operational simplicity, and runtime performance.
+                It also provides a fallback mechanism for configuration changes without requiring
+                a full image rebuild.
+
+    \clearpage
 
             \subsubsection{Data Synchronization and Caching Strategy}\label{syncAndCache}
                 As the tenant-\gls{api} is built with its own \textbf{static} \texttt{config.json}
@@ -1660,9 +1671,9 @@
                         
                 \end{enumerate}
 
-                Because the only legitimate way to alter tenant configuration is to build and deploy
-                a new image, a shorter \gls{ttl} or a manual cache-flush \gls{api} would add
-                operational complexity without practical benefit.
+                Because the only legitimate way to alter tenant configuration is to propagate
+                changes via the \gls{crd}, a shorter \gls{ttl} or a manual cache-flush \gls{api}
+                would add operational complexity without practical benefit.
                 Caching the configuration with a long \gls{ttl} therefore strikes the best balance
                 between maximal runtime throughput and the minimal housekeeping needed to keep every
                 pod's view of configuration fresh and fault-tolerant over time.
@@ -1750,6 +1761,7 @@
 
                 This ensures, that for all customer interactions on the public website the workload
                 remains local to the tenant workspace, thus improving the traceability.
+
             \subsubsection{Parent Workspace: Control Plane Components}\label{subsubsec:controlPlaneComponents}
                 
                 \begin{table}[H]\label{tab:parentComponents}
@@ -1789,7 +1801,7 @@
 
                     \item\label{chal:architectureIsolation}
                         \textit{Tenant Isolation}.
-                        Every customer receives its ows dedicated \gls{kcp} workspace at onboarding
+                        Every customer receives its own dedicated \gls{kcp} workspace at onboarding
                         time.
                         A workspace maps to a private logical cluster stored in an independent
                         \gls{etcd} prefix, so objects created by one tenant are completely invisible
@@ -1797,6 +1809,7 @@
                         All runtime artifacts --- \gls{fe} pods, \gls{api} pods, \gls{db} and even
                         the \texttt{config.json} injected into the \gls{api} --- live exclusively
                         inside that workspace.
+                        The \gls{crd} is only bound to the specific tenant workspace.
                         The platform never mounts cross-workspace volumes or reaches out to shared
                         data services.
                         Because there is \textbf{no shared state across workspaces} the design
@@ -1879,7 +1892,7 @@
             \subsubsection{Initial Tenant Deployment Pipeline}\label{subsubsec:initialDeeployment}
                 When a new customer completes the on-boarding flow \hyperlink{f5}{F-05}, the
                 Dashboard-\gls{api} running in the root workspace emits a custom resource
-                (\texttt{TenantDeploymentRequest}) that seeds a GitOps pipelin.
+                (\texttt{TenantDeploymentRequest}) that seeds a GitOps pipeline.
                 The pipeline is implemented as a set of \textit{\gls{tekton}} tasks that run
                 directly under the control of the Dashboard-\gls{api}, therefore no separate
                 \textit{\gls{argocd}} controller is required.
@@ -1896,7 +1909,6 @@
                         calls the \gls{kcp} \gls{api} to create a dedicated workspace
                         \texttt{root:\textless{}tenant-id\textgreater{}} and assigns only the
                         minimal \gls{rbac} roles required by the tenant components.
-
 
                     \item\label{chal:imageBuild}
                         \textit{Image build}.
@@ -1915,7 +1927,7 @@
 
                     \item\label{chal:routeAllocation}
                         \textit{Route allocation}.
-                        The pipeline creates an \texttt{Ingress} (NGINX) or \texttt{Route}
+                        The pipeline creates an \texttt{Ingress} (nginx) or \texttt{Route}
                         (OpenShift) inside the tenant workspace.
                         A wildcard \gls{dns} entry (\texttt{*.example.com}) avoids central \gls{dns}
                         updates and keeps certificates simple.
@@ -1935,12 +1947,12 @@
                         
                 \end{enumerate}
 
-                By chaining these Tekton tasks the platform turns the single
+                By chaining these \gls{tekton} tasks the platform turns the single
                 \texttt{TenantDeploymentRequest} event into a fully-isolated, routable tenant
                 environment in one pass.
                 Every artefact is generated from code that lives in Git, every cluster mutation is
                 scoped to the tenant workspace, and every build is automatically signed by
-                Tekton~Chains.
+                \gls{tekton}~Chains.
                 Consequently the pipeline satisfies all functional requirements while
                 remaining short enough to version-control next to the product source and easy to
                 extend with additional steps (e.g.\ quota enforcement or cost metering) as the
@@ -1966,17 +1978,18 @@
                         When business users change dynamic catalogue data or feature flags, the
                         dashboard \gls{api} issues a \texttt{TenantReconfigureRequest} object
                         that carries the new \texttt{config.json} payload.  
-                        A dedicated Tekton pipeline in that tenant's workspace performs a rebuild of
-                        the tenant \gls{api} image with a new \texttt{config.json}.
-                        Following this a local helm upgrade of the tenant \gls{api} is performed,
-                        while the \gls{fe} and \gls{db} remain untouched.
+                        A dedicated \gls{tekton} pipeline in that tenant's workspace creates
+                        the \gls{crd} carrying the \gls{json} payload and binds it to the tenant
+                        workspace.
+                        Following this a local \gls{helm} upgrade of the tenant \gls{api} is
+                        performed, while the \gls{fe} and \gls{db} remain untouched.
 
                 \end{enumerate}
 
                 \subsubsection{Zero-Downtime Rollout}\label{subsubsec:zeroDowntime}
 
-                    Both continuous-deployment pipelines should deploy the updated version of the
-                    tenant's application with zero downtime for customers while ensuring stability.
+                    The continuous-deployment pipeline should deploy the updated version of the
+                    tenant code with zero downtime for customers while ensuring stability.
                     This can be achieved through a \textit{canary deployment}.
                     A canary deployment is a type of blue-green deployment strategy
                     \parencite[pp.~33--34]{awsOverviewDeploymentOptions}.
@@ -2001,7 +2014,7 @@
                     minimizing blast radius while still achieving zero downtime for customers
                     \parencite[pp.~33--34]{awsOverviewDeploymentOptions}.
                     \\
-                    Broken down step by step, the pipelines should act as follows:
+                    Broken down step by step, the pipeline should act as follows:
                     
                     \begin{enumerate}[label={[\arabic*]:},
                         ref=Challenge~\arabic*,
@@ -2029,13 +2042,14 @@
 
                     \end{enumerate}
 
-            \cleardoublepage
+            \clearpage
 
         \subsection{Choice of Technologies}\label{subsec:technologies}
             The platform architecture leverages modern, well-supported technologies that align with
-            the core design principles of modularity, performance, and isolation.
+            the core design principles of modularity, performance, and isolation with the addition
+            of the promising bleeding edge \gls{kcp} project.
             Each major component is built using tools selected for their suitability in a
-            cloud-native, tenant-isolated SaaS environment.
+            cloud-native, tenant-isolated \gls{saas} environment.
 
             \begin{enumerate}[label={[\arabic*]:},
                 ref=Challenge~\arabic*,
@@ -2084,12 +2098,11 @@
                     During tenant creation, configuration files are temporarily stored on the
                     Dashboard \gls{api}'s local filesystem.
                     These files are injected into the tenant image using Docker's
-                    \texttt{--build-arg} and \texttt{COPY} mechanisms.
+                    \texttt{--build-arg} and \texttt{COPY} mechanisms for initialization or
+                    injected into the tenant workspace at runtime via a \gls{crd}.
                     This avoids cross-workspace communication and external storage dependencies.
-                    To deliver configuration to the tenant cluster, it is exposed via a \gls{crd}
-                    bound to the tenant workspace by \gls{kcp}.
-                    This theoretically enables runtime updates and a safe, clean way to provide
-                    the config to the tenant cluster.
+                    This enables runtime updates and a safe, clean way to provide the config to the
+                    tenant cluster for both initialization and runtime updates.
 
                 \item\label{chal:tenantDB2}
                     \textit{Tenant \gls{db}}.
