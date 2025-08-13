@@ -240,19 +240,19 @@
         lightweight, Kubernetes-based multi-tenant web stack from local development to cluster
         networking and control-plane virtualization.
         Two cluster types (\enquote{dashboard} and \enquote{tenant}) are implemented to surface the
-        integration points between containerized Next.js front ends, Node/Express back ends, and
-        core Kubernetes primitives (Deployments, Services, Ingress) on top of kind.
+        integration points between containerized \gls{next} front ends, \gls{node}/\gls{express} back ends, and
+        core \gls{k8s@gls} primitives (deployments, services, \gls{ingress}) on top of kind.
         Per-tenant clusters are created with deterministic host-to-node port mappings, while
-        ingress-nginx and host entries provide name-based routing.
+        \gls{ingress}-nginx and host entries provide name-based routing.
         KCP/TMC is incorporated conceptually for placement and synchronization by way of
-        SyncTargets, Locations, Placements, and APIBinding of exported Kubernetes APIs into target
+        SyncTargets, Locations, Placements, and \gls{apibinding} of exported Kubernetes APIs into target
         workspaces.
         Evaluation follows scenario-driven criteria focused on functional correctness,
         reproducibility, isolation, and operability.
         The prototype delivers front ends and configuration APIs reachable under predictable
         hostnames and ports, with a clear separation of server- and client-side networking concerns:
         server code consumes an internal absolute endpoint, and client code targets a stable proxy
-        implemented as a Next.js route handler with explicit cache control.
+        implemented as a \gls{next} route handler with explicit cache control.
         Reproducibility is ensured by idempotent scripts, pinned tool and image versions, and
         consistent cluster templates.
         Shared front- and back-end templates and a central configuration schema enable uniform
@@ -267,7 +267,7 @@
         Overall, the thesis documents an architecture, reproducible workflow, and operational
         guidance that reduce friction when building multi-tenant web systems on Kubernetes, and
         outlines a path for future work: completing the KCP/TMC binding pipeline, standardizing
-        ingress and TLS, adding telemetry for metric-based evaluation, and extending tests to
+        \gls{ingress} and TLS, adding telemetry for metric-based evaluation, and extending tests to
         multi-node and higher-scale scenarios.
 
     \clearpage
@@ -319,15 +319,15 @@
         through design, implementation, evaluation, and conclusions (\autoref{subsec:structure}).
 
         \subsection{Problem Statement and Motivation}\label{subsec:problem}
-            Modern \gls{saas} platforms depend on multi-tenancy to reach viable unit economics and
+            Modern \gls{saas} platforms depend on \gls{multiTenancy} to reach viable unit economics and
             elastic scale, yet shared infrastructure introduces nontrivial risks around security,
             fairness, and performance isolation.
-            As outlined in \autoref{subsubsec:mtImportance}, multi-tenancy improves utilization and
+            As outlined in \autoref{subsubsec:mtImportance}, \gls{multiTenancy} improves utilization and
             operational efficiency, but amplifies concerns such as residual-data exposure,
             limited tenant control and observability, scheduling fairness, and weak performance
             isolation, together with a pressing need for automation at scale
             (\autoref{subsubsec:challenges}).
-            The practical question is not whether to adopt multi-tenancy, but how to do so safely,
+            The practical question is not whether to adopt \gls{multiTenancy}, but how to do so safely,
             repeatably, and cost-effectively in contemporary cloud-native stacks.\\
             This thesis addresses the problem of designing, implementing, and evaluating a
             Kubernetes-based \gls{saas} platform that targets high scalability and high availability
@@ -364,14 +364,14 @@
 
                         \item\label{chal:objectiveSchema}
                             \textit{Coherent schema}.
-                            Express tenant configuration as a shared, validated schema
+                            \gls{express} tenant configuration as a shared, validated schema
                             (TypeScript \texttt{zod}) and, where feasible, as a versioned \gls{crd}
-                            intended for cross-workspace sharing via \emph{APIBinding}.
+                            intended for cross-workspace sharing via \emph{\gls{apibinding}}.
 
                         \item\label{chal:objectiveReproducible}
                             \textit{Reproducible setup}.
                             Provide a reproducible local setup via scripts and manifests
-                            (clusters, deployments, ingress and networking substitutes, and debug
+                            (clusters, deployments, \gls{ingress} and networking substitutes, and debug
                             tools).
 
                         \item\label{chal:objectiveIsolation}
@@ -393,8 +393,8 @@
                 Observability is minimalistic.
                 Security hardening, multi-\gls{az} failover, automated \gls{hpa} and \gls{slo}
                 enforcement, and comprehensive \gls{rbac} policies are out of scope.
-                Quantitative \gls{slo} and \gls{kpi} measurements with Prometheus and Grafana are
-                deferred.
+                Quantitative \gls{slo} and \gls{kpi} measurements with \gls{prometheus} and
+                \gls{grafana} are deferred.
                 Evaluation is scenario-based.
                 Given \gls{kcp}'s alpha status and evolving documentation, the prototype accepts
                 partial substitutions (e.g., \gls{kcp}-\gls{tmc} sync path) where necessary to
@@ -406,8 +406,8 @@
                 and performance benchmarking at target loads are non-goals for this iteration.\\
                 Success is defined by a working demonstration of the core config $\rightarrow$
                 render path, reproducible setup from scripts, clear documentation of challenges
-                (e.g., \gls{cors}, ingress on local hosts, node port mapping, \gls{kcp}-\gls{tmc},
-                \gls{rbac} and APIBinding issues), and an evidence-based account of what would be
+                (e.g., \gls{cors}, \gls{ingress} on local hosts, node port mapping, \gls{kcp}-\gls{tmc},
+                \gls{rbac} and \gls{apibinding} issues), and an evidence-based account of what would be
                 required to progress toward production.
 
         \subsection{Structure of the Thesis}\label{subsec:structure}
@@ -416,11 +416,11 @@
             \textbf{\hyperref[sec:introduction]{Section~\ref*{sec:introduction}}} introduces the
             problem context, objectives, scope, and reading guide.\\
             \textbf{\hyperref[sec:fundamentals]{Section~\ref*{sec:fundamentals}}} consolidates
-            fundamentals: \gls{k8s@gls} and multi-tenancy, the specific capabilities of Kubernetes
+            fundamentals: \gls{k8s@gls} and \gls{multiTenancy}, the specific capabilities of Kubernetes
             Control Plane (\gls{kcp}) --- workspaces, \gls{api}, sharding, and \gls{ha} --- and
             their relevance to \gls{saas}.\\
             \textbf{\hyperref[sec:related]{Section~\ref*{sec:related}}} surveys related work on
-            deployment strategies, scaling, cloud multi-tenancy, and prior art on \gls{kcp}.\\
+            deployment strategies, scaling, cloud \gls{multiTenancy}, and prior art on \gls{kcp}.\\
             \textbf{\hyperref[sec:concept]{Section~\ref*{sec:concept}}} develops the conceptual
             design: scenario and user journey, requirements, architecture on \gls{kcp} (including
             config injection and workspace topology), deployment strategies, and technology
@@ -465,7 +465,7 @@
                 scale \parencite{kubernetesOverview,redhatWhatIsKubernetes}.
 
             \subsubsection{The Importance of Multi-Tenancy in Modern SaaS Platforms}\label{subsubsec:mtImportance}
-                Multi-tenancy plays a fundamental role in modern cloud computing.
+                \Gls{multiTenancy} plays a fundamental role in modern cloud computing.
                 By allowing multiple tenants to share the same infrastructure through
                 virtualization, it significantly increases resource utilization, reduces operational
                 costs, and enables essential features such as VM mobility and dynamic resource
@@ -489,7 +489,7 @@
                 \parencites[pp.~9--11]{awsSaaSArchitectureFundamentals}[p.~4]{isoConcepts}.
 
             \subsubsection{The Challenges of Multi-Tenancy and the Need for Solutions}\label{subsubsec:challenges}
-                Multi-tenancy introduces a spectrum of technical and security challenges that need
+                \Gls{multiTenancy} introduces a spectrum of technical and security challenges that need
                 to be addressed.
 
                 \begin{enumerate}[label={[\arabic*]:},
@@ -726,7 +726,7 @@
                 The preceding concepts ground the requirements of modern \gls{saas}: rapid change,
                 frictionless onboarding, and a single, provider-owned control plane that scales
                 efficiently across many tenants.
-                Multi-tenancy increases utilization and reduces cost but raises hard problems around
+                \Gls{multiTenancy} increases utilization and reduces cost but raises hard problems around
                 isolation, fair scheduling, and performance guarantees that any viable platform must
                 address.
                 \gls{kcp} is relevant here because its workspace abstraction and control-plane
@@ -748,7 +748,7 @@
                 \gls{multiTenancy}.
                 In \gls{kcp}, a workspace is a \gls{k8s@gls}-cluster-like HTTPS endpoint exposed
                 under \texttt{/clusters/<parent>:<name>}, that regular tools such as
-                \textit{kubectl}, \textit{Helm} or \textit{client-go} treat exactly like a real
+                \textit{kubectl}, \textit{\gls{helm}} or \textit{client-go} treat exactly like a real
                 \gls{k8s@gls} cluster.
                 Every workspace is backed by its own logical cluster stored in an isolated
                 \textbf{\gls{etcd} prefix}, so objects in one workspace (including cluster-scoped
@@ -814,8 +814,8 @@
                 to coexist across workspaces \parencite{kcpAPIs}.
                 \\
                 To share an \gls{api} with other tenants, a provider declares an
-                \texttt{APIResourceSchema} and then exports it through an \texttt{APIExport},
-                while consumers attach that \gls{api} to their workspace with an \texttt{APIBinding}
+                \texttt{APIResourceSchema} and then exports it through an \texttt{\gls{apiexport}},
+                while consumers attach that \gls{api} to their workspace with an \texttt{\gls{apibinding}}
                 \parencite{kcpAPIsExport}.
                 This export/bind workflow lets platform teams evolve \glspl{api} centrally without
                 touching each consumer workspace, reinforcing the system's self-service goal
@@ -902,7 +902,7 @@
                     \item\label{chal:writeControllers}
                         \textit{Write controllers}
                         that run on every shard stream a selected set of objects, such as
-                        \texttt{APIExport}, \texttt{APIResourceSchema}, \texttt{Shard}, certain
+                        \texttt{\gls{apiexport}}, \texttt{APIResourceSchema}, \texttt{Shard}, certain
                         \gls{rbac} rules and more into the cache server.
                         Because the controller keeps its own authoritative copy, it can re-push data
                         after a transient outage without the risk of split-brain.
@@ -1132,7 +1132,7 @@
             Yet multi-cluster support is still on the roadmap and the codebase, however according
             to~\cite{senel2023}, it \enquote{“does not seem to be under active development”}.
             At the \textit{namespace only} end of the spectrum, the \gls{hnc} constructs
-            multi-tenancy entirely from nested namespaces and policy inheritance, delivering
+            \gls{multiTenancy} entirely from nested namespaces and policy inheritance, delivering
             near-zero control-plane overhead at the cost of weaker isolation
             \parencite[p.~144581]{senel2023}.
             \\
@@ -1168,7 +1168,7 @@
             \textcite{nguyen2022} propose \enquote{a design of
             \textit{dynamic resource allocation in \sic Kubernetes multi-tenancy system} to address
             the missing dynamic resource allocation in the multi-tenant Kubernetes control plane}.
-            Their architecture adds \enquote{\textit{scheduler/rescheduler}, Prometheus-driven
+            Their architecture adds \enquote{\textit{scheduler/rescheduler}, \gls{prometheus}-driven
             autoscaler, and a \textit{cloud provisioner} that can spin up new clusters based on
             workload changes} \parencite[p.~653]{nguyen2022}.
             Central to the design is the \gls{kcp} \enquote{\textit{logical cluster}, a virtual
@@ -1488,7 +1488,7 @@
                         Concretely, configuration is \textbf{seeded at build time} to guarantee a
                         sane bootstrap and then \textbf{propagated at runtime} via a versioned
                         \gls{crd} that is exported from the provider workspace and \emph{bound} into
-                        each tenant workspace using \emph{APIBinding}.
+                        each tenant workspace using \emph{\gls{apibinding}}.
                         This avoids external stores, keeps edits scoped to workspaces, and still
                         enables live updates.
 
@@ -1519,13 +1519,13 @@
                 \end{enumerate}
 
                 This architectural foundation enables a modular and future-proof SaaS platform that
-                favors operational autonomy, extensibility, and secure multi-tenancy.
+                favors operational autonomy, extensibility, and secure \gls{multiTenancy}.
                 \\
                 Summed up these principles translate into the logical layout in
                 \autoref{fig:system-architecture}.
                 For readability the diagram abstracts away control-plane contracts.
-                The \gls{crd} and its APIExport and APIBinding are not shown.
-                
+                The \gls{crd} and its \gls{apiexport} and \gls{apibinding} are not shown.
+
                 \vspace{0.5cm}
                 \begin{figure}[H]
                     \centering
@@ -1618,12 +1618,12 @@
 
                     \item\label{chal:redis}
                         \textit{\gls{redis}}.
-                        A Redis store within the tenant workspace was considered for fast config
+                        A \gls{redis} store within the tenant workspace was considered for fast config
                         access.
                         However, this introduces a full additional service dependency per tenant,
                         which contradicts the goals of lightweight and cost-efficient tenant
                         deployments.
-                        Redis also requires persistence management if configuration must survive
+                        \gls{redis} also requires persistence management if configuration must survive
                         restarts, therefore adding complexity.
 
                     \item\label{cahl:centralStore}
@@ -1821,7 +1821,7 @@
 
                     \item\label{chal:architectureSecurity}
                         \textit{Security}.
-                        Multi-tenancy is only acceptable if confidentiality and integrity are
+                        \Gls{multiTenancy} is only acceptable if confidentiality and integrity are
                         preserved across tenant boundaries.
                         \autoref{subsubsec:challenges} highlighted, that residual-data exposure,
                         cross-tenant access and side-channel attacks are the primary threats in
@@ -1854,8 +1854,8 @@
                 Collectively the security measures have to fulfill \hyperlink{NF-07}{nf7}. \\
                 \gls{hpa} in Kubernetes can react to any metric that the control plane exposes
                 through resource or custom-metrics \glspl{api}.
-                For a request-driven \textit{express} service, such as the tenant-\gls{api} the most
-                accurate signal would be \textbf{\gls{qps}} at the ingress of each pod, because it
+                For a request-driven \textit{\gls{express}} service, such as the tenant-\gls{api} the most
+                accurate signal would be \textbf{\gls{qps}} at the \gls{ingress} of each pod, because it
                 tracks the real work performed and is immune to the noise that \gls{cpu}-bound
                 metrics introduce when background jobs or garbage collection dominate a sample
                 window.
@@ -1864,8 +1864,8 @@
                 architectural best practices.
                 The choice is pragmatic rather than idealistic.
                 Instrumenting per-pod \gls{qps} would require an extra metrics pipeline or at
-                minimum a side-car that counts requests, a Prometheus deployment to scrape the
-                counter, and a Prometheus adapter (or custom-metrics server) so the \gls{hpa}
+                minimum a side-car that counts requests, a \gls{prometheus} deployment to scrape the
+                counter, and a \gls{prometheus} adapter (or custom-metrics server) so the \gls{hpa}
                 controller can consume the data.
                 Each of those moving parts introduces significant configuration surface, security
                 considerations, and potential failure modes that distract from the core objective of
@@ -1931,19 +1931,19 @@
 
                     \item\label{chal:manifestRendering}
                         \textit{Manifest rendering}.
-                        Helm/Kustomize templates are parameterized with the tenant ID, image
+                        \gls{helm}/\gls{kustomize} templates are parameterized with the tenant ID, image
                         tags and a computed \texttt{ROUTE\_BASE} and rendered to plain \gls{yaml}.
 
                     \item\label{chal:routeAllocation}
                         \textit{Route allocation}.
-                        The pipeline creates an \texttt{Ingress} (nginx) or \texttt{Route}
+                        The pipeline creates an \texttt{\gls{ingress}} (nginx) or \texttt{Route}
                         (OpenShift) inside the tenant workspace.
                         A wildcard \gls{dns} entry (\texttt{*.example.com}) avoids central \gls{dns}
                         updates and keeps certificates simple.
 
                     \item\label{chal:applyManifests}
                         \textit{Deployment}.  
-                        A Helm \texttt{upgrade --install} task applies the rendered manifests
+                        A \gls{helm} \texttt{upgrade --install} task applies the rendered manifests
                         in the tenant workspace, rolling out the \gls{fe}, \gls{api} and
                         backing \gls{db}.  
                         Readiness probes ensure the pipeline blocks until all Pods are ready.
@@ -2037,7 +2037,7 @@
                         \item\label{chal:shiftTraffic}.
                             \textit{Shift traffic}.
                             Shifts traffic incrementally by patching the weight on the tenant's
-                            ingress.
+                            \gls{ingress}.
 
                         \item\label{chal:canaryWindow}
                             \textit{Canary window}.
@@ -2106,7 +2106,7 @@
                     \textit{Temporary Config Store}.
                     During tenant creation, configuration files are temporarily stored on the
                     Dashboard \gls{api}'s local filesystem.
-                    These files are injected into the tenant image using Docker's
+                    These files are injected into the tenant image using \gls{docker}'s
                     \texttt{--build-arg} and \texttt{COPY} mechanisms for initialization or
                     injected into the tenant workspace at runtime via a \gls{crd}.
                     This avoids cross-workspace communication and external storage dependencies.
@@ -2232,20 +2232,20 @@
             configuration and provide the data type across services.
 
             \subsubsection{Frontend Template}\label{subsubsec:frontendTemplate}
-                The frontend template provides a Next.js / TypeScript boilerplate including an
+                The frontend template provides a \gls{next}/TypeScript boilerplate including an
                 \texttt{.editorconfig}, a \texttt{tsconfig.json}.
                 Furthermore it includes code quality tooling configuration for ESLint and Prettier
-                as well as a boilerplate multi-stage Dockerfile.
+                as well as a boilerplate multi-stage dockerfile.
                 Both frontends, the tenant \gls{fe} and the dashboard \gls{fe}, are based on this
                 template repository.\\
                 Due to its minor relevance for the thesis, the template repository contents are not
                 reproduced in the appendix.
 
             \subsubsection{Backend Template}\label{subsubsec:backendTemplate}
-                The backend template offers a TypeScript / Node (Express) baseline with the same
+                The backend template offers a TypeScript/\gls{node} (\gls{express}) baseline with the same
                 tooling and conventions as the frontend to reduce cognitive switching and friction.
                 It includes a \texttt{tsconfig.json}, a \texttt{.editorconfig}, ESLint and Prettier,
-                and a boilerplate multi-stage Dockerfile.\\
+                and a boilerplate multi-stage dockerfile.\\
                 Due to the again minor relevance for the thesis, the template repository contents
                 are not reproduced in the appendix.
 
@@ -2269,11 +2269,11 @@
             Each of the sections below states the component's role and boundaries, its key
             dependencies and the contracts it exposes.
             Cross-cutting topics such as configuration, propagation with \glspl{crd} and
-            APIBindings, \gls{rbac}, networking and port mappings are treated separately
+            \glspl{apibinding}, \gls{rbac}, networking and port mappings are treated separately
             in~\ref{subsec:crossCuttingConcerns} and~\ref{subsec:challengesAndBugs}.
 
             \subsubsection{Tenant Frontend}\label{subsubsec:tenantFrontend}
-                The tenant frontend is a small Next.js (App Router) site that renders the tenant's
+                The tenant frontend is a small \gls{next} (App Router) site that renders the tenant's
                 public page from the shared configuration and exposes a deliberate failure trigger
                 for the tenant backend for chaos testing.\\
                 The \texttt{layout.tsx} file fetches the tenant configuration from the tenant
@@ -2291,12 +2291,12 @@
                 A \enquote{crash} button issues a request to the tenant \gls{api}'s \texttt{/crash}
                 endpoint to intentionally terminate that service.
                 This allows testing the backends recovery behavior.\\
-                The Dockerfile accepts the endpoint \glspl{url} as build arguments.
+                The dockerfile accepts the endpoint \glspl{url} as build arguments.
                 These are baked into the frontend as environment variables at build time.
                 It is shown under~\autoref{lst:tenantfe-dockerfile}.
 
             \subsubsection{Tenant API}\label{subsubsec:tenantAPI}
-                A minimal Node / Express service that exposes exactly two endpoints and serves as
+                A minimal \gls{node}/\gls{express} service that exposes exactly two endpoints and serves as
                 the tenant's backend.\\
                 \texttt{/config} returns the tenant's configuration as a \gls{json} object.\\
                 \texttt{/crash} deliberately terminates the service using
@@ -2315,7 +2315,7 @@
                 The dockerfile is shown under~\autoref{lst:tenantbe-dockerfile}.
 
             \subsubsection{Dashboard Frontend}\label{subsubsec:dashboardFrontend}
-                A small Next.js application that provides a minimal login and a tenant-configuration
+                A small \gls{next} application that provides a minimal login and a tenant-configuration
                 form.\\
                 The login page accepts a username (no password for simplicity during prototyping)
                 and uses a session cookie to keep track of the username.
@@ -2340,7 +2340,7 @@
                 The dockerfile is shown under~\autoref{lst:dashboardfe-dockerfile}.
 
             \subsubsection{Dashboard API}\label{subsubsec:dashboardAPI}
-                A lightweight Node / Express service that accepts tenant configurations, validates
+                A lightweight \gls{node}/\gls{express} service that accepts tenant configurations, validates
                 them against the zod schema, and was supposed to coordinate lifecycle events for
                 the tenant cluster (creation and \gls{crd} updates).\\
                 The service exposes a single \texttt{/config} endpoint that accepts a \gls{json}
@@ -2350,14 +2350,14 @@
                 \texttt{data/\$\{user\}/config.json} to allow for later retrieval and usage in the
                 tenant lifecycle.
                 The \texttt{server.ts} is shown under~\autoref{lst:dashboardbe-server}.\\
-                The service also maintains a redis cache to associate usernames with tenant cluster
+                The service also maintains a \gls{redis} cache to associate usernames with tenant cluster
                 \glspl{ip}.
-                The redis logic is shown under~\autoref{lst:dashboardbe-redis}.\\
+                The \gls{redis} logic is shown under~\autoref{lst:dashboardbe-redis}.\\
                 The dockerfile does not need any build arguments in this case.
                 It is shown under~\autoref{lst:dashboardbe-dockerfile}.\\
                 The integration with the tenant lifecycle could not be implemented due to issues
                 discussed in~\autoref{subsec:challengesAndBugs}.\\
-                The service is stateless aside from the ephemeral file drop and the redis lookup
+                The service is stateless aside from the ephemeral file drop and the \gls{redis} lookup
                 table.
                 Authentication is deliberately minimal to avoid out-of-scope complexity.
                 Production hardening is discussed in~\autoref{subsec:limitationsAndRisks}.
@@ -2368,14 +2368,14 @@
             In the prototype, the dashboard \gls{api} validates configs and writes a versioned file
             used as build context for tenant images (\autoref{app:dashboardbe}).
             The intended runtime path, publishing the same structure as a versioned \gls{crd} and
-            importing it via \emph{APIBinding} during runtime, is defined
+            importing it via \emph{\gls{apibinding}} during runtime, is defined
             under~\autoref{lst:create-tenant-crd}.
             Limitations and the resulting fallback possibilities are discussed
             in~\autoref{subsec:challengesAndBugs}.\\
-            External access terminates at the dashboard ingress (\autoref{lst:dashboard-ingress})
-            however the ingress controller is not fully implemented in the prototype due to
+            External access terminates at the dashboard \gls{ingress} (\autoref{lst:dashboard-ingress})
+            however the \gls{ingress} controller is not fully implemented in the prototype due to
             complexities discussed in~\autoref{subsec:challengesAndBugs}.
-            Tenant services are discovered via the dashboard's redis lookup.
+            Tenant services are discovered via the dashboard's \gls{redis} lookup.
             \gls{cors} is restricted to the dashboard origin due to limitations discussed
             in~\autoref{subsec:challengesAndBugs}.
             Traffic and dependencies between tenant and dashboard clusters are avoided by using
@@ -2406,7 +2406,7 @@
             \texttt{dashboard.local:8080}.
 
         \subsection{Challenges, Bugs and Fixes}\label{subsec:challengesAndBugs}
-            The prototype spans several layers (Next.js/Express services, container builds,
+            The prototype spans several layers (\gls{next}/\gls{express} services, container builds,
             \gls{k8s@gls} on \gls{kind}, \gls{kcp}-\gls{tmc} workspaces, and configuration via
             \gls{crd} and \gls{api}Binding).
             Along this path a mix of non-obvious defaults, complexities, version drift and
@@ -2424,7 +2424,7 @@
                 The underlying cause was a divergence of hosts and ports between frontend
                 \glspl{url} and backend services.
                 Attempts to \enquote{open up} \gls{cors} on the backends and to normalize hosts via
-                ingress (as described in~\autoref{subsubsec:ingress}) still left inconsistent
+                \gls{ingress} (as described in~\autoref{subsubsec:ingress}) still left inconsistent
                 origins during local \gls{kind} testing (multiple ports, per service hostnames),
                 so the browser refused the cross-origin requests.\\
                 The effective workaround was to route traffic through server-side Next.js handlers
@@ -2440,27 +2440,27 @@
                 This pattern centralizes auth/cookies and simplifies local development, but it hides
                 the browser's true origin from the backend, so any future direct browser to backend
                 path must reintroduce strict \gls{cors} and a stable host schema via a gateway or
-                ingress and possibly \gls{dns}.
-                Once the cluster ingress is finalized, the \gls{cors} proxy can be removed or
+                \gls{ingress} and possibly \gls{dns}.
+                Once the cluster \gls{ingress} is finalized, the \gls{cors} proxy can be removed or
                 kept as a fallback for local development.
 
             \subsubsection{Ingress}\label{subsubsec:ingress}
-                Declaring an nginx ingress in \gls{k8s@gls} is straightforward
+                Declaring an nginx \gls{ingress} in \gls{k8s@gls} is straightforward
                 (cf.~\autoref{lst:dashboard-ingress} and~\autoref{lst:tenant-ingress}).
                 The difficulty arose only on a Linux developer machine.
-                A typical ingress controller expects to serve on the standard \gls{http} and
+                A typical \gls{ingress} controller expects to serve on the standard \gls{http} and
                 \gls{https} ports \texttt{80} and \texttt{443}, which competes with existing services
                 and requires elevated privileges and system tweaks.
                 In practice, this turned local setup into \gls{os} plumbing rather than application
                 work, straying from the thesis scope.\\
-                Introducing MetalLB to gain \texttt{LoadBalancer} services on bare metal was
+                Introducing \gls{metallb} to gain \texttt{LoadBalancer} services on bare metal was
                 discarded due to additional network configuration, \gls{ip} range management and
                 operational overhead not central to the thesis.\\
-                Given these trade-offs, an ingress on standard ports was deferred for the local
+                Given these trade-offs, an \gls{ingress} on standard ports was deferred for the local
                 development.
                 The system instead relies on the server-side proxy pattern described
                 in~\autoref{subsubsec:challengesCORS} for direct component to component calls.
-                The browser still uses the ingress to access the frontends combined with custom
+                The browser still uses the \gls{ingress} to access the frontends combined with custom
                 hostnames in \texttt{/etc/hosts}.
                 This keeps the development path simple and reproducible.
                 In managed layouts (\gls{eks}, \gls{gke}, \gls{aks}), the intended production
@@ -2552,7 +2552,7 @@
 
                     \item\label{chal:proxy}
                         \textit{Proxy}.
-                        The intended ingress controller was not implemented due to the
+                        The intended \gls{ingress} controller was not implemented due to the
                         complexities discussed in~\autoref{subsubsec:ingress}.
                         Instead, a server-side proxy was used to bridge \gls{cors} and
                         cross-origin calls.
@@ -2580,7 +2580,7 @@
 
                     \item\label{chal:controlPlaneImmaturity}
                         \textit{Control plane immaturity}.
-                        Stable \texttt{APIExport}/\texttt{APIBinding} across workspaces could not be
+                        Stable \texttt{\gls{apiexport}}/\texttt{\gls{apibinding}} across workspaces could not be
                         realized with \emph{gls{kcp}-gls{tmc}}.
                         Configuration propagation via \gls{crd} is therefore no part of the running
                         system (see~\autoref{subsubsec:challengesKCPTMC}).
@@ -2588,13 +2588,13 @@
                     \item\label{chal:localExposureModel}
                         \textit{Local exposure model}.
                         Services are exposed via \texttt{NodePort} \texttt{/etc/hosts} entries
-                        instead of a proper ingress/\gls{tls} setup
+                        instead of a proper \gls{ingress}/\gls{tls} setup
                         (see~\autoref{subsubsec:ingress}).
                         The result is a brittle developer setup without \gls{https}.
 
                     \item\label{chal:corsWorkaround}
                         \textit{\gls{cors} workaround}.
-                        Browser $\rightarrow$ \gls{be} calls are proxied through Next.js
+                        Browser $\rightarrow$ \gls{be} calls are proxied through \gls{next}
                         \texttt{/api} routes to avoid \gls{cors}
                         (see~\autoref{subsubsec:challengesCORS}).
                         This way the \gls{fe} server becomes a choke point and the additional hop
@@ -2632,7 +2632,7 @@
 
                     \item\label{chal:stateAndPersistence}
                         \textit{State and persistence}.
-                        The redis lookup for tenant cluster \glspl{ip} is a simple, non-hardened
+                        The \gls{redis} lookup for tenant cluster \glspl{ip} is a simple, non-hardened
                         cache.
                         This risks data loss across restarts.
 
@@ -2668,7 +2668,7 @@
 
         \subsection{Introduction and Scope}\label{subsec:introductionAndScope}
             Planned evaluation targeted \glspl{slo} and metrics (latency, availability, error rate,
-            resource use) via Prometheus/Grafana.
+            resource use) via \gls{prometheus}/\gls{grafana}.
             Due to prototype constraints, the approach was reframed to a qualitative, scenario-based
             evaluation focused on correctness, reproducibility, isolation, and operability.
             The goal is to assess whether the implemented paths work as specified and to extract
@@ -2792,7 +2792,7 @@
                 in~\autoref{lst:create-tenant-cluster}.\\
                 The remaining gaps are mostly due to the problems discussed
                 in~\autoref{subsec:challengesAndBugs}.
-                The local ingress on the developer machine also reduces portability due to the
+                The local \gls{ingress} on the developer machine also reduces portability due to the
                 \texttt{/etc/hosts} entries as discussed in~\autoref{subsubsec:hostnames}.
                 The flaky setup is mitigated by node ports and static host mappings but still
                 requires manual attention. Overall the prototype is \emph{mostly reproducible}.
@@ -2813,12 +2813,12 @@
                 tenant backend serves a baked config file, and the dashboard backend writes configs
                 to its own container-local \texttt{data/} directory (\autoref{appsub:dashboardbe}).
                 No shared database is present, so there is no cross-tenant read path.
-                Planned \gls{crd} / APIBinding–based distribution would reintroduce a shared
+                Planned \gls{crd} / \gls{apibinding}–based distribution would reintroduce a shared
                 control-plane surface.
                 Correct scoping and read-only access would be required to preserve isolation.\\
                 \textbf{Network isolation} is acceptable for a local prototype: clusters are
                 distinct, node ports plus static host mappings expose only the necessary services,
-                and there is a dedicated ingress for every cluster.
+                and there is a dedicated \gls{ingress} for every cluster.
                 However, within a cluster no \texttt{NetworkPolicy} is enforced, and pod security
                 or admission hardening is not configured.
                 Thus, isolation relies primarily on “separate clusters” rather than defense-in-depth
@@ -2841,7 +2841,7 @@
                 reduces setup friction, but several steps remain manual (e.g., tenant cluster
                 creation and image rebuilds).
                 In particular, configuration changes require rebuilding the tenant backend image
-                because runtime distribution via \gls{crd}/APIBinding is not functional.
+                because runtime distribution via \gls{crd}/\gls{apibinding} is not functional.
                 This in turn limits agility.\\
                 Observability is minimal. Services log to stdout/stderr and are inspected via
                 \texttt{kubectl logs}.
@@ -2854,7 +2854,7 @@
                 is effective for diagnosing node port and service wiring issues
                 (see~\autoref{subsubsec:e2eportmapping}).
                 Host modification scripts standardize access from the browser.
-                \gls{cors} issues were mitigated by proxying through Next.js server routes, which
+                \gls{cors} issues were mitigated by proxying through \gls{next} server routes, which
                 simplifies local operations but couples the FE to BE routing
                 (\autoref{subsubsec:challengesCORS}).\\
                 Security practices and \gls{rbac} are permissive for development: components run
@@ -2874,7 +2874,7 @@
                 dashboard \gls{fe} and re-validated in the dashboard \gls{api} against the shared
                 \texttt{zod} schema (\autoref{subsubsec:configSchema},
                 \autoref{subsubsec:dashboardFrontend}, \autoref{subsubsec:dashboardAPI}).
-                However, runtime propagation is limited because \gls{crd}/APIBinding-based
+                However, runtime propagation is limited because \gls{crd}/\gls{apibinding}-based
                 distribution is non-functional in the prototype, the Tenant \gls{be} reads a file
                 baked at image build time.
                 Changes therefore require rebuilding and redeploying the tenant \gls{be} image.
@@ -2946,7 +2946,7 @@
                         This requirement is \textbf{not met}.
                         Automated \gls{e2e} provisioning from the dashboard could not be realized
                         due to the pivot from \gls{kcp} to \gls{kcp}-\gls{tmc} and ensuing syncer,
-                        \gls{rbac} and APIBinding issues as discussed
+                        \gls{rbac} and \gls{apibinding} issues as discussed
                         in~\autoref{subsubsec:challengesKCPTMC}.
                         Only manual scripts and clusters were used during evaluation.
 
@@ -2979,7 +2979,7 @@
                     \item\label{chal:evalNF01}
                         \textit{NF-01}.
                         This requirement was \textbf{not evaluated}.
-                        The prototype runs on a local \gls{kind} cluster without Prometheus, Grafana
+                        The prototype runs on a local \gls{kind} cluster without \gls{prometheus}, \gls{grafana}
                         or external uptime probes, so monthly availability and \enquote{0 failed GET
                         during workspace moves and pod restarts} cannot be measured.
                         Ad-hoc tests show the tenant page serves correctly when the tenant cluster
@@ -3041,13 +3041,13 @@
                 \item\label{chal:evalLessonsCORS}
                     \textit{Solve browser-to-backend early}.
                     Direct browser calls repeatedly failed due to \gls{cors}.
-                    Moving requests behind server-side proxy routes in Next.js (\texttt{/api/\dots})
+                    Moving requests behind server-side proxy routes in \gls{next} (\texttt{/api/\dots})
                     eliminated policy mismatches and simplified endpoint management
                     (see~\autoref{subsubsec:challengesCORS}).
 
                 \item\label{chal:evalLessonsIngress}
-                    \textit{Local ingress is fragile on developer machines}.
-                    Nginx Ingress is trivial to declare in \gls{k8s} but awkward locally due to
+                    \textit{Local \gls{ingress} is fragile on developer machines}.
+                    Nginx \gls{ingress} is trivial to declare in \gls{k8s} but awkward locally due to
                     privileged ports and host networking.
                     For developer workflows, \texttt{NodePort} + host mapping proved as a workaround
                     (see~\autoref{subsubsec:challengesIngress},~\autoref{subsubsec:challengesHosts}).
@@ -3079,7 +3079,7 @@
                 \item\label{chal:evalLessonsObservabilityFirst}
                     \textit{Observability first is not optional}.
                     Lack of metrics and traces slowed diagnosis.
-                    Basic Prometheus counters and request tracing hooks should be part of the
+                    Basic \gls{prometheus} counters and request tracing hooks should be part of the
                     initial scaffolding, not deferred work.
 
                 \item\label{chal:evalLessonsDocumentation}
@@ -3126,7 +3126,7 @@
 
                 \item\label{chal:evalValiditySingleImplementationPath}
                     \textit{Single implementation path}.
-                    Templates and services reflect one tech stack (TypeScript + Next.js + Express).
+                    Templates and services reflect one tech stack (TypeScript + \gls{next} + \gls{express}).
                     Alternative stacks may surface different constraints.
             \end{enumerate}
 
@@ -3160,9 +3160,9 @@
 
                 \item\label{chal:plannedTooling}
                     \textit{Intended tooling}.
-                    Service-level Prometheus metrics (\gls{http}, \gls{gc}, cache), Grafana
-                    dashboards, Gatling load tests, blackbox-exporter probes, and basic
-                    OpenTelemetry traces.
+                    Service-level \gls{prometheus} metrics (\gls{http}, \gls{gc}, cache), \gls{grafana}
+                    dashboards, \gls{gatling} load tests, blackbox-exporter probes, and basic
+                    \gls{opentelemetry} traces.
             \end{enumerate}
 
         \subsection{Summary and Link to Conclusion}\label{subsec:evalSummaryAndLinkToConclusion}
@@ -3197,21 +3197,21 @@
         tenant stack, when built and deployed manually, renders the same configuration in the public
         page.
         Practical issues around browser \gls{cors} were resolved by proxying through server-side
-        Next.js routes, and reproducibility was improved via templates, dockerfiles, and scripted
+        \gls{next} routes, and reproducibility was improved via templates, dockerfiles, and scripted
         setup.\\
         Key design promises remain only partially realized.
         Automatic workspace and cluster creation from the dashboard is not wired \gls{e2e}.
         The intended CRD-based distribution and versioning of tenant configuration was not made to
         work reliably, so the tenant backend reads a file baked at image build time,
         and production-grade observability with metrics and \glspl{slo} was deferred.
-        Local networking constraints (node ports, ingress on privileged ports) further limited an
+        Local networking constraints (node ports, \gls{ingress} on privileged ports) further limited an
         \gls{e2e} path on a developer machine.\\
         A major factor in these outcomes was substrate volatility:
         \textbf{\gls{kcp} is still an alpha-stage project} and underwent breaking shifts
         (e.g., from v0.19 to v0.20) with sparse, fast-moving documentation.
         The switch to \texttt{\gls{kcp}-\gls{tmc}} (itself based on an older \gls{kcp} and lightly
         maintained) introduced additional friction, \gls{rbac} for the syncer, compute binding
-        hurdles, and protected core \glspl{crd} that complicated APIBinding plus APIExport usage.
+        hurdles, and protected core \glspl{crd} that complicated \gls{apibinding} plus \gls{apiexport} usage.
         These ecosystem constraints, rather than fundamental flaws in the service design, were the
         primary blockers.\\
         Overall, the prototype validates the feasibility of the configuration model and the tenant
@@ -3227,8 +3227,8 @@
             was fragmentary in terms of comprehensiveness and clear implementation details as well
             as breaking changes.
             As a platform idea, the project looks promising: a shared control plane that offers
-            workspaces, APIBinding, APIExport, and syncers could, in theory, standardize
-            multi-tenancy concerns and reduce bespoke glue.\\
+            workspaces, \gls{apibinding}, \gls{apiexport}, and syncers could, in theory, standardize
+            \gls{multiTenancy} concerns and reduce bespoke glue.\\
             In practice, however, the stack tended to introduce rather than hide complexity.
             The concepts and interaction between workspaces, exports, bindings, syncers, the
             \gls{kcp} core, \gls{tmc} and the newer \gls{mcr} in combination with custom \gls{rbac}
@@ -3261,16 +3261,16 @@
             that a submitted configuration deterministically builds a tenant image and deploys to a
             target cluster.
             The external interface should remain stable so that a later swap to \gls{crd} plus
-            APIBinding is possible without impacting clients.
+            \gls{apibinding} is possible without impacting clients.
             Networking should be standardized for local development by adopting node port with nginx
-            ingress or, if required, adding MetalLB with a fixed address pool.
+            \gls{ingress} or, if required, adding \gls{metallb} with a fixed address pool.
             A single source of truth for ports should be defined and encoded in manifests and
             scripts.
-            Observability should be introduced via Prometheus, Grafana and synthetic probes.
-            Frontends and backends should expose \gls{red} metrics, with logs shipped to Loki and
-            traces emitted through OpenTelemetry to enable the deferred \gls{slo} evaluation.
+            Observability should be introduced via \gls{prometheus}, \gls{grafana} and synthetic probes.
+            Frontends and backends should expose \gls{red} metrics, with logs shipped to \gls{loki} and
+            traces emitted through \gls{opentelemetry} to enable the deferred \gls{slo} evaluation.
             Given past issues, the server-side proxy from frontend to backend should remain the
-            default while \gls{cors} policies for a future ingress-only model are documented.
+            default while \gls{cors} policies for a future \gls{ingress}-only model are documented.
             Reproducibility should be strengthened by adding smoke tests to \gls{ci}.\\
             Mid-term, configuration should be treated explicitly \enquote{as an \gls{api}}.
             A renewed attempt at \enquote{config as \gls{crd}} should be made only behind a narrow
@@ -3284,7 +3284,7 @@
             Operational readiness should be improved with concise runbooks for build failures,
             rollout rollback, configuration drift, and cluster replacement.\\
             Longer-term, \gls{kcp} and \gls{kcp}-\gls{tmc} should be re-evaluated periodically.
-            Adoption gates should include stable and documented APIExports for the required
+            Adoption gates should include stable and documented \gls{apiexport}s for the required
             resources, clear \gls{rbac} patterns for syncers, and a credible migration plan from the
             baseline adapter.
             With instrumentation in place, scalability can be addressed by introducing \gls{hpa},
@@ -3320,15 +3320,15 @@
                 \toprule
                 Repository & Appendix & Scope \\
                 \midrule
-                \ghrepo{BachelorThesis_TenantFE}     & \appref{app:tenantfe}     & Next.js tenant frontend (per-workspace) \\
+                \ghrepo{BachelorThesis_TenantFE}     & \appref{app:tenantfe}     & \gls{next} tenant frontend (per-workspace) \\
                 \ghrepo{BachelorThesis_TenantBE}     & \appref{app:tenantbe}     & Express tenant API (+ in-memory cache) \\
                 \ghrepo{BachelorThesis_ConfigSchema} & \appref{app:configschema} & JSON schema / validation for \texttt{config.json} \\
-                \ghrepo{BachelorThesis_DashboardFE}  & \appref{app:dashboardfe}  & Central operator/tenant dashboard (Next.js) \\
+                \ghrepo{BachelorThesis_DashboardFE}  & \appref{app:dashboardfe}  & Central operator/tenant dashboard (\gls{next}) \\
                 \ghrepo{BachelorThesis_DashboardBE}  & \appref{app:dashboardbe}  & Onboarding + pipeline triggers (Express) \\
                 \ghrepo{BachelorThesis_Infra}        & \appref{app:infra}        & KCP / cluster manifests and automation \\
                 \addlinespace
                 \multicolumn{2}{@{}l}{\textit{Templates:}}\\
-                \ghrepo{BachelorThesis_TemplateFE}   & —                         & Template for frontends (Next.js) \\
+                \ghrepo{BachelorThesis_TemplateFE}   & —                         & Template for frontends (\gls{next}) \\
                 \ghrepo{BachelorThesis_TemplateBE}   & —                         & Template for backends (Express) \\
                 \addlinespace
                 \multicolumn{2}{@{}l}{\textit{Artifacts:}}\\
@@ -3450,7 +3450,7 @@
                 \end{flushleft}
                 \codesummary
                     {Reproducible, minimal image for the tenant \gls{ui}. Reduced attack surface and env-specific endpoints baked at build time.}
-                    {Multi-stage build (\texttt{deps}, \texttt{builder}, \texttt{runner}). Installs deps from a lockfile, sets \texttt{\detokenize{CONFIG_ENDPOINT}}/\texttt{\detokenize{CRASH_ENDPOINT}} via build args, builds Next.js standalone, copies \texttt{.next/standalone} and \texttt{.next/static}, runs as non-root \texttt{nextjs} on port 3000 via \texttt{server.js}.}
+                    {Multi-stage build (\texttt{deps}, \texttt{builder}, \texttt{runner}). Installs deps from a lockfile, sets \texttt{\detokenize{CONFIG_ENDPOINT}}/\texttt{\detokenize{CRASH_ENDPOINT}} via build args, builds \gls{next} standalone, copies \texttt{.next/standalone} and \texttt{.next/static}, runs as non-root \texttt{nextjs} on port 3000 via \texttt{server.js}.}
                     {Container artifact of the Tenant \gls{fe}. Deployed in the tenant Cluster.}
 
         \clearpage
@@ -3484,7 +3484,7 @@
                 \end{flushleft}
                 \codesummary
                     {Stable config source for the Tenant \gls{ui} plus a controlled crash hook to test failure handling and orchestration.}
-                    {Express app with \gls{json} parsing.\@\texttt{GET /config} reads \texttt{data/config.json}, parses and caches it via \texttt{node-cache} (TTL 24h).\@\texttt{GET /crash} exits the process. Listens on \texttt{PORT} (default 3000).}
+                    {\gls{express} app with \gls{json} parsing.\@\texttt{GET /config} reads \texttt{data/config.json}, parses and caches it via \texttt{node-cache} (TTL 24h).\@\texttt{GET /crash} exits the process. Listens on \texttt{PORT} (default 3000).}
                     {Tenant backend microservice exposing a config \gls{api} and a chaos hook. Consumed by the \gls{fe} through its server-side proxy. Managed by the platform for restarts.}
 
         \clearpage
@@ -3728,7 +3728,7 @@
                 \end{listing}
                 \codesummary
                     {Button navigating to the dashboard page.}
-                    {Navigates to \texttt{/dashboard} via Next.js \texttt{useRouter()}.}% chktex 36
+                    {Navigates to \texttt{/dashboard} via \gls{next}\texttt{useRouter()}.}% chktex 36
                     {Entry point for the form.}
 
                 \begin{listing}[H]
@@ -3781,7 +3781,7 @@
                 \end{flushleft}
                 \codesummary
                     {Containerized build for the dashboard \gls{fe} with minimal attack surface and environment-specific endpoints baked at build time.}
-                    {Multi-stage build: installs deps, builds Next.js with \texttt{\detokenize{CONFIG_ENDPOINT}} via \texttt{ARG}/\texttt{ENV}, copies \texttt{.next/standalone} and static assets, runs as non-root on port~3000.}
+                    {Multi-stage build: installs deps, builds \gls{next} with \texttt{\detokenize{CONFIG_ENDPOINT}} via \texttt{ARG}/\texttt{ENV}, copies \texttt{.next/standalone} and static assets, runs as non-root on port~3000.}
                     {Deployment artifact for the Dashboard Frontend.}
 
         \clearpage
@@ -3816,7 +3816,7 @@
                 \end{flushleft}
                 \codesummary
                     {Central write path for tenant config. Validates and persists admin edits safely.}
-                    {Express app with \gls{cors} policy for the dashboard \gls{fe}.\@\texttt{POST /config} reads \texttt{user} header, validates body via \texttt{ConfigSchema}, ensures \texttt{data/<user>/} exists, writes \texttt{config.json}, returns 200/4xx/5xx, listens on \texttt{PORT}.}
+                    {\gls{express} app with \gls{cors} policy for the dashboard \gls{fe}.\@\texttt{POST /config} reads \texttt{user} header, validates body via \texttt{ConfigSchema}, ensures \texttt{data/<user>/} exists, writes \texttt{config.json}, returns 200/4xx/5xx, listens on \texttt{PORT}.}
                     {Dashboard backend service. Persists tenant configuration to make it available to the \gls{crd}.}
 
                 \begin{listing}[H]
@@ -3879,7 +3879,7 @@
                     \texttt{\detokenize{config.example.json}} \\
                     \addlinespace
                     \texttt{\detokenize{k8s/}} &
-                    All \gls{k8s@gls} and \gls{kcp} artifacts (\glspl{crd}, \gls{rbac}, workspaces, deployments, ingress) &
+                    All \gls{k8s@gls} and \gls{kcp} artifacts (\glspl{crd}, \gls{rbac}, workspaces, deployments, \gls{ingress}) &
                     Subfolders by concern: \texttt{\detokenize{cluster/}}, \texttt{\detokenize{deployments/}}, \texttt{\detokenize{rbac/}}, \texttt{\detokenize{apibindings/}}, \texttt{\detokenize{kcp-crds/}}, \texttt{\detokenize{workspaces/}}, \texttt{\detokenize{ingress/}} \\
                     \addlinespace
                     \texttt{\detokenize{scripts/}} &
@@ -4053,7 +4053,7 @@
                 \end{flushleft}
                 \codesummary
                     {Deploys and exposes the dashboard frontend.}
-                    {Creates a \texttt{Deployment} of the Next.js app on port 3000 and a NodePort \texttt{Service} (80 -> 3000); sets \texttt{CONFIG\_ENDPOINT} to \texttt{http://dashboard-be.default.svc.cluster.local/config}.}
+                    {Creates a \texttt{Deployment} of the \gls{next} app on port 3000 and a NodePort \texttt{Service} (80 -> 3000); sets \texttt{CONFIG\_ENDPOINT} to \texttt{http://dashboard-be.default.svc.cluster.local/config}.}
                     {Integrates the dashboard frontend into the cluster.}
 
                 \begin{listing}[H]
@@ -4124,7 +4124,7 @@
                 \end{flushleft}
                 \codesummary
                     {One-shot bootstrap for the dashboard control plane, so anyone can reproduce the full setup quickly and consistently.}
-                    {Exports plugin paths, creates \gls{kcp} workspaces (:root, dashboard, tenants), spins up a \gls{kind} cluster, builds/loads \gls{fe} + \gls{be} images, applies deployments / services, grants \gls{rbac}, generates+applies the \gls{tmc} syncer, binds compute, and applies standard APIBindings.}
+                    {Exports plugin paths, creates \gls{kcp} workspaces (:root, dashboard, tenants), spins up a \gls{kind} cluster, builds/loads \gls{fe} + \gls{be} images, applies deployments / services, grants \gls{rbac}, generates+applies the \gls{tmc} syncer, binds compute, and applies standard \glspl{apibinding}.}
                     {Provisioning glue between control plane (\gls{kcp} workspaces) and data plane (\gls{kind}). It installs and wires the dashboard stack that operators use to manage tenant configs.}
 
                 \begin{flushleft}
@@ -4159,7 +4159,7 @@
                 \end{flushleft}
                 \codesummary
                     {Enforce a typed, cluster-native contract for tenant configuration and make it consumable across workspaces in \gls{kcp}.}
-                    {Generates a namespaced \gls{crd} \texttt{TenantConfig} (schema mirrors the \gls{npm} \texttt{ConfigSchema}) and an \texttt{APIExport}. Writes both \gls{yaml} files under \texttt{k8s/CRDs/tenant-\textit{ID}-*.yaml}.}
+                    {Generates a namespaced \gls{crd} \texttt{TenantConfig} (schema mirrors the \gls{npm} \texttt{ConfigSchema}) and an \texttt{\gls{apiexport}}. Writes both \gls{yaml} files under \texttt{k8s/CRDs/tenant-\textit{ID}-*.yaml}.}
                     {Defines the source of truth for per-tenant config and publishes it via \gls{kcp} so other workspaces can bind and validate it.}
         \clearpage
 
@@ -4234,7 +4234,7 @@
                 \codesummary
                     {Enable local name resolution for vanity domains during development without setting up external \gls{dns}.}
                     {Appends \texttt{IP HOSTNAME} pairs to \texttt{/etc/hosts} if missing, handling multiple hosts and skipping duplicates (idempotent).}
-                    {Local networking shim so dashboard and \gls{api} hostnames resolve to the \gls{kind} node / ingress \gls{ip} on the developer machine.}
+                    {Local networking shim so dashboard and \gls{api} hostnames resolve to the \gls{kind} node / \gls{ingress} \gls{ip} on the developer machine.}
 
         \clearpage
 
@@ -4289,7 +4289,7 @@
                 \codesummary
                     {The quick start guide uses a \gls{kuard} demo workload rather than a local cluster, which makes the process of binding a workload to the \gls{tmc} workspace opaque.}
                     {A minimal path that builds the \gls{tmc}/\gls{kcp} \gls{cli} binaries, starts \gls{tmc}-\gls{kcp}, creates a \gls{tmc} workspace, generates and installs a syncer on a child cluster, binds compute, and deploys the \gls{kuard} demo --- thereby \enquote{making things work} without exposing the full lifecycle of a local cluster.}
-                    {Documents the hidden assumptions and shortcuts that produced misleading \enquote{green} signals, explains why later steps (\gls{rbac}, APIBinding, \glspl{crd}, ingress) surfaced as hard-to-diagnose issues, and frames why the approach is not prescriptive for production.}
+                    {Documents the hidden assumptions and shortcuts that produced misleading \enquote{green} signals, explains why later steps (\gls{rbac}, \gls{apibinding}, \glspl{crd}, ingress) surfaced as hard-to-diagnose issues, and frames why the approach is not prescriptive for production.}
 
         \clearpage
 

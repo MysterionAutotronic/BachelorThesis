@@ -35,6 +35,7 @@
         "Autoscaler",
         "biber",
         "bibtex",
+        "blackbox",
         "buildx",
         "bursty",
         "cgroupfs",
