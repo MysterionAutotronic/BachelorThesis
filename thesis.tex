@@ -1011,6 +1011,8 @@
             and external friction, and ensure stability, efficiency and repeatability for this
             process \parencite[p.~14]{awsSaaSArchitectureFundamentals}.
 
+    \clearpage
+
     \section{State of the Art and Related Work}\label{sec:related}
 
         \subsection{Zero-Downtime Deployment Strategies}\label{subsec:zeroDowntime}
@@ -2386,6 +2388,8 @@
             valid configuration.\\
             All services accept their dependencies via env as build args.
 
+    \clearpage
+
         \subsection{Infrastructure and Deployment}\label{subsec:infrastructureAndDeployment}
             The whole infrastructure is scripted to produce a repeatable demo environment following
             the \texttt{README} file in the \textit{Infra} repository.
@@ -2570,6 +2574,8 @@
             These changes are reflected in the implementation and evaluation, and are explicitly
             accounted for in~\autoref{subsec:limitationsAndRisks}.
 
+    \clearpage
+
         \subsection{Limitations and Risks}\label{subsec:limitationsAndRisks}
             The prototype intentionally narrows the scope to demonstrate \gls{e2e} flow.
             Several constraints and risks remain:
@@ -2729,6 +2735,8 @@
             This method aligns the evaluation with the implemented surface and provides screenshots
             as evidence for each scenario while acknowledging non-functional instrumentation and
             full automation as deferred work.
+
+    \clearpage
 
         \subsection{Evaluation Criteria (Reframed)}\label{subsec:evaluationCriteria}
             This section defines the qualitative criteria used to judge the prototype in lieu
@@ -2896,6 +2904,8 @@
                 versions, and adding staged deploys and history would close the gap in future
                 iterations.
 
+    \clearpage
+
         \subsection{Requirements}\label{subsec:evalRequirements}
             This section assesses the prototype against the requirements defined
             in~\autoref{subsec:requirements}.
@@ -3015,6 +3025,8 @@
                         sustain 200 req/s while keeping p95 under the budget.
                 \end{enumerate}
 
+    \clearpage
+
         \subsection{Results and Evidence}\label{subsec:evalResultsAndEvidence}
             This section aggregates the outcomes of the scenario-based evaluation without reprinting
             artifacts.
@@ -3028,6 +3040,8 @@
             non-functional (Scenario~\ref{chal:evalCRD}, \emph{Fail}),
             which blocks the fully automated path from submission to deployed tenant.\\
             \textbf{Evidence map.}
+
+    \clearpage
 
         \subsection{Lessons Learned}\label{subsec:evalLessonsLearned}
             Several design and implementation insights emerged during the prototype and are listed
@@ -3093,7 +3107,6 @@
                     As an example for a pain point in the \gls{tmc} documentation, the official
                     quick start guide is provided in~\autoref{app:docs}.
             \end{enumerate}
-
         
         \subsection{Threats to Validity}\label{subsec:evalThreatsToValidity}
             The following factors limit generalizability:
@@ -3129,6 +3142,8 @@
                     Templates and services reflect one tech stack (TypeScript + \gls{next} + \gls{express}).
                     Alternative stacks may surface different constraints.
             \end{enumerate}
+
+    \clearpage
 
         \subsection{Planned Metrics (Deferred)}\label{subsec:evalPlannedMetrics}
             The following metrics were originally planned, but deferred due to time and tooling
@@ -3251,6 +3266,8 @@
             may become a viable core for multi-tenant platforms.
             Until then, it is best treated as an experimental avenue to monitor or a concept to
             apply in edge-case scenarios.
+
+    \clearpage
 
         \subsection{Future Outlook}\label{subsec:outlook}
             The short-term priority is to harden the prototype, reconnect the missing paths, and add
