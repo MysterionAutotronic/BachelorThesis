@@ -315,7 +315,7 @@
         reproducibility, and change management are attainable today with \gls{kcp}-based workflows,
         and where practical limits emerge in a realistic developer setup.
         The next subsections motivate the problem and context (\autoref{subsec:problem}), define
-        objectives and scope (\autoref{subsec:objectives}), and outline the thesis structure leading
+        objectives and scope (\autoref{subsec:objectivesAndScope}), and outline the thesis structure leading
         through design, implementation, evaluation, and conclusions (\autoref{subsec:structure}).
 
         \subsection{Problem Statement and Motivation}\label{subsec:problem}
@@ -1725,7 +1725,7 @@
 
             \subsubsection{Tenant Workspace: Data Plane Components}
 
-                \begin{table}[H]\label{tab:tenantComponents}
+                \begin{table}[H]
                     \centering
                     \renewcommand{\arraystretch}{1.5}
                     \begin{tabular}{lp{4cm}P{8cm}}
@@ -1737,7 +1737,7 @@
                         \gls{db} & StatefulSet & Stores ratings \\
                         \bottomrule
                     \end{tabular}
-                    \caption{Per Tenant Components}
+                    \caption{Per Tenant Components}\label{tab:tenantComponents}
                 \end{table}
 
                 The request flow of the visitor path can be summarized as follows:
@@ -1797,7 +1797,7 @@
                         as stateless deployments.
                         A \gls{hpa} driven by \gls{cpu} utilization and \gls{qps} metrics adds or
                         removes replicas linearly, so throughput increases proportionally with the
-                        number of pods \see{tab:perTenantComponents}.
+                        number of pods (see~\autoref{tab:tenantComponents}).
                         Because the \gls{api} keeps no local state, new replicas can be scheduled on
                         any node without coordination, ensuring that burst traffic on popular sites
                         never impacts neighboring tenants.
@@ -2382,7 +2382,7 @@
             file-based build injection and \glspl{crd} rather than direct calls across clusters
             to achieve isolation.\\
             Validation failures are provided by zod.
-            In the case of an \gls{crd} update being unavailable the system degrades to the last
+            In the case of a \gls{crd} update being unavailable the system degrades to the last
             valid configuration.\\
             All services accept their dependencies via env as build args.
 
@@ -2483,7 +2483,7 @@
                 revealed which hop in the mapping was incorrect.\\
                 The mapping was normalized to the working version in~\autoref{app:infra}.
                 The debug container manifest was deliberately kept in the thesis, because it
-                outlines a easy to deploy best practice for debugging network issues in
+                outlines an easy to deploy best practice for debugging network issues in
                 \gls{k8s@gls}.
 
             \subsubsection{Hostnames}\label{subsubsec:hostnames}
@@ -2737,7 +2737,7 @@
 
             \subsubsection{Functional Correctness}\label{subsubsec:functionalCorrectness}
                 Functional behavior is judged against the scenario set 
-                n~\autoref{subsec:evalMethod} without explicitly reciting the preconditions, steps
+                in~\autoref{subsec:evalMethod} without explicitly reciting the preconditions, steps
                 and expected outcomes.
                 \begin{enumerate}[label={[\arabic*]:},
                     ref=Challenge~\arabic*,
@@ -3041,8 +3041,8 @@
                 \item\label{chal:evalLessonsCORS}
                     \textit{Solve browser-to-backend early}.
                     Direct browser calls repeatedly failed due to \gls{cors}.
-                    Moving requests behind server-side proxy routes in \gls{next} (\texttt{/api/\dots})
-                    eliminated policy mismatches and simplified endpoint management
+                    Moving requests behind server-side proxy routes in \gls{next} (\texttt{/api/...})%chktex 11
+                    \@eliminated policy mismatches and simplified endpoint management
                     (see~\autoref{subsubsec:challengesCORS}).
 
                 \item\label{chal:evalLessonsIngress}
@@ -3050,14 +3050,14 @@
                     Nginx \gls{ingress} is trivial to declare in \gls{k8s} but awkward locally due to
                     privileged ports and host networking.
                     For developer workflows, \texttt{NodePort} + host mapping proved as a workaround
-                    (see~\autoref{subsubsec:challengesIngress},~\autoref{subsubsec:challengesHosts}).
+                    (see~\autoref{subsubsec:ingress},~\autoref{subsubsec:hostnames}).
 
                 \item\label{Make port paths explicit}
                     \textit{Make port paths explicit}.
                     Mismatches across app $\rightarrow$ container $\rightarrow$ service
                     $\rightarrow$ cluster ports were the root cause of several days of debugging.
                     A dedicated debug pod (\texttt{netshoot}) should be part of the baseline
-                    toolchain (see~\autoref{subsubsec:challengesNodePorts}).
+                    toolchain (see~\autoref{subsubsec:e2eportmapping}).
 
                 \item\label{chal:evalLessonsSchemaFirst}
                     \textit{Schema-first helps across services}.
@@ -3084,7 +3084,7 @@
 
                 \item\label{chal:evalLessonsDocumentation}
                     \textit{Documentation is crucial}.
-                    \gls{kcp} provides a intriguing approach, but its complexity necessitates
+                    \gls{kcp} provides an intriguing approach, but its complexity necessitates
                     thorough documentation, that is not provided in all necessary forms.
                     Because of its alpha status breaking changes are introduced and easily available
                     resources often did not reflect the current state of the project.
@@ -3105,7 +3105,7 @@
                 \item\label{chal:evalValidityEnvironmentBias}
                     \textit{Environment bias}.
                     Evaluation was conducted on a single-machine with local clusters.
-                    results may not transfer to managed clouds with load balancers, \gls{dns} and
+                    Results may not transfer to managed clouds with load balancers, \gls{dns} and
                     storage classes.
 
                 \item\label{chal:evalValidityPrototypeBias}
@@ -3436,7 +3436,7 @@
 
         \clearpage
 
-            \subsection{Build and Runtime}
+            \subsection{Build and Runtime} 
                 \begin{flushleft}
                     \captionof{listing}{Dockerfile}\label{lst:tenantfe-dockerfile}
                     \inputminted[
