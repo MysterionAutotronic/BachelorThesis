@@ -1199,7 +1199,7 @@
         \subsection{Proposed Scenario}\label{subsec:scenario}
             To demonstrate the conception, implementation, and evaluation of a highly-scalable, 
             highly available SaaS platform on \gls{kcp}, the thesis adopts a deliberately
-            light-weight yet realistic \textbf{case study}:
+            lightweight yet realistic \textbf{case study}:
             \\
             A \textbf{\gls{smb} Web-Presence-as-a-Service}, whose sole purpose is to give
             \glspl{smb} an instantly available, single-page web presence.
@@ -1371,7 +1371,7 @@
                         \hypertarget{f4}{F-04} & \textit{Tenant} & Public Page Delivery & The per-tenant public frontend shall render the latest template and tenant data via the per-tenant \gls{api}. \\
                         \hypertarget{f5}{F-05} & \textit{Platform} & Tenant Provisioning & The dashboard shall create a new \gls{kcp} workspace, deploy the tenant stack and return a public \gls{url} in~$\leq$~60~s. \\
                         \hypertarget{f6}{F-06} & \textit{Platform} & Config Storage and Retrieval & Template configuration for every tenant shall be stored inside the tenants \gls{api} as a \gls{json} file. \\
-                        \hypertarget{f7}{F-07} & \textit{Tenant} & Config Caching & The per-tenant \gls{api} shall cache configuration in-memory with a \gls{ttl}~$\geq$~24~h, falling back to the \gls{json} file on cache miss. \\
+                        \hypertarget{f7}{F-07} & \textit{Tenant} & Config Caching & The per-tenant \gls{api} shall cache configuration in-memory with a \gls{ttl}~$\geq$~24~hours, falling back to the \gls{json} file on cache miss. \\
                         \bottomrule
                     \end{tabular}
                     \caption{Functional Requirements}
@@ -1379,7 +1379,7 @@
 
                 These requirements cover the complete life-cycle of a tenant environment from
                 \textbf{creation} over \textbf{serving} to \textbf{evolution}.
-                Furthermore they define a simple yet measurable consistency contract between object
+                Furthermore they define a simple, yet measurable consistency contract between object
                 storage and the \gls{api} cache.
                 \\
                 By keeping the scope this narrow, the thesis can focus evaluation on control-plane
@@ -1581,7 +1581,7 @@
                         \textit{ConfigMap}.
                         A ConfigMap is a lightweight and \gls{k8s} native way to inject
                         configuration, but it has a very constraining size limit (typically 1 MiB)
-                        and is not designed for cross-workspace usage.  
+                        and is not designed for cross-workspace use.  
                         Since KCP workspaces enforce strict isolation, injecting a ConfigMap from
                         the parent workspace into the tenant workspace would violate boundary
                         constraints, or require custom controllers.  
@@ -1757,7 +1757,7 @@
 
                     \item\label{chal:db}
                         \textit{Data sources}.
-                        The tenant \gls{api} periodically renews its cache based of a \gls{ttl}.
+                        The tenant \gls{api} periodically renews its cache based on a \gls{ttl}.
                         The dynamic data (reviews) comes from the tenant \gls{db} while the static
                         data (config) comes from the tenant \gls{api}.
                 \end{enumerate}
@@ -1958,7 +1958,7 @@
                 By chaining these \gls{tekton} tasks the platform turns the single
                 \texttt{TenantDeploymentRequest} event into a fully-isolated, routable tenant
                 environment in one pass.
-                Every artefact is generated from code that lives in Git, every cluster mutation is
+                Every artifact is generated from code that lives in Git, every cluster mutation is
                 scoped to the tenant workspace, and every build is automatically signed by
                 \gls{tekton}~Chains.
                 Consequently the pipeline satisfies all functional requirements while
@@ -2525,7 +2525,7 @@
                 protected as documented in~\autoref{app:docs}.\\
                 Because a compute binding could not be established under the pinned
                 \gls{kcp}-\gls{tmc} version, the design that depended on cross-workspace and more
-                importantly cross-cluster configuration via \gls{crd} could not be completed.
+                importantly, cross-cluster configuration via \gls{crd} could not be completed.
                 As an operational workaround, the configuration could be injected into the tenant's
                 \gls{be} image at build time, however, this is out of scope for this thesis, which
                 explicitly aims to evaluate such an architecture using \gls{kcp}.\\
@@ -3484,7 +3484,7 @@
                 \end{flushleft}
                 \codesummary
                     {Stable config source for the Tenant \gls{ui} plus a controlled crash hook to test failure handling and orchestration.}
-                    {\gls{express} app with \gls{json} parsing.\@\texttt{GET /config} reads \texttt{data/config.json}, parses and caches it via \texttt{node-cache} (TTL 24h).\@\texttt{GET /crash} exits the process. Listens on \texttt{PORT} (default 3000).}
+                    {\gls{express} app with \gls{json} parsing.\@\texttt{GET /config} reads \texttt{data/config.json}, parses and caches it via \texttt{node-cache} (TTL 24 hours).\@\texttt{GET /crash} exits the process. Listens on \texttt{PORT} (default 3000).}
                     {Tenant backend microservice exposing a config \gls{api} and a chaos hook. Consumed by the \gls{fe} through its server-side proxy. Managed by the platform for restarts.}
 
         \clearpage
@@ -3694,7 +3694,7 @@
                 \end{listing}
                 \codesummary
                     {Implements the actual login step by creating a session cookie.}
-                    {Reads \texttt{username} from form data. If missing, returns an error. Otherwise sets an \gls{http}-only \texttt{user} cookie (24h) and redirects to \texttt{/}.}
+                    {Reads \texttt{username} from form data. If missing, returns an error. Otherwise sets an \gls{http}-only \texttt{user} cookie (24 hours) and redirects to \texttt{/}.}
                     {Auth server action invoked by \texttt{LoginForm}. Bootstraps the session state used across the dashboard \gls{fe}.}
 
         \clearpage
@@ -3782,7 +3782,7 @@
                 \codesummary
                     {Containerized build for the dashboard \gls{fe} with minimal attack surface and environment-specific endpoints baked at build time.}
                     {Multi-stage build: installs deps, builds \gls{next} with \texttt{\detokenize{CONFIG_ENDPOINT}} via \texttt{ARG}/\texttt{ENV}, copies \texttt{.next/standalone} and static assets, runs as non-root on port~3000.}
-                    {Deployment artifact for the Dashboard Frontend.}
+                    {Deployment artifact for the dashboard frontend.}
 
         \clearpage
 
@@ -3944,7 +3944,7 @@
                     ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/build/dashboardFE.sh}}
                 \end{flushleft}
                 \codesummary
-                    {Parameterized, reproducible build for the Dashboard Frontend. Binds the \gls{fe} to the correct backend at build time.}
+                    {Parameterized, reproducible build for the dashboard frontend. Binds the \gls{fe} to the correct backend at build time.}
                     {\Gls{bash} script that requires and \gls{api} \gls{url} as build argument. Builds the \gls{fe}.}
                     {Produces the frontend build artifact for the dashboard application.}
 
@@ -3980,7 +3980,7 @@
                     ]{bash}{\detokenize{code/BachelorThesis_Infra/scripts/build/tenantFE.sh}}
                 \end{flushleft}
                 \codesummary
-                    {Produces a per-tenant Frontend image with the correct backend endpoints baked in.}
+                    {Produces a per-tenant frontend image with the correct backend endpoints baked in.}
                     {Takes \texttt{TENANT\_ID} and \texttt{TENANT\_BE\_URL} as arguments, builds the tenant \gls{fe} image with the correct backend endpoint.}
                     {Creates the deployable \gls{fe} artifact bound to its tenant’s backend service.}
 
